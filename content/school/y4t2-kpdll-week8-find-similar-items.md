@@ -31,6 +31,5 @@ Cải thiện -> PCY
 - [PCY Algorithm and Friends (Medium Article)](https://medium.com/weekly-data-science/the-pcy-algorithm-and-its-friends-ecba67216190)
 - [Finding Similar Items (Lecture Notes PDF - Click to View)](http://mmds.org/mmds/v2.1/ch03-lsh.pdf)
 
-- [Information Retrieval books](/pdfs/y4t2-information-retrieval/intro_information_retrieval.pdf)
 
 
