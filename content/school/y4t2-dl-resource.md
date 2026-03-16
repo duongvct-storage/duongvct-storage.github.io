@@ -35,22 +35,22 @@ Year 4 Term 2 - Deep Learning learning resources
 ## Offline resource
 
 
-- [1 - Intro](/pdfs/y4t2-dl/1-Intro.pdf)
+- [1 - Intro](/pdfs/y4t2-dl/L1-Intro.pdf)
 
 
-- [2 - Linear algebra](/pdfs/y4t2-dl/2-Linear-algebra.pdf)
+- [2 - Linear algebra](/pdfs/y4t2-dl/L2-Linear-algebra.pdf)
 
 
-- [3 - Calculus](/pdfs/y4t2-dl/3-Calculus.pdf)
+- [3 - Calculus](/pdfs/y4t2-dl/L3-Calculus.pdf)
 
 
-- [4 - Linear models](/pdfs/y4t2-dl/4-Linear-models.pdf)
+- [4 - Linear models](/pdfs/y4t2-dl/L4-Linear-models.pdf)
 
 
-- [5 - MLP](/pdfs/y4t2-dl/5-MLP.pdf)
+- [5 - MLP](/pdfs/y4t2-dl/L5-MLP.pdf)
 
 
-- [6 - CNN](/pdfs/y4t2-dl/6-CNN.pdf)
+- [6 - CNN](/pdfs/y4t2-dl/L6-CNN.pdf)
 
 
-- [7 - RNN](/pdfs/y4t2-dl/7-RNN.pdf)
+- [7 - RNN](/pdfs/y4t2-dl/L7-RNN.pdf)

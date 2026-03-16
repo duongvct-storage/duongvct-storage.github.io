@@ -47,7 +47,7 @@ Year 4 Term 2 - NLP learning resources
 
 
 
-- [Week 2 - Language model](/pdfs/y4t2-nlp/Week2-Language%20model.pdf)
+- [Week 2 - Language model](/pdfs/y4t2-nlp/Week2-Language-model.pdf)
 
 
 
@@ -59,5 +59,5 @@ Year 4 Term 2 - NLP learning resources
 
 
 
-- [Week 5.1 - Text Preprocessing](/pdfs/y4t2-nlp/Week5-1-Text%20Preprocessing.pdf)
+- [Week 5.1 - Text Preprocessing](/pdfs/y4t2-nlp/Week5-1-Text-Preprocessing.pdf)
 
