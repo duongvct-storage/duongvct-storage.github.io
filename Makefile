@@ -160,7 +160,7 @@ $(build)/search.json: $(DEPENDENCIES) $(posts-src) $(school-src)
 	$(shell [ ! -d $(@D) ] && mkdir -p $(@D))
 	$(PANDOC) --defaults=pandoc.yaml \
 	  --template=templates/search.json --lua-filter=filters/search-index.lua \
-	  --to plain --standalone \
+	  --to plain --standalone --wrap=none \
 	  -f markdown -o "$@" /dev/null
 
 stylesheets: $(css-result)
