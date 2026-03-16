@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+DIR=$(dirname -- "$( realpath -- "$0")")
+
+if [ "$1" = "-" ]; then
+  INFILE=/dev/stdin
+else
+  INFILE="$1"
+fi
+if [ "$2" = "-" ]; then
+  OUTFILE=/dev/stdout
+else
+  OUTFILE="$2"
+fi
+
+TMPPATH="$(mktemp --directory --tmpdir tex2svg.XXXXXXXXXX)"
+trap '{ rm -rf -- "$TMPPATH"; }' EXIT
+
+TMPFILE="$TMPPATH/convert"
+
+cp "$INFILE" "${TMPFILE}.tex"
+# tex -> dvi
+lualatex --output-format=dvi --halt-on-error --file-line-error --interaction nonstopmode --output-directory "$TMPPATH" "${TMPFILE}.tex"
+# dvi -> svg
+dvisvgm --color --relative --zoom=1.5 --optimize=all --font-format=woff2,autohint --exact --bbox=min -o "$OUTFILE" "${TMPFILE}.dvi"

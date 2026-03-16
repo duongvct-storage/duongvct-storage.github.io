@@ -1,0 +1,33 @@
+# Compilation parameters
+template: templates/index.html
+standalone: true
+self-contained: false
+writer: html5
+
+metadata:
+  lang: en
+  bibliography: refs.bib
+  csl: chicago-fullnote-bibliography-with-ibid.csl
+
+variables:
+  author-meta: Duong Vu Cong Tuan
+  github:    https://github.com/vucongtuanduong
+  site-url:  https://vucongtuanduong.github.io
+  site-repo: https://github.com/vucongtuanduong/vucongtuanduong.github.io
+  year-range: 2022-2026
+
+# Log boilerplate
+verbosity: WARNING
+
+# Styling
+strip-comments:  true
+highlight-style: kate
+
+html-math-method:
+  method: katex
+
+reference-links: false
+# block, section, or document
+reference-location: document
+
+fail-if-warnings: true

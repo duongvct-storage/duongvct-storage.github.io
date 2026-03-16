@@ -1,0 +1,281 @@
+svg.diagram {
+  --color-active:  hsl(140 50% 40%);
+}
+
+.site {
+  r:            32px;
+  stroke-width: 3px;
+  cursor:       pointer;
+  fill:         #fff;
+  stroke:       #b0b6c1;
+  filter:       none;
+  transition:   filter 0.3s, stroke 0.3s, color 1s;
+}
+
+.edge {
+  stroke-width: 3px;
+  stroke:       #b0b6c1;
+  fill:         none;
+  transition:   stroke 0.3s, filter 0.3s;
+}
+
+.weight {
+  font-size:         1.25rem;
+  font-weight:       bold;
+  paint-order:       stroke fill;
+  pointer-events:    none;
+  dominant-baseline: middle;
+  text-anchor:       middle;
+  background:        none;
+  stroke:            none;
+  transition:        fill 0.2s, opacity 0.2s;
+}
+
+.ising {
+  .site {
+    stroke-dasharray: 40 10;
+    stroke-linecap:   round;
+    filter:           drop-shadow(0 0 4px #b3c6e0);
+    transform-origin: center;
+    transform-box:    fill-box;
+    transform-style:  preserve-3d;
+
+    &[state="1"] {
+      stroke:    #1976d2;
+      animation: spin-ccw 10s linear infinite;
+    }
+
+    &[state="-1"] {
+      stroke:    #3b4a6b;
+      animation: spin-cw 10s linear infinite;
+    }
+
+  }
+
+  .edge {
+    &[product="1"] {
+      filter: drop-shadow(0 0 6px #ffcdd2) drop-shadow(0 0 12px #ffcdd2);
+    }
+
+    &[product="-1"] {
+      filter: drop-shadow(0 0 4px #b7e1cd);
+    }
+  }
+}
+
+.qubo {
+  .site {
+    fill: #f5f7fa;
+    stroke: #b0b6c1;
+    filter: drop-shadow(0 1px 6px rgba(60, 120, 80, 0.04));
+    transition:
+      fill 0.3s cubic-bezier(.4,0,.2,1),
+      stroke 0.3s cubic-bezier(.4,0,.2,1),
+      filter 0.3s cubic-bezier(.4,0,.2,1);
+
+    &[state="1"] {
+      stroke: var(--color-active);
+      stroke-width: 5px;
+      filter: drop-shadow(0 0 10px hsl(142 71% 45% / 30%));
+      animation: pulse-shadow 1.2s infinite;
+      fill: #e0f7ef;
+    }
+
+    &:hover {
+      filter: drop-shadow(0 2px 16px hsl(142 71% 45% / 18%));
+      fill: #e6f2fa;
+      stroke: hsl(140 50% 50%);
+    }
+  }
+
+  .edge {
+    stroke:       #b0b6c1;
+    stroke-width: 4px;
+    transition:
+      stroke 0.3s cubic-bezier(.4,0,.2,1),
+      filter 0.3s cubic-bezier(.4,0,.2,1);
+
+    &[product="1"] {
+      stroke:    var(--color-active);
+      filter:    drop-shadow(0 0 8px hsl(142 71% 45% / 40%));
+      animation: pulse-shadow 1.2s infinite;
+    }
+
+    &:hover {
+      stroke: hsl(140 50% 50%);
+      filter: drop-shadow(0 0 12px hsl(142 71% 45% / 25%));
+    }
+  }
+}
+
+/* Spin animations */
+@keyframes spin-ccw {
+  0%   { transform: rotate(0deg); }
+  100% { transform: rotate(-360deg); }
+}
+
+@keyframes spin-cw {
+  0%   { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* QUBO animations */
+@keyframes pulse-shadow {
+  0%   { filter: drop-shadow(0 0 4px  hsl(142 71% 45% / 50%)); }
+  50%  { filter: drop-shadow(0 0 12px hsl(142 71% 45% / 30%)); }
+  100% { filter: drop-shadow(0 0 4px  hsl(142 71% 45% / 50%)); }
+}
+
+
+/* Popup */
+.diagram-container {
+  .popup {
+    display:        block;
+    position:       absolute;
+    z-index:        10;
+    pointer-events: none;
+    padding:        4px 10px;
+    background:     #fff;
+    color:          #222;
+    border-radius:  4px;
+    box-shadow:     0 2px 12px rgba(60, 60, 80, 0.08);
+    border:         1px solid #e0e3ea;
+    font-size:      1rem;
+    transition:     opacity 0.25s cubic-bezier(.4,0,.2,1);
+    white-space:    nowrap;
+    opacity:        0;
+    transform: translate(-50%, -150%);
+
+    &::after {
+      content: "";
+      position: absolute;
+      left: 50%;
+      bottom: -8px; /* distance below popup */
+      transform: translateX(-50%);
+      width: 0;
+      height: 0;
+      border-left: 8px solid transparent;
+      border-right: 8px solid transparent;
+      border-top: 8px solid #fff; /* match popup background */
+      filter: drop-shadow(0 1px 2px rgba(60,60,80,0.08));
+      pointer-events: none;
+    }
+
+    &.visible {
+      opacity:        1;
+      pointer-events: auto;
+    }
+  }
+}
+
+
+/* Math label */
+.math-label {
+  display:       inline-block;
+  background:    var(--color-background, #f9f9fb);
+  color:         var(--color-typography, #222);
+  font-size:     1.1rem;
+  padding:       6px 14px;
+  border-radius: 6px;
+  box-shadow:    0 2px 8px rgba(60, 60, 80, 0.07);
+  border:        1px solid var(--color-border, #e0e3ea);
+  margin-top:    12px;
+  transition:    background 0.18s, box-shadow 0.4s;
+}
+
+/* Energy label and value */
+.energy-value {
+  transition:    background 0.18s, color 0.18s;
+  border-radius: 3px;
+  padding:       0 3px;
+
+  &.energy-changed {
+    color: var(--color-lightning) !important;
+  }
+}
+
+/* Encoding diagram and buttons */
+
+
+.encoding-diagram {
+  --color-active:  hsl(140 50% 40%);
+
+  padding: 12px;
+  box-shadow:       rgba(0, 0, 0, 0.1) 0px 4px 12px;
+
+  .math-label-container {
+    display:     flex;
+    flex-wrap:   wrap;
+    align-items: center;
+    gap:         0.5rem;
+  }
+
+  fieldset {
+    display:         flex;
+    flex-wrap:       wrap;
+    gap:             1rem;
+    justify-content: center;
+    align-items:     flex-end;
+  }
+
+  label {
+    display:         flex;
+    flex-direction:  column;
+    align-items:     center;
+
+    span {
+      color:          var(--color-faded);
+      text-align:     center;
+    }
+  }
+
+  input[type="radio"],
+  input[type="checkbox"] {
+    appearance:    none;
+    position:      relative;
+    width:         28px;
+    height:        28px;
+    border-radius: 50%;
+    border:        2.5px solid var(--color-faded);
+    background:    var(--color-background);
+    cursor:        pointer;
+    display:        inline-grid;
+    vertical-align: middle;
+    place-content:  center;
+    transition:
+      background 0.3s ease-in-out,
+      border-color 0.3s ease-in-out;
+
+    &::before {
+      content:       "";
+      width:         20px;
+      height:        20px;
+      border-radius: 50%;
+      transform:     scale(0);
+      box-shadow:    inset 1rem 1rem var(--color-lightning);
+      transition:    0.3s transform ease-in-out;
+    }
+
+    &:checked::before {
+      transform: scale(1);
+    }
+
+    &:checked {
+      background:   #e0f7ef;
+      border-color: var(--color-active);
+      border-width: 2.5px;
+      box-shadow:   0 0 10px hsl(142 71% 45% / 30%);
+      animation:    pulse-shadow 1.2s infinite;
+    }
+
+    &:hover,
+    &:focus {
+      filter: drop-shadow(0 0 12px hsl(142 71% 45% / 25%));
+    }
+
+    &:focus {
+      outline: 2px solid var(--color-accent);
+      outline-offset: 2px;
+    }
+  }
+}

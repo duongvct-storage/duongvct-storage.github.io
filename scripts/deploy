@@ -1,0 +1,26 @@
+#!/usr/bin/env sh
+set -e
+
+BUILDDIR=build
+SITE_BRANCH=gh-pages
+
+echo "Starting to deploy site"
+echo "Removing old build files..."
+make clean-build
+git worktree add "$BUILDDIR" gh-pages
+(
+  echo "Remove all files from site"
+  cd "$BUILDDIR"
+  git rm -r *
+)
+echo "Starting a clean build..."
+make -B
+(
+  echo "It's git time!"
+  cd "$BUILDDIR"
+  git add .
+  git commit -m "Deploy from $(git rev-parse master)"
+  git push
+)
+echo "Removing build files..."
+git worktree remove "$BUILDDIR"

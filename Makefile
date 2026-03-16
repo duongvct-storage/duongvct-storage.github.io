@@ -1,0 +1,189 @@
+# Guarantee that things are properly defined
+PYTHON_3 ?= python3
+PANDOC ?= pandoc
+
+# The important directories
+content = content
+cache   = cache
+build   = build
+
+# The important files
+posts-src    := $(wildcard $(content)/posts/*)
+posts-result := $(patsubst $(content)/posts/%.md.lhs,$(build)/posts/%/index.html,$(posts-src))
+posts-result := $(patsubst $(content)/posts/%.md,$(build)/posts/%/index.html,$(posts-result))
+
+school-src    := $(wildcard $(content)/school/*)
+school-result := $(patsubst $(content)/school/%.md.lhs,$(build)/school/%/index.html,$(school-src))
+school-result := $(patsubst $(content)/school/%.md,$(build)/school/%/index.html,$(school-result))
+
+# All additional pages go here
+pages-names  = about masters posts school search
+pages-result = $(addprefix $(build)/,$(addsuffix /index.html,$(pages-names)) \
+                 index.html 404.html)
+
+css-src    = $(wildcard css/*.css)
+css-result = $(addprefix $(build)/,$(css-src))
+
+static-src    = $(shell find static/ -type f)
+static-result = $(patsubst %.tex,%.svg,$(addprefix $(build)/, $(static-src:static/%=%)))
+
+# Dependency-only
+filters   = $(wildcard filters/*)
+templates = $(wildcard templates/*)
+scripts   = $(wildcard scripts/*)
+
+# Configuration files
+config = pandoc.yaml
+
+DEPENDENCIES = $(filters) $(templates) $(scripts) $(config)
+
+#### Functions
+define generate_page
+  $(shell [ ! -d $(@D) ] && mkdir -p $(@D))
+  $(PANDOC) --defaults=pandoc.yaml \
+    --lua-filter=filters/post-list.lua \
+    --lua-filter=filters/url.lua \
+    -f $(3) -o "$(2)" "$(1)" \
+    $(4)
+endef
+
+define generate_post
+  $(shell [ ! -d $(@D) ] && mkdir -p $(@D))
+  $(PANDOC) --defaults=pandoc.yaml         \
+            --shift-heading-level-by=1     \
+            -M post                        \
+            --lua-filter=filters/date.lua \
+            --lua-filter=filters/url.lua  \
+            --lua-filter=filters/bib.lua  \
+            --lua-filter=filters/figure.lua \
+            --citeproc \
+    -f $(3) -o "$(2)" "$(1)" \
+    $(4)
+endef
+
+############
+# Commands #
+############
+
+.DEFAULT: all
+
+.PHONY: all clean serve watch clean-cache clean-build deploy
+
+all: pages posts school stylesheets static feed search-index
+
+clean: clean-cache clean-build
+
+clean-cache:
+	if [ -d $(cache) ]; then rm -rf $(cache); fi
+
+clean-build:
+	if [ -d $(build) ]; then rm -rf $(build); fi
+	if [ -f 'pandoc-log.json' ]; then rm pandoc-log.json; fi
+
+serve:
+	cd $(build) && $(PYTHON_3) -m http.server
+
+watch:
+	watch -n 0.5 -- $(MAKE) all
+
+deploy:
+	scripts/deploy
+
+#########
+# Posts #
+#########
+
+.PHONY: posts
+
+posts:   $(posts-result)
+
+$(build)/posts/%/index.html: $(content)/posts/%.md $(DEPENDENCIES)
+	$(call generate_post,$<,$@,markdown)
+
+$(build)/posts/%/index.html: $(content)/posts/%.md.lhs $(DEPENDENCIES)
+	$(call generate_post,$<,$@,markdown+lhs)
+
+##########
+# School #
+##########
+
+.PHONY: school
+
+school: $(school-result)
+
+$(build)/school/%/index.html: $(content)/school/%.md $(DEPENDENCIES)
+	$(call generate_post,$<,$@,markdown)
+
+$(build)/school/%/index.html: $(content)/school/%.md.lhs $(DEPENDENCIES)
+	$(call generate_post,$<,$@,markdown+lhs)
+
+###############
+# Other Pages #
+###############
+
+.PHONY: pages
+
+pages: $(pages-result)
+
+$(build)/index.html: $(content)/index.md $(DEPENDENCIES) $(posts-src) $(school-src)
+	$(call generate_page,$<,$@,markdown,-M title:'Home')
+
+$(build)/404.html: $(content)/404.html   $(DEPENDENCIES)
+	$(call generate_page,$<,$@,html,-M title:'Are you lost?')
+
+$(build)/%/index.html: $(content)/%.md   $(DEPENDENCIES)
+	$(call generate_page,$<,$@,markdown)
+
+$(build)/%/index.html: $(content)/%.html $(DEPENDENCIES)
+	$(call generate_page,$<,$@,html)
+
+###################
+# Other processes #
+###################
+
+.PHONY: stylesheets static feed
+
+feed: $(build)/rss.xml
+
+$(build)/rss.xml: $(DEPENDENCIES)
+	$(shell [ ! -d $(@D) ] && mkdir -p $(@D))
+	$(PANDOC) --defaults=pandoc.yaml \
+	  --template=templates/rss.xml --lua-filter=filters/rss.lua \
+	  --to plain --standalone \
+	  -f markdown -o "$@" /dev/null
+
+.PHONY: search-index
+
+search-index: $(build)/search.json
+
+$(build)/search.json: $(DEPENDENCIES) $(posts-src) $(school-src)
+	$(shell [ ! -d $(@D) ] && mkdir -p $(@D))
+	$(PANDOC) --defaults=pandoc.yaml \
+	  --template=templates/search.json --lua-filter=filters/search-index.lua \
+	  --to plain --standalone \
+	  -f markdown -o "$@" /dev/null
+
+stylesheets: $(css-result)
+
+$(build)/css/%: css/%
+	$(shell [ ! -d $(@D) ] && mkdir -p $(@D))
+	cp "$<" "$@"
+# hasmin -c "$<" > "$@"
+
+static: $(static-result)
+
+# Minimize svg files
+$(build)/%.svg: static/%.svg
+	$(shell [ ! -d $(@D) ] && mkdir -p $(@D))
+	@echo Minifying file "$<"
+	scripts/svg-minify "$<" "$@"
+
+# Convert tikz images to svg
+$(build)/%.svg: static/%.tex
+	$(shell [ ! -d $(@D) ] && mkdir -p $(@D))
+	scripts/tex2svg "$<" "$@"
+
+# For {img,video,font,data}
+$(build)/%: static/%
+	$(shell [ ! -d $(@D) ] && mkdir -p $(@D))
+	cp "$<" "$@"

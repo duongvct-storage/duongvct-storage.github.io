@@ -1,0 +1,73 @@
+\documentclass{standalone}
+
+\def\pgfsysdriver{pgfsys-dvisvgm.def}
+\usepackage{tikz}
+
+\usetikzlibrary{animations,positioning, arrows, arrows.meta, backgrounds, fit}
+
+\begin{document}
+
+\colorlet{smoothgray}{gray!80}
+
+\begin{tikzpicture}[
+  node distance = 3cm,
+  state/.style    = { circle, minimum width = 0.7cm, fill = gray!20, draw = gray!40, very thick },
+  terminal/.style = {rectangle, fill = black, scale = 1},
+  action/.style   = {
+    opacity = 0.8,
+    thin,
+    smoothgray,
+    ->,
+    >={Kite[length=4pt,width=2.5pt,inset=1.5pt]},
+  },
+  bg/.style = {
+    rectangle,
+    rounded corners,
+    inner sep      = 0.35cm,
+    minimum height = #1*1.5cm,
+    minimum width  = 1.5cm,
+  },
+  animate/glow/.style n args ={3}{
+    myself:opacity = {base = "#1", 0s="current value", 0.3s="#2", freeze, begin on={mouse over, of next = #3}},
+    myself:opacity = {id = 2, 0s="current value", 0.3s="#1", freeze, begin on= {mouse out, of next = #3} },
+  },
+]
+
+  % Useful constants
+  % How many states per stage
+  \def\states{{1,3,2,3}}
+  % Total number of stages
+  \pgfmathsetmacro{\nStages}{dim(\states)}
+  % Maximum number of states among stages
+  \expandafter\pgfmathmax\states{}\edef\maxStates{\pgfmathresult}
+
+  \pgfmathsetseed{5671243}
+
+  \foreach \t in {\nStages,...,1} {
+    \pgfmathsetmacro{\nStates}{\states[\t-1]}
+
+    \foreach \s in {\nStates,...,1} {
+      % Grid of states
+      \node [state, outer sep = 2] (q\t\s) at ({3cm*(\t-1)}, {1.5cm*(\s - (\nStates+1)/2)}) {};
+
+      % Arraws going out of each state
+      \ifnum \t<\nStages
+        \pgfmathtruncatemacro{\next}{\t + 1}
+        \pgfmathsetmacro{\nStatesNext}{\states[\t]}
+
+        \foreach \ny in {1,...,\nStatesNext}
+          \draw [action] (q\t\s) -- (q\next\ny);
+      \fi
+    }
+
+    \scoped [on background layer]
+      \node (bg\t) [animate={glow={0.2}{0.4}{b\t}}, bg=\maxStates, fill = orange, label=above:{$t = \t$}]
+                at ({3*(\t-1)}, 0) {};
+
+    \node (b\t) [bg=\maxStates, fill = white, opacity = 0.0,
+                  fit=(bg\t)] at (bg\t) {};
+  }
+\end{tikzpicture}
+
+\end{document}
+

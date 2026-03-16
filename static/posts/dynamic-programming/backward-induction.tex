@@ -1,0 +1,121 @@
+\documentclass{standalone}
+
+\def\pgfsysdriver{pgfsys-dvisvgm.def}
+\usepackage{tikz}
+
+\usetikzlibrary{animations, positioning, arrows, arrows.meta}
+
+\begin{document}
+
+\colorlet{smoothgray}{gray!80}
+
+\begin{tikzpicture}[
+  node distance = 3cm,
+  state/.style    = { circle, minimum width = 0.7cm, fill = gray!20, draw = gray!40, very thick, outer sep = 2 },
+  terminal/.style = {rectangle, fill = black, scale = 1},
+  action/.style   = {
+    opacity = 0.8,
+    thin,
+    smoothgray,
+    ->,
+    -{Kite[length=4pt,width=2.5pt,inset=1.5pt]},
+  },
+  animate/pulse/.style = {
+    myself: = {
+      begin on = {begin, of = "state"},
+      scope = {
+        time = #1,
+        :color = "orange",
+        :line width = "0.4pt",
+      },
+      0.8s = {
+        :color = "orange!80!red",
+        :line width = "0.8pt",
+        entry,
+      },
+      20s = {
+        :color = "orange!80!red",
+        :line width = "0.8pt",
+        entry
+      },
+    },
+    myself: = {
+      begin on = {end, of next = "apocalypse"}, % Undo the blue marks when the animation ends
+      id = 2,
+      scope = {
+        attribute = color,
+        0s = "current value",
+        0.5s = "smoothgray",
+        freeze,
+        entry,
+      },
+      scope = {
+        attribute = line width,
+        0s = "current value",
+        0.5s = "0.4pt",
+        freeze,
+        entry,
+      },
+      entry,
+    },
+  },
+]
+
+  % Useful constants
+  % How many states per stage
+  \def\states{{1,3,2,3}}
+  % Total number of stages
+  \pgfmathsetmacro{\nStages}{dim(\states)}
+  % Maximum number of states among stages
+  \expandafter\pgfmathmax\states{}\edef\maxStates{\pgfmathresult}
+
+  \pgfmathsetseed{5671243}
+
+  \node :fill = { 0s         = "current value",
+                  10ms later = "current value",
+                  name = "state",
+                  begin = 0.5s,
+                  begin on = {end, of next = "apocalypse", delay = 1s},
+                }
+    [terminal, opacity = 0] (T) {};
+
+  \foreach \t in {\nStages,...,1} {
+    \pgfmathsetmacro{\nStates}{\states[\t-1]}
+
+    \foreach \s in {\nStates,...,1} {
+      % Grid of states
+      \node :fill = { 0s = { exit control = {1}{0}, "gray!20" },
+                      0.2s     = "orange",
+                      0.8s     = "orange",
+                      1s = { entry control = {0}{1}, "gray!20!orange" },
+                      begin on = {end, of = "state", delay = -0.2s},
+                      name = "state",
+                    }
+            [state, outer sep = 2] (q\t\s) at ({3cm*(\t-1)}, {1.5cm*(\s - (\nStates+1)/2)}) {};
+
+      % Arraws going out of each state
+      \ifnum \t<\nStages
+        \pgfmathtruncatemacro{\next}{\t + 1}
+        \pgfmathsetmacro{\nStatesNext}{\states[\t]}
+        \pgfmathrandominteger{\bestaction}{1}{\nStatesNext}
+
+        \foreach \ny in {1,...,\nStatesNext} {
+            \ifnum \ny=\bestaction
+              \draw [action, animate ={pulse={\ny*100/\nStatesNext ms}}] (q\t\s) -- (q\next\ny);
+            \else
+              \draw :color = {
+                      \ny*100ms = {exit control = {1}{0}, "orange"},
+                      0.8s      = "smoothgray",
+                      begin on = {begin, of = "state"},
+                      }
+                  [action] (q\t\s) -- (q\next\ny);
+            \fi
+        }
+      \fi
+    }
+  }
+
+  \node :visible = {0s = "false", 3s = "false", begin on = {end, of = "state"}, name = "apocalypse"} {};
+\end{tikzpicture}
+
+\end{document}

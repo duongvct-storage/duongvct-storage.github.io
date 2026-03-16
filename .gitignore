@@ -1,0 +1,15 @@
+# Artifact folders
+cache
+build
+pandoc-log.json
+
+# Not ready to commit
+content/unposts
+unposts/
+
+# Workflow
+.direnv
+.envrc
+.harper-dictionary.txt
+
+**/tests/**

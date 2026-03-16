@@ -1,0 +1,84 @@
+\documentclass{standalone}
+
+\def\pgfsysdriver{pgfsys-dvisvgm.def}
+\usepackage{lmodern,tikz}
+
+\usetikzlibrary{positioning, arrows, arrows.meta, shapes.geometric}
+\usetikzlibrary {decorations.pathmorphing, chains, calc, matrix, scopes}
+
+\begin{document}
+
+\colorlet{smoothgray}{gray!80}
+\colorlet{smoothorange}{orange!70}
+\colorlet{greenish}{green!50!cyan!50}
+
+% Reflexive-transitive closure
+% 0 => no edge
+% 1 => original relation
+% 2 => only on closure
+\def\adjacency{{1,1,2,0}%
+              ,{1,2,1,0}%
+              ,{0,0,2,0}%
+              ,{1,2,2,1}}
+
+\def\colors{{"green!30"%
+            ,"orange!50"%
+            ,"red!30!blue!50"%
+            ,"yellow!90!black"%
+            }}
+
+\begin{tikzpicture}[
+    state/.style  = {circle, draw = black, fill=greenish, thin, minimum size=2pt}
+  , rel/.style    = {shorten >= 1mm, shorten <= 1mm, draw = black, {Round Cap[]}-{Triangle Cap[cap angle = 60]}}
+  , baseline      = (current bounding box.south),
+  , node distance = 5mm
+  ]
+
+  % Relations
+  { [ start chain        = source going below
+    , local bounding box = relScope
+    , baseline           = {(0,0)}
+    ]
+
+    \foreach \row [count=\n, evaluate= \n as \color using {\colors[\n-1]}] in \adjacency {
+      \node[state, fill=\color, on chain = source] (s\n) {};
+      \node[state, fill=\color] (t\n) [right = 20mm of s\n.east] {};
+    }
+
+    \foreach[count=\s] \row in \adjacency {
+      \foreach[count=\t] \cell in \row {
+          \ifnum\cell=1
+            \draw[rel] (s\s) -- (t\t);
+          \fi
+      }
+    }
+  }
+
+  % Complete relation
+  { [ start chain        = source going below
+    , local bounding box = relCloScope,
+    , xshift = 7cm,
+    ]
+
+    \foreach \row [count=\n, evaluate= \n as \color using {\colors[\n-1]}] in \adjacency {
+      \node[state, fill=\color, on chain = source] (s\n) {};
+      \node[state, fill=\color] (t\n) [right = 20mm of s\n.east] {};
+    }
+
+    \foreach[count=\s] \row in \adjacency {
+      \foreach[count=\t] \cell in \row {
+          \ifnum\cell=1
+            \draw[rel] (s\s) -- (t\t);
+          \else
+            \ifnum\cell=2
+              \draw[rel, draw = blue!30, semithick] (s\s.east) -- (t\t.west);
+            \fi
+          \fi
+      }
+    }
+  }
+
+  \draw[->, -Kite, thick, shorten >= 4mm, shorten <= 4mm] (relScope.east) -- node[above] {closure} (relCloScope.west);
+\end{tikzpicture}
+
+\end{document}
