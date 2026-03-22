@@ -11,6 +11,8 @@ Year 4 Term 2 - Deep Learning learning resources
 ## Online resource
 
 
+- [Tổng hợp](https://drive.google.com/drive/folders/1N1D85Dc7Sv14xvuF07PoZgcFuQF4dhpT)
+
 - [1 - Intro](https://drive.google.com/file/d/1LKD48eFaX2ejmMVPuqtmG0zora3T565A/view?usp=drive_link)
 
 

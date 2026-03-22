@@ -11,6 +11,9 @@ Year 4 Term 2 - Recommender system learning resources
 ## Online resource
 
 
+- [Tổng hợp](https://drive.google.com/drive/folders/1Z4sqM6suZWxhClPUdzcHw6dwf7r8qiGp?usp=drive_link)
+
+
 
 - [L0 - Giới thiệu môn học](https://drive.google.com/file/d/1E_r63zVbgx8p9lxhGZ6s7Ts_QBesyZSk/view?usp=drive_link)
 

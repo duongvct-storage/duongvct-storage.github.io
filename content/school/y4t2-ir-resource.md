@@ -11,6 +11,7 @@ Year 4 Term 2 - Information retrieval learning resources
 ## Online resource
 
 
+- [Tổng hợp](https://drive.google.com/drive/folders/1MO_KkPc86IIMzb7JSwGMGZ3L0f5gTRaV)
 
 - [Giáo trình](https://drive.google.com/file/d/1iQ4YfeSFnoLv5wuayM_MoIiZyvhjOOw0/view?usp=drive_link)
 

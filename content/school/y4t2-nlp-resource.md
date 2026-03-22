@@ -12,6 +12,9 @@ Year 4 Term 2 - NLP learning resources
 ## Online resource
 
 
+
+- [Tổng hợp](https://drive.google.com/drive/folders/1y_oAn9jKF4H8NYgxQfoR-ozZeLg8nqeX?usp=sharing)
+
 - [Project](https://drive.google.com/file/d/1NqOuCBNsEC-9jc4UM5rY4ecP8p8BL3mO/view?usp=drive_link)
 
 
