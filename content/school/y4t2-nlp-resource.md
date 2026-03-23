@@ -9,6 +9,20 @@ description:
 Year 4 Term 2 - NLP learning resources
 
 
+## Reference books
+
+
+- [Speech and Language Processing, Daniel Jurasky & James H. Martin, second  edition, printed by Prentice Hall, 2009](/pdfs/y4t2-nlp/speech_language_processing_ed3book_jan26.pdf)
+
+
+
+- [Foundation of Statistical Natural Language Processing, Christopher D.  Manning & Hinrich Schutze, 2001.](/pdfs/y4t2-nlp/foundations_nlp.pdf)
+
+
+
+- [Neural Network Methods in Natural Language Processing - Synthesis Lectures on Human Language Technologies, Yoav Goldberg, 2017 ](/pdfs/y4t2-nlp/nn_networks_method.pdf)
+
+
 ## Online resource
 
 
