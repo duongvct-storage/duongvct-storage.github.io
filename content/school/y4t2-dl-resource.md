@@ -61,7 +61,7 @@ Year 4 Term 2 - Deep Learning learning resources
 ### BTL
 
 
-- [Link github] (https://github.com/PTIT-Assignment-Projects/INT14154-project)
+- [Link github](https://github.com/PTIT-Assignment-Projects/INT14154-project)
 
 
 - [Report](/pdfs/y4t2-dl/btl/BTL.pdf)
