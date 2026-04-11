@@ -71,3 +71,12 @@ Year 4 Term 2 - Information retrieval learning resources
 
 - [Chapter VIII](/pdfs/y4t2-information-retrieval/Chapter_VIII.pdf)
 
+
+
+
+### BTL
+
+- [Report](/pdfs/y4t2-information-retrieval/btl/BTL.pdf)
+
+
+- [Slide](/pdfs/y4t2-information-retrieval/btl/slide.pdf)

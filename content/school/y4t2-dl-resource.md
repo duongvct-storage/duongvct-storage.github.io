@@ -56,3 +56,11 @@ Year 4 Term 2 - Deep Learning learning resources
 
 
 - [7 - RNN](/pdfs/y4t2-dl/L7-RNN.pdf)
+
+
+### BTL
+
+- [Report](/pdfs/y4t2-dl/btl/BTL.pdf)
+
+
+- [Slide](/pdfs/y4t2-dl/btl/slide.pdf)
