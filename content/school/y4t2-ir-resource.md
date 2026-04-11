@@ -76,6 +76,10 @@ Year 4 Term 2 - Information retrieval learning resources
 
 ### BTL
 
+
+- [Link github] (https://github.com/PTIT-Assignment-Projects/vietnamese-law-retrieval)
+
+
 - [Report](/pdfs/y4t2-information-retrieval/btl/BTL.pdf)
 
 
