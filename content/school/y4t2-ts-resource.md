@@ -30,3 +30,7 @@ Year 4 Term 2 - Time Series learning resources
 
 
 - [3 - Trích chọn đặc trưng](/pdfs/y4t2-time-series/3_trich_chon_dac_trung.pdf)
+
+
+
+- [4 - Mô hình thống kê](/pdfs/y4t2-time-series/4-mo-hinh-thong-ke.pdf)
