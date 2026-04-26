@@ -1,0 +1,100 @@
+# Markdown Bullet Point Fixer
+
+## Mục đích
+Khi viết hoặc chỉnh sửa file markdown, đảm bảo các bullet points được format đúng để render chính xác trên website.
+
+## Quy tắc quan trọng
+
+### 1. Bullet Points Cần Dòng Trống Phía Trước
+
+Trong Markdown (đặc biệt khi dùng Pandoc), một bullet list phải có **ít nhất một dòng trống** giữa text phía trước và các mục trong danh sách.
+
+**SAI:**
+```markdown
+Đây là text không có dòng trống
+- Mục 1
+- Mục 2
+- Mục 3
+```
+
+**ĐÚNG:**
+```markdown
+Đây là text không có dòng trống
+
+- Mục 1
+- Mục 2
+- Mục 3
+```
+
+### 2. Giữa Các List Items Không Cần Dòng Trống
+
+**ĐÚNG:**
+```markdown
+- Mục 1
+- Mục 2
+- Mục 3
+```
+
+### 3. Sau Horizontal Rule (`---`) Không Cần Dòng Trống
+
+**ĐÚNG:**
+```markdown
+---
+
+- Mục 1
+```
+
+## Pattern Cần Kiểm Tra
+
+Mỗi khi thấy một dòng bắt đầu bằng `-` hoặc `*`, cần kiểm tra dòng phía trước:
+
+1. **OK** - Dòng trống
+2. **OK** - Dòng bắt đầu bằng `-` hoặc `*` (tiếp tục list)
+3. **OK** - Dòng bắt đầu bằng `---` (horizontal rule)
+4. **OK** - Dòng bắt đầu bằng `|` (table row)
+5. **OK** - Dòng bắt đầu bằng `#` (heading)
+6. **CẦN FIX** - Dòng kết thúc bằng `:` mà không có dòng trống
+7. **CẦN FIX** - Dòng plain text thông thường không có dòng trống
+
+## Commands Để Kiểm Tra
+
+```bash
+# Tìm các dòng bullet points
+grep -n "^- " file.md
+
+# Kiểm tra xem có vấn đề format không bằng cách build
+make school
+```
+
+## Hướng Dẫn Nhanh
+
+1. Mỗi khi thêm bullet list sau text, phải có ít nhất 1 dòng trống
+2. Nếu thấy text ngay trước bullet point mà không có dòng trống, thêm dòng trống vào
+3. Các mục trong cùng một list thì không cần dòng trống giữa chúng
+
+## Ví Dụ Thực Tế
+
+### Trường hợp bị lỗi (render không đúng):
+```markdown
+Kiểm tra điều kiện dừng:
+- ϕ1 + ϕ2 < 1 ✓
+- ϕ2 - ϕ1 < 1 ✓
+```
+
+Rendered: text liền với bullet, không thành list
+
+### Đã fix:
+```markdown
+Kiểm tra điều kiện dừng:
+
+- ϕ1 + ϕ2 < 1 ✓
+- ϕ2 - ϕ1 < 1 ✓
+```
+
+Rendered: Danh sách bullet đúng cách
+
+## Áp Dụng
+
+Khi làm việc với bất kỳ file `.md` nào trong repo này, luôn nhớ:
+- Thêm dòng trống TRƯỚC khi bắt đầu một bullet list mới
+- Không cần thêm dòng trống giữa các items trong cùng một list

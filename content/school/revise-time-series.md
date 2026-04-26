@@ -28,10 +28,12 @@ description: Year 4 Term 2 - Time Series revise
 **Chuỗi thời gian (Time Series)** là tập hợp các quan sát về một hiện tượng nào đó được thu thập theo trình tự trong một khoảng thời gian nhất định.
 
 **Đặc điểm quan trọng:**
+
 - Dữ liệu được thu thập theo thứ tự thời gian (time-ordered)
 - Các quan sát tại các thời điểm cách đều nhau (hàng ngày, hàng tháng, hàng năm,...)
 
 **Ký hiệu:**
+
 - $Y_t$: giá trị quan sát được tại thời điểm $t$
 - $T = 1, 2, \ldots, T$: Chỉ số thời gian
 
@@ -78,30 +80,35 @@ description: Year 4 Term 2 - Time Series revise
 ### Câu hỏi trắc nghiệm
 
 **Câu 1**: Chuỗi thời gian là gì?
+
 - A. Tập hợp các quan sát được thu thập ngẫu nhiên
 - B. Tập hợp các quan sát được thu thập theo trình tự thời gian
 - C. Tập hợp các quan sát độc lập với nhau
 - D. Tập hợp các quan sát trong một thời điểm cố định
 
 **Câu 2**: Đặc điểm nào KHÔNG phải của chuỗi thời gian?
+
 - A. Thứ tự thời gian quan trọng
 - B. Các quan sát độc lập với nhau
 - C. Có tính tự tương quan (autocorrelation)
 - D. Phụ thuộc vào thời gian
 
 **Câu 3**: Chuỗi liên tục và chuỗi rời rạc khác nhau ở điểm nào?
+
 - A. Số lượng quan sát
 - B. Cách thu thập dữ liệu theo thời gian
 - C. Độ chính xác của phép đo
 - D. Không có sự khác biệt
 
 **Câu 4**: Tại sao chuỗi thời gian không thể xáo trộn thứ tự?
+
 - A. Vì dữ liệu quá lớn
 - B. Vì thứ tự thời gian chứa thông tin quan trọng về mối quan hệ giữa các quan sát
 - C. Vì máy tính không cho phép
 - D. Vì các quan sát giống nhau
 
 **Câu 5**: Khi nào một chuỗi thời gian có thể được dự đoán chính xác?
+
 - A. Khi chuỗi là ngẫu nhiên hoàn toàn
 - B. Khi chuỗi là chuỗi xác định (deterministic)
 - C. Khi chuỗi có nhiều nhiễu
@@ -136,6 +143,7 @@ description: Year 4 Term 2 - Time Series revise
 *Ví dụ: Doanh số bán hàng hàng tháng của một cửa hàng trong 12 tháng*
 
 **Đặc điểm:**
+
 - **Thứ tự thời gian quan trọng**: Doanh số tháng này phụ thuộc vào các tháng trước
 - **Tính xu hướng (trend)**: Có thể tăng hoặc giảm theo thời gian
 - **Tính mùa vụ (seasonality)**: Doanh số có thể tăng vào dịp lễ, Tết
@@ -153,6 +161,7 @@ description: Year 4 Term 2 - Time Series revise
 2. Nhiệt độ đo mỗi 10 phút - không phải liên tục
 
 *Sự khác biệt chính:*
+
 - Chuỗi liên tục: quan sát được thực hiện liên tục, có thể nhận giá trị bất kỳ thời điểm nào
 - Chuỗi rời rạc: quan sát chỉ tại các thời điểm xác định, thường cách đều nhau
 
@@ -386,6 +395,7 @@ Chuỗi: $x = [100, 110, NaN, 125, 135, NaN, 150]$
 | Linear Interpolation | 117.5 | 142.5 |
 
 **Nhận xét:**
+
 - Linear Interpolation cho giá trị cao hơn vì tính đến trend tăng
 - SMA(2) chỉ nhìn backward nên bỏ qua thông tin từ tương lai gần
 - Trong chuỗi có trend, Linear Interpolation thường chính xác hơn
@@ -455,6 +465,7 @@ Trong khi Linear Interpolation sẽ cho:
 $[20, 22, 24, 26, 28, 30]$ → **Gần đúng với thực tế**
 
 **Kết luận:**
+
 - Forward Fill chỉ phù hợp với dữ liệu ít thay đổi hoặc step function
 - Khi có trend rõ ràng, nên dùng Linear Interpolation hoặc các phương pháp phức tạp hơn
 
@@ -476,6 +487,7 @@ $[20, 22, 24, 26, 28, 30]$ → **Gần đúng với thực tế**
 **Định nghĩa**: Chia chuỗi thời gian dài thành nhiều đoạn nhỏ, mỗi đoạn có tính chất ổn định hơn.
 
 **Mục đích:**
+
 - Tìm điểm thay đổi (change points)
 - Đại diện chuỗi bằng các đoạn có ý nghĩa (piecewise constant, piecewise linear)
 - Làm mô hình tốt hơn, giảm nhiễu
@@ -490,6 +502,7 @@ $[20, 22, 24, 26, 28, 30]$ → **Gần đúng với thực tế**
 **Định nghĩa**: Kỹ thuật lấy các đoạn con có độ dài cố định từ chuỗi thời gian.
 
 **Tham số:**
+
 - Window size (W): Chiều dài cửa sổ
 - Step size (S): Khoảng dịch chuyển mỗi lần
 
@@ -562,11 +575,13 @@ Một chuỗi là dừng yếu nếu:
 $$\rho_k = \frac{\gamma_k}{\gamma_0}$$
 
 **Đặc điểm:**
+
 - $\rho_0 = 1$
 - $\rho_k = \rho_{-k}$
 - $\rho_k \in [-1, 1]$
 
 **Ý nghĩa:**
+
 - ACF giảm từ từ → có trend hoặc chu kỳ
 - ACF giảm nhanh → dữ liệu khá stationary
 
@@ -575,6 +590,7 @@ $$\rho_k = \frac{\gamma_k}{\gamma_0}$$
 Hệ số tự tương quan giữa $Y_t$ và $Y_{t-k}$ sau khi loại bỏ ảnh hưởng của các biến ở giữa.
 
 **Ý nghĩa:**
+
 - PACF cắt tại lag p → gợi ý mô hình AR(p)
 - ACF cắt tại lag q → gợi ý mô hình MA(q)
 
@@ -589,6 +605,7 @@ $$X(\omega_k) = \sum_{t=0}^{T-1} x_t e^{-i\omega_k t}, \quad \omega_k = \frac{2\
 $$S(\omega_k) = \frac{1}{T}|X(\omega_k)|^2$$
 
 **Ý nghĩa:**
+
 - Đỉnh (peaks) trong PSD → chu kỳ mạnh
 - PSD rộng → tín hiệu nhiễu
 - PSD sắc, cao → tín hiệu có chu kỳ rõ ràng
@@ -838,6 +855,7 @@ Chuỗi: $x = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]$
 Window size = 4, Step = 2
 
 **Các cửa sổ:**
+
 - Cửa sổ 1 (t=1-4): [1, 2, 3, 4]
 - Cửa sổ 2 (t=3-6): [3, 4, 5, 6]
 - Cửa sổ 3 (t=5-8): [5, 6, 7, 8]
@@ -848,12 +866,14 @@ Window size = 4, Step = 2
 ### Bài 7:
 
 **Trung bình của mỗi cửa sổ:**
+
 - Window 1: $(1+2+3+4)/4 = 2.5$
 - Window 2: $(3+4+5+6)/4 = 4.5$
 - Window 3: $(5+6+7+8)/4 = 6.5$
 - Window 4: $(7+8+9+10)/4 = 8.5$
 
 **Nhận xét:**
+
 - Trung bình tăng đều: 2.5 → 4.5 → 6.5 → 8.5 (mỗi cửa sổ tăng 2)
 - Điều này phản ánh trend tăng tuyến tính của chuỗi gốc
 - Có thể dùng để làm mịn dữ liệu hoặc phát hiện xu hướng
@@ -875,6 +895,7 @@ $$S(\omega_k) = \frac{1}{T}|X(\omega_k)|^2$$
 3. **Dễ dự báo**: Có thể khai thác chu kỳ để dự báo ngắn hạn
 
 **Ví dụ thực tế:**
+
 - ECG (điện tâm đồ): PSD có đỉnh ở ~1Hz (nhịp tim)
 - Tín hiệu điện: PSD có đỉnh ở 50Hz/60Hz (tần số lưới điện)
 - Dữ liệu bán hàng theo tháng: PSD có đỉnh ở tần số 1/12 (chu kỳ năm)
@@ -910,6 +931,7 @@ $$Y_t = c + \phi_1 Y_{t-1} + \varepsilon_t$$
 **Điều kiện dừng:** $|\phi_1| < 1$
 
 **Ý nghĩa:**
+
 - $\phi_1 > 0$: có xu hướng cùng chiều với quá khứ
 - $\phi_1 < 0$: có xu hướng ngược chiều (zig-zag)
 - $|\phi_1| \to 1$: không dừng (unit root)
@@ -971,6 +993,7 @@ $$Y_t = c + \phi_1 Y_{t-1} + \cdots + \phi_p Y_{t-p} + \varepsilon_t + \theta_1 
 MA(q) có tính khả nghịch nếu các nghiệm của $\theta(B) = 0$ nằm ngoài vòng tròn đơn vị.
 
 **Ý nghĩa:**
+
 - MA(1) khả nghịch khi $|\theta_1| < 1$
 - Khi khả nghịch, có thể biểu diễn MA dưới dạng AR vô hạn
 - Đảm bảo tính duy nhất của mô hình
@@ -990,11 +1013,13 @@ ARIMA = AR + MA + Integration (sai phân)
 $$\phi(B)(1-B)^d Y_t = \theta(B)\varepsilon_t$$
 
 **Ký hiệu:** ARIMA(p, d, q)
+
 - p: bậc AR
 - d: bậc sai phân
 - q: bậc MA
 
 **Ý nghĩa của sai phân:**
+
 - $d = 0$: Chuỗi đã dừng, dùng ARMA
 - $d = 1$: Lấy sai phân bậc 1 để làm dừng
 - $d = 2$: Lấy sai phân bậc 2
@@ -1183,6 +1208,7 @@ $$|\phi_1| = |0.7| = 0.7 < 1 \Rightarrow \text{Dừng}$$
 
 **d) ACF:**
 $$\rho_k = \phi_1^k$$
+
 - $\rho_1 = 0.7^1 = 0.7$
 - $\rho_2 = 0.7^2 = 0.49$
 - $\rho_3 = 0.7^3 = 0.343$
@@ -1264,6 +1290,7 @@ $$\theta_1 = -0.3, \quad |\theta_1| = 0.3 < 1 \Rightarrow \text{Khả nghịch}$
 | **Phương sai** | Hữu hạn khi dừng | Luôn hữu hạn (luôn dừng) |
 
 **Khi nào dùng:**
+
 - **AR**: Khi chuỗi có autocorrelation mạnh với quá khứ gần
 - **MA**: Khi chuỗi bị ảnh hưởng bởi các cú sốc (shocks) tạm thời
 - **ARMA**: Khi cả hai yếu tố đều quan trọng
@@ -1325,6 +1352,7 @@ Cập nhật sai số ước lượng:
 $$P_{t|t} = (I - K_t H) P_{t|t-1}$$
 
 **Ý nghĩa:**
+
 - $K_t$ lớn → Tin vào đo lường nhiều hơn
 - $K_t$ nhỏ → Tin vào mô hình dự đoán nhiều hơn
 
@@ -1362,11 +1390,13 @@ $$P(x_t = \text{dry} | z_t = \text{Nắng}) = B_{12} = 0.9 = 90\%$$
 **c) Ý nghĩa:**
 
 **Ma trận A (Transition matrix):**
+
 - Hàng i, cột j = xác suất chuyển từ trạng thái i sang trạng thái j
 - $A_{11} = 0.8$: Nếu hôm nay nắng, 80% ngày mai vẫn nắng
 - $A_{21} = 0.3$: Nếu hôm nay mưa, 30% ngày mai nắng
 
 **Ma trận B (Emission matrix):**
+
 - Hàng i, cột k = xác suất trạng thái i phát ra quan sát k
 - $B_{11} = 0.1$: Khi trời nắng, chỉ 10% khả năng đất ướt
 - $B_{21} = 0.8$: Khi trời mưa, 80% khả năng đất ướt
@@ -1415,6 +1445,7 @@ $$\phi_1 = 0.936 - 0.936 \times (-0.597) = 0.936 + 0.559 = 1.495$$
 $$\hat{\phi}_1 \approx 1.495, \quad \hat{\phi}_2 \approx -0.597$$
 
 **Kiểm tra điều kiện dừng:**
+
 - $\phi_1 + \phi_2 = 1.495 - 0.597 = 0.898 < 1$ ✓
 - $\phi_2 - \phi_1 = -0.597 - 1.495 = -2.092 < 1$ ✓
 - $|\phi_2| = 0.597 < 1$ ✓
