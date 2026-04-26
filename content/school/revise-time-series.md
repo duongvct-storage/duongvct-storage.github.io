@@ -3,8 +3,7 @@ title: Y4T2-Time Series revise
 keywords: [school, time-series, revise]
 date: 2026-04-26
 theme: time-series
-description:
-Year 4 Term 2 - Time Series revise
+description: Year 4 Term 2 - Time Series revise
 ---
 
 # ON TAP CUOI KY: PHAN TICH DU LIEU CHUOI THOI GIAN
