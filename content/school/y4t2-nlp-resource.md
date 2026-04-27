@@ -78,3 +78,12 @@ Year 4 Term 2 - NLP learning resources
 
 - [Week 5.1 - Text Preprocessing](/pdfs/y4t2-nlp/Week5-1-Text-Preprocessing.pdf)
 
+
+## Images
+
+- [photo_2026-02-03_11-22-28.jpg](/img/y4t2-nlp/photo_2026-02-03_11-22-28.jpg)
+- [photo_2026-02-03_11-22-39.jpg](/img/y4t2-nlp/photo_2026-02-03_11-22-39.jpg)
+- [photo_2026-02-26_22-40-23.jpg](/img/y4t2-nlp/photo_2026-02-26_22-40-23.jpg)
+- [photo_2026-02-26_22-40-31.jpg](/img/y4t2-nlp/photo_2026-02-26_22-40-31.jpg)
+- [photo_2026-02-26_22-40-32.jpg](/img/y4t2-nlp/photo_2026-02-26_22-40-32.jpg)
+
