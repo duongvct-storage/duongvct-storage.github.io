@@ -782,37 +782,149 @@ $$\rho_2 = \frac{-1.8}{4} = -0.45$$
 
 ### Bài 4:
 
-**a) $x_t = \beta t + \varepsilon_t$ với $\beta \neq 0$**
+**Giả định chung:** $\varepsilon_t$ là chuỗi nhiễu trắng (white noise):
+- $E[\varepsilon_t] = 0$
+- $\text{Var}(\varepsilon_t) = \sigma^2$ (hằng số)
+- $\text{Cov}(\varepsilon_t, \varepsilon_{t-k}) = E[\varepsilon_t \varepsilon_{t-k}] = 0$ với mọi $k \neq 0$
 
-$$E[x_t] = \beta t \quad \text{(phụ thuộc vào t!)}$$
+---
 
-→ **Không dừng** vì kỳ vọng thay đổi theo thời gian
+#### a) $x_t = \beta t + \varepsilon_t$
 
-**b) $x_t = \varepsilon_t - \beta \varepsilon_{t-1}$**
+**Kỳ vọng:**
 
-$$E[x_t] = 0 \quad \text{(không đổi)}$$
-$$\text{Var}(x_t) = \sigma^2 + \beta^2\sigma^2 = (1+\beta^2)\sigma^2 \quad \text{(không đổi)}$$
-$$\gamma_k = \text{Cov}(x_t, x_{t-k}) \quad \text{chỉ phụ thuộc vào k}$$
+$$E[x_t] = E[\beta t + \varepsilon_t] = \beta t + E[\varepsilon_t] = \beta t$$
 
-→ **Dừng** (đây là mô hình MA(1))
+**Phương sai:**
 
-**c) $x_t = x_{t-1} + \varepsilon_t$**
+\begin{align*}
+\text{Var}(x_t) &= \text{Var}(\beta t + \varepsilon_t) \\
+&= \text{Var}(\beta t) + \text{Var}(\varepsilon_t) \\
+&= 0 + \sigma^2 = \sigma^2
+\end{align*}
 
-Đây là **Random Walk**:
-$$x_t = x_0 + \sum_{i=1}^{t}\varepsilon_i$$
+**Autocovariance ở độ trễ $k$:**
 
-$$E[x_t] = x_0 \quad \text{(không đổi)}$$
-$$\text{Var}(x_t) = t\sigma^2 \quad \text{(phụ thuộc vào t!)}$$
+\begin{align*}
+\text{Cov}(x_t, x_{t-k}) &= E[(x_t - E[x_t])(x_{t-k} - E[x_{t-k}])] \\
+x_t - E[x_t] &= (\beta t + \varepsilon_t) - \beta t = \varepsilon_t \\
+x_{t-k} - E[x_{t-k}] &= (\beta(t-k) + \varepsilon_{t-k}) - \beta(t-k) = \varepsilon_{t-k} \\
+\text{Cov}(x_t, x_{t-k}) &= E[\varepsilon_t \cdot \varepsilon_{t-k}]
+\end{align*}
 
-→ **Không dừng** vì phương sai tăng theo thời gian
+- Khi $k = 0$ (phương sai): $\gamma_0 = E[\varepsilon_t^2] = \sigma^2$
+- Khi $k \neq 0$: $\gamma_k = E[\varepsilon_t \varepsilon_{t-k}] = 0$
 
-**d) $x_t = \mu + \varepsilon_t$ (white noise)**
+→ **Không dừng** vì kỳ vọng $E[x_t] = \beta t$ phụ thuộc vào thời gian $t$ (dù hiệp phương sai không đổi).
 
-$$E[x_t] = \mu \quad \text{(không đổi)}$$
-$$\text{Var}(x_t) = \sigma^2 \quad \text{(không đổi)}$$
-$$\gamma_k = 0 \text{ cho } k \neq 0 \quad \text{(chỉ phụ thuộc vào k)}$$
+---
 
-→ **Dừng**
+#### b) $x_t = \varepsilon_t - \beta \varepsilon_{t-1}$ (Mô hình MA(1))
+
+**Kỳ vọng:**
+
+$$E[x_t] = E[\varepsilon_t - \beta \varepsilon_{t-1}] = E[\varepsilon_t] - \beta E[\varepsilon_{t-1}] = 0 - 0 = 0$$
+
+Do $E[x_t] = 0$ nên công thức hiệp phương sai thu gọn thành $\text{Cov}(x_t, x_{t-k}) = E[x_t \cdot x_{t-k}]$.
+
+**Phương sai ($k = 0$):**
+
+\begin{align*}
+\gamma_0 = \text{Var}(x_t) &= E[(\varepsilon_t - \beta \varepsilon_{t-1})^2] \\
+&= E[\varepsilon_t^2 - 2\beta \varepsilon_t \varepsilon_{t-1} + \beta^2 \varepsilon_{t-1}^2] \\
+&= E[\varepsilon_t^2] - 2\beta E[\varepsilon_t \varepsilon_{t-1}] + \beta^2 E[\varepsilon_{t-1}^2] \\
+&= \sigma^2 - 0 + \beta^2 \sigma^2 = (1 + \beta^2)\sigma^2
+\end{align*}
+
+**Tại $k = 1$:**
+
+\begin{align*}
+\gamma_1 &= \text{Cov}(x_t, x_{t-1}) \\
+&= E[(\varepsilon_t - \beta \varepsilon_{t-1})(\varepsilon_{t-1} - \beta \varepsilon_{t-2})] \\
+&= E[\varepsilon_t \varepsilon_{t-1} - \beta \varepsilon_t \varepsilon_{t-2} - \beta \varepsilon_{t-1}^2 + \beta^2 \varepsilon_{t-1} \varepsilon_{t-2}] \\
+&= 0 - 0 - \beta E[\varepsilon_{t-1}^2] + 0 = -\beta \sigma^2
+\end{align*}
+
+**Tại $k > 1$:**
+
+$$\gamma_k = E[(\varepsilon_t - \beta \varepsilon_{t-1})(\varepsilon_{t-k} - \beta \varepsilon_{t-k-1})] = 0$$
+
+(vì tất cả các chỉ số thời gian của $\varepsilon$ khi nhân chéo đều khác nhau hoàn toàn).
+
+→ **Dừng** vì $E[x_t] = 0$ không đổi, $\text{Var}(x_t) = (1+\beta^2)\sigma^2$ không đổi, và $\gamma_k$ chỉ phụ thuộc vào $k$.
+
+---
+
+#### c) $x_t = x_{t-1} + \varepsilon_t$ (Random Walk)
+
+Bằng cách thế lùi dần (giả sử bắt đầu từ $x_0$):
+
+$$x_t = x_0 + \sum_{i=1}^{t} \varepsilon_i$$
+
+**Kỳ vọng (với $x_0$ là hằng số):**
+
+\begin{align*}
+E[x_t] &= E\left[x_0 + \sum_{i=1}^{t} \varepsilon_i\right] \\
+&= E[x_0] + \sum_{i=1}^{t} E[\varepsilon_i] \\
+&= x_0 + 0 + 0 + \cdots + 0 = x_0
+\end{align*}
+
+(Áp dụng tính chất tuyến tính của kỳ vọng: kỳ vọng của tổng bằng tổng các kỳ vọng, và $E[\varepsilon_i] = 0$).
+
+**Phương sai ($k = 0$):**
+
+\begin{align*}
+\text{Var}(x_t) &= \text{Var}\left(x_0 + \sum_{i=1}^{t} \varepsilon_i\right) \\
+&= \text{Var}(x_0) + \text{Var}(\varepsilon_1) + \text{Var}(\varepsilon_2) + \cdots + \text{Var}(\varepsilon_t) \\
+&= 0 + \underbrace{\sigma^2 + \sigma^2 + \cdots + \sigma^2}_{t \text{ lần}} \\
+&= t\sigma^2
+\end{align*}
+
+**Autocovariance ở độ trễ $k$ (với $k > 0$):**
+
+\begin{align*}
+\text{Cov}(x_t, x_{t-k}) &= \text{Cov}\left( \sum_{i=1}^{t} \varepsilon_i, \sum_{j=1}^{t-k} \varepsilon_j \right) \\
+&= \text{Cov}\left( \sum_{i=1}^{t-k} \varepsilon_i, \sum_{j=1}^{t-k} \varepsilon_j \right) + \text{Cov}\left( \sum_{i=t-k+1}^{t} \varepsilon_i, \sum_{j=1}^{t-k} \varepsilon_j \right) \\
+&= (t-k)\sigma^2 + 0 = (t-k)\sigma^2
+\end{align*}
+
+→ **Không dừng** vì phương sai $\text{Var}(x_t) = t\sigma^2$ phụ thuộc vào $t$ (tăng dần tới vô cực khi $t \to \infty$).
+
+---
+
+#### d) $x_t = \mu + \varepsilon_t$ (White noise có nhiễu nền)
+
+**Kỳ vọng:**
+
+$$E[x_t] = E[\mu + \varepsilon_t] = \mu + E[\varepsilon_t] = \mu$$
+
+**Phương sai:**
+
+\begin{align*}
+\text{Var}(x_t) &= \text{Var}(\mu + \varepsilon_t) \\
+&= \text{Var}(\mu) + \text{Var}(\varepsilon_t) \\
+&= 0 + \sigma^2 = \sigma^2
+\end{align*}
+
+**Autocovariance:**
+
+\begin{align*}
+\text{Cov}(x_t, x_{t-k}) &= E[(x_t - E[x_t])(x_{t-k} - E[x_{t-k}])] \\
+x_t - E[x_t] &= (\mu + \varepsilon_t) - \mu = \varepsilon_t \\
+x_{t-k} - E[x_{t-k}] &= (\mu + \varepsilon_{t-k}) - \mu = \varepsilon_{t-k} \\
+\text{Cov}(x_t, x_{t-k}) &= E[\varepsilon_t \cdot \varepsilon_{t-k}]
+\end{align*}
+
+- Nếu $k = 0$: $\gamma_0 = E[\varepsilon_t^2] = \sigma^2$ (phương sai không đổi)
+- Nếu $k \neq 0$: $\gamma_k = E[\varepsilon_t \varepsilon_{t-k}] = 0$ (độc lập)
+
+→ **Dừng** vì kỳ vọng không đổi, phương sai không đổi, hiệp phương sai chỉ phụ thuộc vào độ trễ $k$ (thực tế bằng 0).
+
+---
+
+> **Lưu ý:** Khi một chuỗi có kỳ vọng bằng 0 ($E[x_t] = 0$, như trong câu b), công thức hiệp phương sai được rút gọn thành $\text{Cov}(x_t, x_{t-k}) = E[x_t \cdot x_{t-k}]$. Điều này xuất phát từ công thức khai triển $\text{Cov}(X,Y) = E[XY] - E[X]E[Y]$, và khi $E[X] = E[Y] = 0$ thì số hạng thứ hai bị triệt tiêu.
+>
+> **Lưu ý về $E[\varepsilon_t^2] = \sigma^2$ vs $E[\varepsilon_t] = 0$:** Không nên nhầm lẫn $E[\varepsilon_t^2]$ với $(E[\varepsilon_t])^2$. Từ công thức $\text{Var}(X) = E[X^2] - (E[X])^2$, thay $\text{Var}(\varepsilon_t) = \sigma^2$ và $E[\varepsilon_t] = 0$, ta có $\sigma^2 = E[\varepsilon_t^2] - 0$, suy ra $E[\varepsilon_t^2] = \sigma^2$. Trực quan: bình phương các giá trị nhiễu (âm $\to$ dương) tạo ra tập toàn số không âm, nên trung bình của chúng là $\sigma^2 > 0$, không thể bằng 0.
 
 ---
 
