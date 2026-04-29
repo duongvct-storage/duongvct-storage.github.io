@@ -49,6 +49,20 @@ Year 4 Term 2 - NLP learning resources
 
 - [Week 5.1 - Text Preprocessing](/pdfs/y4t2-nlp/Week5-1-Text-Preprocessing.pdf)
 
+- [Week 5 - Sentiment Analysis](/pdfs/y4t2-nlp/Week5-Sentiment-Analysis.pdf)
+
+- [Week 6 - RNN](/pdfs/y4t2-nlp/Week6-RNN.pdf)
+
+- [Week 6 - Seq2seq](/pdfs/y4t2-nlp/Week6-Seq2seq.pdf)
+
+- [Week 6 - Transformer](/pdfs/y4t2-nlp/Week6-Transformer.pdf)
+
+- [Week 7 - Lexical Semantics](/pdfs/y4t2-nlp/Week7-Lexical-Semantics.pdf)
+
+- [Week 8 - Information Extraction](/pdfs/y4t2-nlp/Week8-Information-Extraction.pdf)
+
+- [Week 9 - Question Answering](/pdfs/y4t2-nlp/Week9-Question-Answering.pdf)
+
 
 ## Images
 
