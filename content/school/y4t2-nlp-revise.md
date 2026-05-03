@@ -219,7 +219,7 @@ $$
 
 ## 3.5 Thuật toán Viterbi
 
-Tìm chuỗi trạng thái có xác suất cao nhất. Tương tự Forward nhưng thay **Sum → Max** và lưu lại **backpointer**.
+Tìm chuỗi trạng thái có xác suất cao nhất. Tương tự Forward nhưng thay **Sum bằng Max** và lưu lại **backpointer**.
 
 **Khởi tạo:**
 
@@ -517,7 +517,7 @@ P(\text{câu}) &= P(cô | <s>) \times P(ấy | cô) \times P(học | ấy) \\
 \end{aligned}
 $$
 
-*Vấn đề: Bigram (học, môn) không xuất hiện trong tập huấn luyện! Count = 0 → xác suất = 0.*
+*Vấn đề: Bigram (học, môn) không xuất hiện trong tập huấn luyện! Count = 0, dẫn đến xác suất = 0.*
 
 **Xử lý bằng Laplace Smoothing:**
 
@@ -870,9 +870,13 @@ Phân tích các luật:
 - $X \rightarrow XX$: phép ghép (concatenation) của hai chuỗi con sinh từ X.
 
 Thực hiện suy diễn:
+
 - $n=0$: $X \Rightarrow \varepsilon$
+
 - $n=1$: $X \Rightarrow aXb \Rightarrow a\varepsilon b = ab$
+
 - $n=2$: $X \Rightarrow aXb \Rightarrow aaXbb \Rightarrow aabb$
+
 - $n=3$: $X \Rightarrow XX \Rightarrow aXb \cdot aXb \Rightarrow ab \cdot ab = abab$
 
 Chuỗi sinh từ $aXb$ đảm bảo số lượng $a$ và $b$ bằng nhau và mọi $a$ nằm bên trái $b$ tương ứng. Phép $XX$ cho phép nối các chuỗi loại $a^n b^n$ lại với nhau.

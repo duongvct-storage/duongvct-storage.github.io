@@ -34,3 +34,5 @@ Year 4 Term 2 - Time Series learning resources
 
 
 - [4 - Mô hình thống kê](/pdfs/y4t2-time-series/4-mo-hinh-thong-ke.pdf)
+
+- [5 - Học máy và học sâu](/pdfs/y4t2-time-series/05-hoc-may-va-hoc-sau.pdf)
