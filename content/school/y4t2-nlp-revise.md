@@ -93,20 +93,48 @@ Một câu có thể có nhiều cấu trúc cú pháp khác nhau.
 
 **Câu 3. Gán nhãn từ loại (POS Tagging) là gì? Tại sao cần gán nhãn từ loại? Nêu ít nhất 01 ứng dụng thực tế.**
 
-**POS Tagging (Part-of-Speech Tagging)** là quá trình gán cho mỗi từ trong câu một nhãn từ loại tương ứng (danh từ, động từ, tính từ,...).
+**Định nghĩa:**
 
-**Tại sao cần:**
+POS Tagging (Part-of-Speech tagging) là quá trình gán cho mỗi từ trong câu một nhãn từ loại tương ứng (danh từ, động từ, tính từ,...).
 
-- Là bước tiền xử lý quan trọng cho hầu hết các tác vụ NLP.
-- Cung cấp thông tin ngữ pháp giúp hiểu cấu trúc câu.
-- Một từ có thể thuộc nhiều từ loại → cần POS để khử nhập nhằng.
-- Dễ thực hiện và dễ đánh giá (đếm số thẻ gán đúng).
+- **Input:** 1 đoạn văn bản đã tách từ + tập nhãn (tagset)
+- **Output:** cách gán nhãn chính xác nhất cho mọi token
 
-**Ứng dụng thực tế:**
+**Bản chất — bài toán khử nhập nhằng:**
 
-- **Text-to-speech:** Từ "record" là danh từ (ˈrekɔːd) hay động từ (rɪˈkɔːd) → phát âm khác nhau.
-- Tiền xử lý cho phân tích cú pháp (parsing).
-- Nhận dạng tiếng nói, trích xuất thông tin.
+POS tagging là một bài toán khử nhập nhằng (disambiguation): mỗi từ có thể thuộc nhiều từ loại khác nhau, mục tiêu là tìm ra nhãn đúng trong ngữ cảnh cụ thể.
+
+Ví dụ từ "that" trong tiếng Anh (theo slide):
+
+- "Book **that** fight" → **verb** (động từ)
+- "Hand me **that** book" → **determiner** (mạo từ)
+- "Does **that** flight serve dinner?" → **determiner** (mạo từ)
+- "I thought **that** your flight was earlier" → **complementizer** (bổ ngữ)
+
+**Lớp từ (Word classes) — kiến thức nền tảng:**
+
+Theo slide bài giảng, từ được chia làm 2 lớp chính:
+
+| Lớp | Đặc điểm | Ví dụ |
+|-----|---------|-------|
+| **Lớp đóng (Closed class)** — từ chức năng | Số lượng cố định, từ ngắn, xuất hiện thường xuyên, có chức năng ngữ pháp | Giới từ (on, under, over), mạo từ (a, an, the), đại từ (I, you, she), liên từ, trợ động từ |
+| **Lớp mở (Open class)** — từ nội dung | Có thể thêm từ mới | Danh từ, động từ, tính từ, trạng từ (vd: iPhone) |
+
+**Tại sao cần POS tagging?** (theo slide)
+
+1. **Dễ thực hiện:** có thể thực hiện bằng nhiều phương pháp khác nhau; các phương pháp sử dụng ngữ cảnh có thể đem lại kết quả tốt.
+2. **Dễ đánh giá:** đếm số thẻ được gán nhãn đúng.
+3. **Là bước tiền xử lý quan trọng** cho hầu hết các tác vụ NLP khác.
+
+**Ứng dụng thực tế** (theo slide):
+
+- **Text-to-speech:** Phân biệt cách phát âm dựa vào từ loại. VD: "record" là danh từ (ˈrekɔːd) hay động từ (rɪˈkɔːd); "lead" là danh từ (led) hay động từ (liːd).
+- **Tiền xử lý cho phân tích cú pháp (Parsing):** PTCP thực hiện việc gán nhãn tốt hơn nhưng đắt hơn.
+- **Nhận dạng tiếng nói (Speech Recognition), tìm kiếm (Search), trích xuất thông tin.**
+
+**Bộ nhãn phổ biến:**
+
+Penn Treebank POS tagset — bộ nhãn được sử dụng rộng rãi, gồm tập các nhãn đại diện cho từng từ loại hoặc phạm trù ngữ pháp, được xây dựng để chú giải tập ngữ liệu tiếng Anh lớn với thông tin cú pháp và cấu trúc.
 
 
 
