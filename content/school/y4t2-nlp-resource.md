@@ -65,8 +65,6 @@ Year 4 Term 2 - NLP learning resources
 
 - [Đề cương NLP](/pdfs/y4t2-nlp/de-cuong-nlp.pdf)
 
-- [06 - Một số ứng dụng](/pdfs/y4t2-nlp/06-mot-so-ung-dung.pdf)
-
 
 ## Images
 

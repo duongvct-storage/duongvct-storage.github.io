@@ -1,1190 +1,1164 @@
 ---
-title: Y4T2-NLP revise
-date: 2026-04-29
-keywords: [school, nlp, revise]
+title: Y4T2-NLP Ôn tập chi tiết
+keywords: [nlp, revise, exam]
+date: 2026-05-12
 theme: nlp
-description: Year 4 Term 2 - NLP course revision and exercises
+description:
+  Ôn tập xử lý ngôn ngữ tự nhiên - giải chi tiết đề cương
 ---
 
-# Ôn tập cuối kỳ: Xử lý ngôn ngữ tự nhiên (NLP)
+# Ôn tập Xử lý ngôn ngữ tự nhiên
 
----
-
-## Mục lục
-
-1. [PHẦN 1: Giới thiệu về NLP](#phần-1-giới-thiệu-về-nlp)
-2. [PHẦN 2: Mô hình ngôn ngữ](#phần-2-mô-hình-ngôn-ngữ)
-3. [PHẦN 3: Gán nhãn từ loại & HMM](#phần-3-gán-nhãn-từ-loại--hmm)
-4. [PHẦN 4: Phân tích cú pháp](#phần-4-phân-tích-cú-pháp)
-5. [PHẦN 5: Các chủ đề nâng cao (tóm tắt)](#phần-5-các-chủ-đề-nâng-cao-tóm-tắt)
-6. [BÀI TẬP TƯƠNG TỰ SLIDE - GIẢI CHI TIẾT](#bài-tập-tương-tự-slide---giải-chi-tiết)
+**Hình thức:** Tự luận - **Thời gian:** 90ph - **Cấu trúc:** 2 câu lý thuyết + 2 câu bài tập
 
 ---
 
-# PHẦN 1: GIỚI THIỆU VỀ NLP
+## Phần 1: Lý thuyết (4đ)
 
-## 1.1 Định nghĩa
+### Chương 1: Giới thiệu NLP
 
-**Xử lý ngôn ngữ tự nhiên (Natural Language Processing - NLP)** là một nhánh nghiên cứu của trí tuệ nhân tạo và ngôn ngữ học tính toán, nghiên cứu về sinh ngôn ngữ tự động và hiểu ngôn ngữ con người.
+**Câu 1. NLP là gì? Kể tên 3 ứng dụng phổ biến của NLP trong đời sống hiện nay.**
 
-- **NLG (Natural Language Generation)**: chuyển đổi thông tin từ CSDL sang ngôn ngữ giống con người.
-- **NLU (Natural Language Understanding)**: chuyển đổi từ ngôn ngữ con người sang biểu diễn dễ xử lý cho máy tính.
+**NLP (Natural Language Processing)** là một nhánh của trí tuệ nhân tạo và ngôn ngữ học tính toán, nghiên cứu về vấn đề sinh ngôn ngữ tự động và hiểu ngôn ngữ con người. NLP bao gồm hai mảng chính:
+- **NLU (Natural Language Understanding):** Chuyển đổi ngôn ngữ con người thành biểu diễn để máy tính xử lý.
+- **NLG (Natural Language Generation):** Chuyển đổi thông tin từ cơ sở dữ liệu thành ngôn ngữ giống con người.
 
-## 1.2 Các mức độ hiểu biết ngôn ngữ
-
-| Mức độ | Nội dung |
-|--------|----------|
-| Ngữ âm học (Phonetics) | Cách con người tạo ra, truyền tải và nghe các âm thanh |
-| Âm vị học (Phonology) | Hệ thống âm thanh để truyền tải ý nghĩa |
-| Hình thái học (Morphology) | Cấu trúc của từ (ví dụ: re+vital+ize+ation) |
-| Từ vựng (Lexicon) | Từ điển của ngôn ngữ với cách phát âm, từ loại, ý nghĩa |
-| Cú pháp (Syntax) | Cách từ được tổng hợp tạo thành cụm từ và câu |
-| Ngữ nghĩa (Semantics) | Ý nghĩa của từ, cụm từ và câu |
-| Ngữ dụng (Pragmatics) | Mối quan hệ giữa ngôn ngữ và ngữ cảnh |
-| Diễn ngôn (Discourse) | Cấu trúc văn bản lớn hơn câu đơn lẻ |
-
-## 1.3 Lịch sử phát triển NLP
-
-1. **Rule-Based Machine Translation (RBMT)**: Dựa trên luật ngôn ngữ học.
-2. **Statistical Machine Translation (SMT)**: Dựa trên thống kê và xác suất từ dữ liệu.
-3. **Neural Machine Translation (NMT)**: Sử dụng mạng nơ-ron sau (RNN, Transformer).
-
-## 1.4 Nhập nhằng (Ambiguity)
-
-Nhập nhằng là một trong những khó khăn lớn nhất của NLP, xuất hiện ở nhiều mức độ:
-
-- **Mức độ từ**: "Học sinh học sinh học" - có nhiều khả năng tách từ.
-- **Mức độ từ loại**: "Con ngựa đá con ngựa đá" - từ "đá" có thể là động từ hoặc tính từ.
-- **Mức độ cú pháp**: Câu có nhiều cách phân tích cây cú pháp.
-- **Mức độ từ vựng**: "I walked to the bank" - "bank" có thể là bờ sông hoặc ngân hàng.
-
-## 1.5 Tính thưa thớt dữ liệu (Sparsity)
-
-Theo **Zipf's Law**, tần suất của từ hàng r xấp xỉ tỷ lệ nghịch với r:
-
-$$
-f(w) \propto \frac{1}{rank(w)}
-$$
-
-Điều này dẫn đến phần lớn từ ít xuất hiện, gây khó khăn cho ước lượng xác suất.
-
-## 1.6 Corpus
-
-**Corpus** là tập hợp các văn bản thường được chú thích. Ví dụ quan trọng:
-- **Penn Treebank**: 1M từ của báo Wall Street Journal.
-- **Canadian Hansards**: 10M+ từ song ngữ Pháp/Anh.
+**3 ứng dụng phổ biến:**
+1. **Dịch máy (Machine Translation):** Google Translate, ChatGPT dịch văn bản giữa các ngôn ngữ.
+2. **Trợ lý ảo/Chatbot:** ChatGPT, Google Assistant, Alexa, Siri — hiểu và phản hồi hội thoại.
+3. **Phân tích quan điểm (Sentiment Analysis):** Phân loại đánh giá sản phẩm thành tích cực/tiêu cực trên các nền tảng thương mại điện tử.
 
 ---
 
-# PHẦN 2: MÔ HÌNH NGÔN NGỮ
+**Câu 2. Tại sao sự nhập nhằng lại là thách thức lớn nhất của NLP? Cho ví dụ về nhập nhằng từ vựng trong tiếng Việt.**
 
-## 2.1 Định nghĩa
+**Nhập nhằng (Ambiguity)** là hiện tượng một câu/cụm từ có nhiều cách hiểu khác nhau. Đây là thách thức lớn nhất vì:
+- Ngôn ngữ con người vốn dĩ nhập nhằng ở nhiều mức độ (âm thanh, từ vựng, cú pháp, ngữ nghĩa, thực dụng).
+- Cùng một câu có thể có nhiều cách phân tích hợp lệ, nhưng chỉ một cách đúng trong ngữ cảnh cụ thể.
+- Máy tính không có tri thức nền tảng như con người để khử nhập nhằng.
+- Nhập nhằng xuất hiện ở hầu hết mọi bài toán NLP: tách từ, POS tagging, parsing, dịch máy.
 
-**Mô hình ngôn ngữ (Language Model - LM)** là mô hình xác suất cho phép tính xác suất của một câu (chuỗi các từ) trong một ngôn ngữ.
-
-$$
-P(W) = P(w_1, w_2, \dots, w_m) = P(w_1) \times P(w_2|w_1) \times \dots \times P(w_m|w_1 \dots w_{m-1})
-$$
-
-## 2.2 Mô hình N-gram
-
-Sử dụng giả thuyết **Markov**: từ chỉ phụ thuộc vào n từ đứng trước.
-
-| Mô hình | Công thức |
-|---------|-----------|
-| Unigram | $P(w_1 \dots w_n) \approx \prod_{i=1}^{n} P(w_i)$ |
-| Bigram | $P(w_1 \dots w_n) \approx P(w_1) \prod_{i=2}^{n} P(w_i \| w_{i-1})$ |
-| Trigram | $P(w_1 \dots w_n) \approx P(w_1)P(w_2\|w_1) \prod_{i=3}^{n} P(w_i \| w_{i-1}, w_{i-2})$ |
-
-## 2.3 Ước lượng hợp lý cực đại (MLE)
-
-Với bigram:
-
-$$
-P(w_i | w_{i-1}) = \frac{count(w_{i-1}, w_i)}{count(w_{i-1})}
-$$
-
-Với N-gram tổng quát:
-
-$$
-P(w_i | w_{i-N+1} \dots w_{i-1}) = \frac{count(w_{i-N+1} \dots w_i)}{count(w_{i-N+1} \dots w_{i-1})}
-$$
-
-## 2.4 Làm trơn xác suất (Smoothing)
-
-### Laplace (Add-one) Smoothing
-
-$$
-P_{Laplace}(w_i | w_{i-1}) = \frac{count(w_{i-1}, w_i) + 1}{count(w_{i-1}) + V}
-$$
-
-Trong đó $V$ là kích thước từ vựng.
-
-### Add-k Smoothing
-
-$$
-P_{add\_k}(w_i | w_{i-1}) = \frac{count(w_{i-1}, w_i) + k}{count(w_{i-1}) + kV}
-$$
-
-### Backoff
-
-- Sử dụng trigram nếu có đủ dữ liệu.
-- Nếu không, lùi xuống bigram.
-- Nếu vẫn không đủ, lùi xuống unigram.
-
-### Interpolation (Nội suy)
-
-$$
-P_{SLI}(w_n | w_{n-1}, w_{n-2}) = \lambda_1 P(w_n | w_{n-1}, w_{n-2}) + \lambda_2 P(w_n | w_{n-1}) + \lambda_3 P(w_n)
-$$
-
-Với $\sum_i \lambda_i = 1$.
-
-## 2.5 Đánh giá mô hình - Perplexity
-
-**Perplexity (PP)** là thước đo chuẩn để đánh giá mô hình ngôn ngữ:
-
-$$
-PP(W) = P(w_1 w_2 \dots w_N)^{-\frac{1}{N}} = \sqrt[N]{\frac{1}{\prod_{i=1}^{N} P(w_i | w_1 \dots w_{i-1})}}
-$$
-
-Với bigram:
-
-$$
-PP(W) = \sqrt[N]{\prod_{i=1}^{N} \frac{1}{P(w_i | w_{i-1})}}
-$$
-
-**PP càng nhỏ, mô hình càng tốt. **
-
-## 2.6 Xử lý từ không biết (Unknown Words)
-
-Thay thế các từ hiếm bằng token giả **`<UNK>`**, sau đó huấn luyện mô hình như bình thường.
+**Ví dụ nhập nhằng từ vựng trong tiếng Việt:**
+- "Con ngựa đá con ngựa đá" có thể hiểu là: "Con_ngựa đá con_ngựa đá" (con ngựa dùng chân đá con ngựa đang đá).
+- "Học_sinh học sinh_học" (học sinh học môn sinh học) vs "Học_sinh học_sinh học" (học sinh học tập sinh học).
+- "Ông già đi nhanh quá" có thể là "Ông_già đi nhanh quá" (DT ĐgT TT) hoặc "Ông già đi nhanh quá" (ĐaT TT PT).
 
 ---
 
-# PHẦN 3: GÁN NHÃN TỪ LOẠI & HMM
+### Chương 2: Gán nhãn từ loại & HMM
 
-## 3.1 Gán nhãn từ loại (POS Tagging)
+**Câu 3. Gán nhãn từ loại (POS Tagging) là gì? Tại sao cần gán nhãn từ loại? Nêu ít nhất 01 ứng dụng thực tế.**
 
-**POS Tagging** là bài toán gán nhãn từ loại cho mỗi từ trong câu. Đây là bài toán khử nhập nhằng vì nhiều từ có thể thuộc nhiều từ loại khác nhau.
+**POS Tagging (Part-of-Speech Tagging)** là quá trình gán cho mỗi từ trong câu một nhãn từ loại tương ứng (danh từ, động từ, tính từ,...).
 
-**Bộ nhãn Penn Treebank** được sử dụng rộng rãi, bao gồm các nhãn như: NN (danh từ số ít), NNS (danh từ số nhiều), VB (động từ nguyên thể), VBD (động từ quá khứ), JJ (tính từ), RB (trạng từ), IN (giới từ), DT (mạo từ), PRP (đại từ), MD (động từ khiếm khuyết)...
+**Tại sao cần:**
+- Là bước tiền xử lý quan trọng cho hầu hết các tác vụ NLP.
+- Cung cấp thông tin ngữ pháp giúp hiểu cấu trúc câu.
+- Một từ có thể thuộc nhiều từ loại → cần POS để khử nhập nhằng.
+- Dễ thực hiện và dễ đánh giá (đếm số thẻ gán đúng).
 
-## 3.2 Mô hình Markov
-
-**Chuỗi Markov** dựa trên nguyên lý không có bộ nhớ: xác suất chuyển sang trạng thái tiếp theo chỉ phụ thuộc vào trạng thái hiện tại.
-
-- **Xác suất chuyển trạng thái**: $P(t_i | t_{i-1})$
-- **Xác suất ban đầu**: $\pi$
-- **Ma trận chuyển trạng thái**: $A$
-
-## 3.3 Hidden Markov Model (HMM)
-
-HMM là mô hình sinh xác suất cho dữ liệu dạng chuỗi, với:
-- **Trạng thái ẩn (Hidden)**: Nhãn từ loại ($t_i$)
-- **Quan sát (Observable)**: Từ xuất hiện ($w_i$)
-- **Xác suất phát xạ (Emission)**: $P(w_i | t_i)$ - xác suất từ được sinh ra biết nhãn từ loại.
-
-Ba bài toán chính của HMM:
-
-| Bài toán | Mục tiêu | Thuật toán |
-|----------|----------|------------|
-| Likelihood | Tính $P(O\|\lambda)$ | Forward Algorithm |
-| Decoding | Tìm chuỗi trạng thái tốt nhất | Viterbi Algorithm |
-| Learning | Học tham số $\lambda = (\pi, A, B)$ | Baum-Welch (EM) |
-
-## 3.4 Thuật toán Forward
-
-Tính $\alpha_t(j)$ - xác suất hệ thống ở trạng thái $s_j$ sau khi quan sát $t$ quan sát đầu tiên:
-
-**Khởi tạo:**
-
-$$
-\alpha_1(j) = \pi_j \cdot b_j(o_1), \quad 1 \leq j \leq N
-$$
-
-**Đệ quy:**
-
-$$
-\alpha_t(j) = \left[ \sum_{i=1}^{N} \alpha_{t-1}(i) \cdot a_{ij} \right] \cdot b_j(o_t), \quad 1 \leq j \leq N, \quad 1 < t \leq T
-$$
-
-**Kết thúc:**
-
-$$
-P(O\|\lambda) = \sum_{i=1}^{N} \alpha_T(i)
-$$
-
-Độ phức tạp: $O(T \cdot N^2)$.
-
-## 3.5 Thuật toán Viterbi
-
-Tìm chuỗi trạng thái có xác suất cao nhất. Tương tự Forward nhưng thay **Sum bằng Max** và lưu lại **backpointer**.
-
-**Khởi tạo:**
-
-$$
-v_1(j) = \pi_j \cdot b_j(o_1), \quad bt_1(j) = 0
-$$
-
-**Đệ quy:**
-
-$$
-v_t(j) = \max_{1 \leq i \leq N} [v_{t-1}(i) \cdot a_{ij}] \cdot b_j(o_t)
-$$
-
-$$
-bt_t(j) = \arg\max_{1 \leq i \leq N} [v_{t-1}(i) \cdot a_{ij}]
-$$
-
-**Kết thúc:**
-
-$$
-P^* = \max_{1 \leq i \leq N} v_T(i), \quad q_T^* = \arg\max_{1 \leq i \leq N} v_T(i)
-$$
-
-Sau đó truy vết ngược bằng backpointer để tìm chuỗi trạng thái tối ưu.
-
-## 3.6 Huấn luyện HMM
-
-- **Có giám sát (Supervised)**: Đếm tần suất trực tiếp từ dữ liệu gán nhãn.
-  $$
-  P(t_i | t_{i-1}) = \frac{C(t_{i-1}, t_i)}{\sum_j C(t_{i-1}, t_j)}, \quad P(w_i | t_i) = \frac{C(t_i, w_i)}{C(t_i)}
-  $$
-- **Không giám sát (Unsupervised)**: Sử dụng thuật toán Baum-Welch (EM).
-- **Bán giám sát (Semi-supervised)**: Kết hợp cả hai.
-
-## 3.7 Beam Search
-
-Là chiến lược giải mã phổ biến trong các mô hình sinh ngôn ngữ:
-- Ở mỗi bước, chỉ giữ lại $K$ (beam size) giả thuyết tốt nhất.
-- Cân bằng giữa độ phức tạp $O(K \cdot T)$ và chất lượng.
-- Tốt hơn Greedy Search (chỉ chọn từ tốt nhất tại mỗi bước) nhưng ít tốn kém hơn Exhaustive Search.
+**Ứng dụng thực tế:**
+- **Text-to-speech:** Từ "record" là danh từ (ˈrekɔːd) hay động từ (rɪˈkɔːd) → phát âm khác nhau.
+- Tiền xử lý cho phân tích cú pháp (parsing).
+- Nhận dạng tiếng nói, trích xuất thông tin.
 
 ---
 
-# PHẦN 4: PHÂN TÍCH CÚ PHÁP
+**Câu 4. Mô hình Markov ẩn (HMM) bao gồm những thành phần nào khi áp dụng cho bài toán POS tagging? Mô tả ý nghĩa từng thành phần.**
 
-## 4.1 Định nghĩa
+HMM cho POS tagging gồm 3 thành phần chính:
 
-**Phân tích cú pháp (Parsing)** là bài toán xác định thông tin về cấu trúc của một câu - mối quan hệ giữa các thành phần.
+| Thành phần | Ký hiệu | Ý nghĩa |
+|-----------|---------|---------|
+| Xác suất khởi đầu | π = P(t₁) | Xác suất một nhãn từ loại xuất hiện ở đầu câu |
+| Ma trận chuyển trạng thái | A = P(tᵢ | tᵢ₋₁) | Xác suất nhãn hiện tại khi biết nhãn trước đó |
+| Ma trận phát xạ | B = P(wᵢ | tᵢ) | Xác suất một từ được sinh ra khi biết nhãn của nó |
 
-- **Đầu vào**: Xâu các từ + văn phạm.
-- **Đầu ra**: Cây cú pháp (parse tree).
+Ngoài ra còn có:
+- **Q:** Tập các trạng thái ẩn (các nhãn từ loại) — không quan sát được.
+- **O:** Chuỗi quan sát (các từ trong câu) — quan sát được.
 
-## 4.2 Hai tiếp cận chính
-
-1. **Phân tích thành phần (Constituency Parsing)**: Tổ chức các từ thành các cụm (phrases) lồng nhau.
-2. **Phân tích phụ thuộc (Dependency Parsing)**: Phân tích mối quan hệ phụ thuộc có hướng giữa các từ.
-
-Các nhãn phụ thuộc phổ biến: `nsubj` (chủ ngữ), `dobj` (tân ngữ), `det` (mạo từ), `amod` (tính từ bổ nghĩa), `aux` (trợ động từ).
-
-## 4.3 Văn phạm (Grammar)
-
-Một văn phạm sinh là hệ thống $G = (T, N, S, R)$:
-- $T$: Tập ký hiệu kết thúc (terminal)
-- $N$: Tập ký hiệu không kết thúc (non-terminal)
-- $S$: Ký hiệu khởi đầu
-- $R$: Tập luật sản xuất ($\alpha \rightarrow \beta$)
-
-## 4.4 Văn phạm phi ngữ cảnh (CFG)
-
-Là văn phạm mà mọi luật có dạng $X \rightarrow \gamma$, trong đó:
-- $X$ là ký hiệu không kết thúc.
-- $\gamma$ là chuỗi các ký hiệu kết thúc và không kết thúc (có thể rỗng).
-
-## 4.5 Treebank
-
-**Treebank** là tập ngữ liệu mà mỗi câu được chú giải cú pháp bằng tay thành các cây chuẩn. Có thể trích xuất các luật CFG trực tiếp từ cây.
-
-## 4.6 Đánh giá Parser
-
-- **Precision**: $P = \frac{\text{Số trường hợp hệ thống gán đúng}}{\text{Tổng số trường hợp hệ thống gán}}$
-- **Recall**: $R = \frac{\text{Số trường hợp hệ thống gán đúng}}{\text{Tổng số trường hợp đúng}}$
-- **F1-score**: $F_1 = \frac{2PR}{P+R}$
-
-Đánh giá dựa trên các thành phần (constituents): nhãn, điểm bắt đầu, điểm kết thúc.
-
-## 4.7 Dạng chuẩn Chomsky (CNF)
-
-Mọi luật trong CNF chỉ có 2 dạng:
-1. $A \rightarrow B\ C$ (2 non-terminals)
-2. $A \rightarrow a$ (1 terminal)
-
-Mục đích: Đảm bảo cây cú pháp luôn là cây nhị phân, dễ dàng chia đoạn câu làm 2 phần trong lập trình động.
-
-## 4.8 Thuật toán CKY (Cocke-Kasami-Younger)
-
-Là thuật toán phân tích cú pháp từ dưới lên dựa trên lập trình động:
-- Độ phức tạp: $O(n^3 |G|)$.
-- Bắt buộc sử dụng văn phạm dạng CNF.
-- Xây dựng ma trận $(n+1) \times (n+1)$, chỉ sử dụng phần tam giác trên.
-
-**Các bước:**
-
-1. **Khởi tạo**: Duyệt đường chéo (span = 1), điền các non-terminal sinh ra từng từ vào ô $[j-1, j]$.
-2. **Đệ quy**: Với ô $[i, j]$, duyệt điểm cắt $k$ ($i < k < j$). Nếu ô $[i, k]$ chứa $B$, ô $[k, j]$ chứa $C$, và có luật $A \rightarrow B\ C$, thì điền $A$ vào ô $[i, j]$.
-3. **Kết thúc**: Nếu ô $[0, n]$ chứa $S$, câu đúng ngữ pháp.
-
-## 4.9 Văn phạm phi ngữ cảnh xác suất (PCFG)
-
-Gắn xác suất vào mỗi luật để xử lý nhập nhằng:
-
-$$
-P(\tau) = \prod_{r \in \tau} P(r)
-$$
-
-Với mọi non-terminal $X$:
-
-$$
-\sum_{\alpha} P(X \rightarrow \alpha | X) = 1
-$$
-
-**Viterbi CKY**: Lưu thêm xác suất lớn nhất tại mỗi ô để phục hồi cây có xác suất cao nhất.
-
----
-
-# PHẦN 5: CÁC CHỦ ĐỀ NÂNG CAO (TÓM TẮT)
-
-## 5.1 Tiền xử lý văn bản (Week 5)
-
-Các bước tiền xử lý: tách từ (tokenization), chuẩn hóa (normalization), loại bỏ stopwords, tách câu (sentence segmentation).
-
-## 5.2 Phân tích cảm xúc (Sentiment Analysis)
-
-Phân loại văn bản theo cảm xúc: tích cực, tiêu cực, trung tính. Sử dụng các phương pháp từ lexicon-based đến deep learning.
-
-## 5.3 Mô hình Neural Network (Week 6)
-
-| Mô hình | Đặc điểm |
-|---------|----------|
-| RNN | Xử lý chuỗi, nhưng yếu vấn đề gradient biến mất |
-| LSTM/GRU | Có cổng (gates) để kiểm soát thông tin, giảm vấn đề gradient |
-| Seq2Seq | Encoder-Decoder cho dịch máy, tóm tắt văn bản |
-| Attention | Tập trung vào phần quan trọng của đầu vào |
-| Transformer | Self-attention, song song hóa, nền tảng của BERT/GPT |
-
-## 5.4 Ngữ nghĩa từ vựng (Week 7 - Lexical Semantics)
-
-Nghĩa của từ, mối quan hệ đồng nghĩa, trái nghĩa, hạ vị, toàn vị, word embeddings (Word2Vec, GloVe).
-
-## 5.5 Trích xuất thông tin (Week 8)
-
-Nhận dạng thực thể có tên (NER), trích xuất quan hệ, trích xuất sự kiện.
-
-## 5.6 Hỏi đáp (Week 9)
-
-Các hệ thống hỏi đáp từ dựa trên retrieval đến generative QA (sử dụng LLM).
-
----
-
-# BÀI TẬP TƯƠNG TỰ SLIDE - GIẢI CHI TIẾT
-
----
-
-## BÀI TẬP CHƯƠNG 1: GIỚI THIỆU NLP
-
-### Bài 1.1
-
-**Đề bài:** Phân tích các mức độ nhập nhằng trong câu sau: "I walked to the bank to get money, but it was near the river bank."
-
-**Lời giải:**
-
-1. **Mức độ từ vựng (Lexical ambiguity)**: Từ "bank" xuất hiện 2 lần với 2 nghĩa khác nhau:
-   - "bank" lần 1: ngân hàng (nơi lấy tiền)
-   - "bank" lần 2: bờ sông (near the river)
-
-2. **Mức độ cú pháp**: Không có nhập nhằng cú pháp rõ ràng trong câu này.
-
-3. **Mức độ ngữ nghĩa**: Mối quan hệ nguyên nhân - kết quả ("to get money") tạo ra sự mong đợi về nghĩa ngân hàng cho "bank" đầu tiên. Người đọc dùng ngữ cảnh để phân giải nghĩa.
-
-4. **Mức độ ngữ dụng**: Sự chuyển đổi từ "bank" (ngân hàng) sang "bank" (bờ sông) tạo ra yếu tố bất ngờ, dựa trên kiến thức thế giới về vị trí của các tòa nhà ngân hàng so với sông.
-
----
-
-### Bài 1.2
-
-**Đề bài:** Giải thích sự khác biệt giữa NLP và Computational Linguistics.
-
-**Lời giải:**
-
-| Tiêu chí | NLP | Computational Linguistics |
-|----------|-----|---------------------------|
-| **Mục tiêu** | Phát triển chương trình giải quyết các vấn đề thực tế của ngôn ngữ | Sử dụng công nghệ để hỗ trợ/hiện thực hóa ngôn ngữ học |
-| **Câu hỏi chính** | Làm sao để máy tính hiểu/sinh ngôn ngữ hiệu quả? | Làm sao để hiểu được ngôn ngữ? Làm sao để sinh ngôn ngữ? |
-| **Ứng dụng** | Dịch máy, nhận dạng giọng nói, chatbot, phân tích cảm xúc | Mô hình hóa lý thuyết ngôn ngữ, nghiên cứu nhận thức |
-| **Tính chất** | Hướng ứng dụng, công nghiệp | Hướng lý thuyết, học thuật |
-
----
-
-## BÀI TẬP CHƯƠNG 2: MÔ HÌNH NGÔN NGỮ
-
-### Bài 2.1 (Tương tự slide Week 2 - Bài tập bigram)
-
-**Đề bài:** Cho tập dữ liệu văn bản gồm các câu sau:
-
+**Công thức HMM cho POS tagging:**
 ```
-<s> cô ấy dạy môn tin học </s>
-<s> anh dạy môn toán </s>
-<s> cô ấy học toán anh ấy dạy </s>
-<s> môn toán môn tin đều hay </s>
-<s> anh ấy dạy môn toán hay môn tin </s>
+P(t₁..tₙ, w₁..wₙ) = P(t₁) × ∏ P(tᵢ|tᵢ₋₁) × P(wᵢ|tᵢ)
 ```
 
-**Yêu cầu:**
+---
 
-a) Xây dựng mô hình ngôn ngữ unigram và bigram (tính xác suất).
+**Câu 5. Phân biệt từ lớp mở (open class) với lớp đóng (closed class). Tại sao sự phân chia này quan trọng trong POS tagging?**
 
-b) Tính xác suất của câu `<s> cô ấy học môn tin </s>` bằng mô hình bigram.
+| Tiêu chí | Open Class (Lớp mở) | Closed Class (Lớp đóng) |
+|----------|--------------------|------------------------|
+| Khả năng thêm từ mới | Có thể (VD: iPhone, selfie) | Cố định, ít thay đổi |
+| Chức năng | Mang nội dung chính (content words) | Chức năng ngữ pháp (function words) |
+| Số lượng | Nhiều, tăng theo thời gian | Hạn chế |
+| Độ dài từ | Thường dài hơn | Thường ngắn |
+| Ví dụ | Danh từ, động từ, tính từ, trạng từ | Giới từ, mạo từ, đại từ, liên từ |
 
-**Lời giải:**
-
-**Bước 1: Thống kê tần suất**
-
-Tách token đơn giản theo khoảng trắng:
-
-- Câu 1: `<s>`, `cô`, `ấy`, `dạy`, `môn`, `tin`, `học`, `</s>`
-- Câu 2: `<s>`, `anh`, `dạy`, `môn`, `toán`, `</s>`
-- Câu 3: `<s>`, `cô`, `ấy`, `học`, `toán`, `anh`, `ấy`, `dạy`, `</s>`
-- Câu 4: `<s>`, `môn`, `toán`, `môn`, `tin`, `đều`, `hay`, `</s>`
-- Câu 5: `<s>`, `anh`, `ấy`, `dạy`, `môn`, `toán`, `hay`, `môn`, `tin`, `</s>`
-
-Tổng số token: 8 + 6 + 9 + 8 + 10 = 41 token.
-
-**a) Mô hình Unigram:**
-
-| Từ | Count | P(từ) = count/41 |
-|-----|-------|------------------|
-| cô | 2 | 2/41 |
-| ấy | 3 | 3/41 |
-| dạy | 4 | 4/41 |
-| môn | 5 | 5/41 |
-| tin | 3 | 3/41 |
-| học | 2 | 2/41 |
-| anh | 2 | 2/41 |
-| toán | 4 | 4/41 |
-| đều | 1 | 1/41 |
-| hay | 2 | 2/41 |
-| <s> | 5 | 5/41 |
-| </s> | 5 | 5/41 |
-
-**Mô hình Bigram:**
-
-Bảng tần suất bigram (một số cặp quan trọng):
-
-| Bigram | Count |
-|--------|-------|
-| (<s>, cô) | 2 |
-| (<s>, anh) | 2 |
-| (<s>, môn) | 1 |
-| (cô, ấy) | 2 |
-| (ấy, dạy) | 2 |
-| (ấy, học) | 1 |
-| (dạy, môn) | 3 |
-| (môn, tin) | 3 |
-| (môn, toán) | 2 |
-| (tin, học) | 1 |
-| (tin, đều) | 1 |
-| (học, </s>) | 1 |
-| (học, toán) | 1 |
-| (anh, dạy) | 1 |
-| (anh, ấy) | 1 |
-| (toán, </s>) | 2 |
-| (toán, anh) | 1 |
-| (toán, hay) | 1 |
-| (đều, hay) | 1 |
-| (hay, </s>) | 1 |
-| (hay, môn) | 1 |
-
-Xác suất bigram: $P(w_i|w_{i-1}) = \frac{count(w_{i-1}, w_i)}{count(w_{i-1})}$
-
-Ví dụ:
-- $P(cô | <s>) = 2/5 = 0.4$
-- $P(ấy | cô) = 2/2 = 1.0$
-- $P(dạy | ấy) = 2/3 \approx 0.667$
-- $P(môn | dạy) = 3/4 = 0.75$
-- $P(tin | môn) = 3/5 = 0.6$
-
-**b) Tính xác suất câu: `<s> cô ấy học môn tin </s>`**
-
-Sử dụng bigram:
-
-$$
-\begin{aligned}
-P(\text{câu}) &= P(cô | <s>) \times P(ấy | cô) \times P(học | ấy) \\
-&\quad \times P(môn | học) \times P(tin | môn) \times P(</s> | tin) \\
-&= \frac{2}{5} \times \frac{2}{2} \times \frac{1}{3} \times \frac{0}{2} \times \frac{3}{5} \times \frac{1}{3}
-\end{aligned}
-$$
-
-*Vấn đề: Bigram (học, môn) không xuất hiện trong tập huấn luyện! Count = 0, dẫn đến xác suất = 0.*
-
-**Xử lý bằng Laplace Smoothing:**
-
-Kích thước từ vựng V = 12 (các token độc nhất).
-
-Với Laplace:
-
-$$
-P_{Laplace}(môn | học) = \frac{count(học, môn) + 1}{count(học) + V} = \frac{0 + 1}{2 + 12} = \frac{1}{14} \approx 0.0714
-$$
-
-Tính lại toàn bộ với Laplace:
-
-$$
-\begin{aligned}
-P(cô | <s>) &= \frac{2+1}{5+12} = \frac{3}{17} \\
-P(ấy | cô) &= \frac{2+1}{2+12} = \frac{3}{14} \\
-P(học | ấy) &= \frac{1+1}{3+12} = \frac{2}{15} \\
-P(môn | học) &= \frac{0+1}{2+12} = \frac{1}{14} \\
-P(tin | môn) &= \frac{3+1}{5+12} = \frac{4}{17} \\
-P(</s> | tin) &= \frac{1+1}{3+12} = \frac{2}{15}
-\end{aligned}
-$$
-
-$$
-P(\text{câu}) = \frac{3}{17} \times \frac{3}{14} \times \frac{2}{15} \times \frac{1}{14} \times \frac{4}{17} \times \frac{2}{15} \approx 0.00000284
-$$
+**Tầm quan trọng trong POS tagging:**
+- Closed class có số lượng nhỏ và ổn định → dễ xây dựng từ điển, dự đoán chính xác hơn.
+- Open class có số lượng lớn và biến động → khó xử lý từ mới (OOV), cần các kỹ thuật đặc biệt.
+- Hỗ trợ khử nhập nhằng: một từ có thể vừa là open vừa là closed → dựa vào ngữ cảnh để quyết định.
 
 ---
 
-### Bài 2.2 (Tương tự slide Week 2 - Perplexity)
+**Câu 6. Tại sao backpointer là cần thiết cho thuật toán Viterbi? Nếu bỏ backpointer đi, thuật toán có thể tính được xác suất cao nhất không?**
 
-**Đề bài:** Cho một mô hình bigram đã được tính toán trên tập kiểm tra có 100 từ với xác suất trung bình mỗi từ là $P(w_i|w_{i-1}) = 0.1$. Tính perplexity của mô hình này.
+**Vai trò của backpointer:**
+- Thuật toán Viterbi tìm chuỗi trạng thái có xác suất cao nhất Q\* = argmax P(O, Q|λ).
+- **v-table:** lưu xác suất tối đa đến trạng thái j tại thời điểm t: vⱼ(t) = max P(q₁,...,qₜ₋₁, o₁,...,oₜ, qₜ=j)
+- **Backpointer (bp-table):** lưu trạng thái trước đó (tại t-1) dẫn đến trạng thái j tại t có xác suất max.
+- Sau khi tính forward pass (v-table), backpointer cho phép **truy vết ngược (backtrace)** để khôi phục lại chuỗi trạng thái tối ưu.
 
-**Lời giải:**
-
-$$
-PP(W) = \left( \prod_{i=1}^{N} \frac{1}{P(w_i|w_{i-1})} \right)^{\frac{1}{N}} = \left( \frac{1}{0.1^{100}} \right)^{\frac{1}{100}} = \left( 10^{100} \right)^{0.01} = 10
-$$
-
-**Ý nghĩa:** Mô hình này có perplexity bằng 10, tức là tại mỗi bước nó phải "chọn" giữa khoảng 10 từ có khả năng xuất hiện như nhau.
-
----
-
-### Bài 2.3 (Tương tự slide Week 2 - Tính toán xác suất câu)
-
-**Đề bài:** Cho một số cặp bigram đã được chuẩn hóa:
-
-- $P(I | <s>) = 0.25$
-- $P(want | I) = 0.33$
-- $P(english | want) = 0.0011$
-- $P(food | english) = 0.5$
-- $P(</s> | food) = 0.68$
-
-Tính xác suất câu: "I want English food"
-
-**Lời giải:**
-
-$$
-\begin{aligned}
-P(\text{câu}) &= P(I|<s>) \times P(want|I) \times P(english|want) \times P(food|english) \times P(</s>|food) \\
-&= 0.25 \times 0.33 \times 0.0011 \times 0.5 \times 0.68 \\
-&= 0.00003069 \approx 3.069 \times 10^{-5}
-\end{aligned}
-$$
+**Nếu bỏ backpointer:**
+- Vẫn tính được **giá trị xác suất** của chuỗi trạng thái tốt nhất (P\* = max v_T(i)).
+- Nhưng **không thể khôi phục** chuỗi trạng thái cụ thể nào đã đạt được xác suất đó.
+- Trong POS tagging, ta cần biết nhãn cụ thể cho từng từ → backpointer là bắt buộc.
 
 ---
 
-## BÀI TẬP CHƯƠNG 3: HMM & POS TAGGING
+**Câu 7. Phân tích nguyên nhân "unknown words" gây vấn đề trong HMM và đề xuất phương pháp xử lý.**
 
-### Bài 3.1 (Tương tự slide Week 3 - Chuỗi Markov)
+**Nguyên nhân:**
+- HMM dùng ước lượng MLE: P(wᵢ|tᵢ) = count(tᵢ, wᵢ) / count(tᵢ).
+- Nếu từ w không xuất hiện với nhãn t nào trong tập huấn luyện → P(w|t) = 0 với mọi t.
+- Khi gặp unknown word ở test, tất cả các chuỗi nhãn đều có xác suất = 0.
+- HMM không có cơ chế tận dụng thông tin hình thái (hậu tố, tiền tố) của từ.
 
-**Đề bài:** Cho một mẫu thời tiết với 3 trạng thái: Hot (H), Cold (C), Mild (M). Xác suất ban đầu và ma trận chuyển trạng thái như sau:
-
-$$
-\pi = [0.5, 0.3, 0.2]
-$$
-
-Ma trận chuyển trạng thái A:
-
-|   | H   | C   | M   |
-|---|-----|-----|-----|
-| **H** | 0.6 | 0.2 | 0.2 |
-| **C** | 0.3 | 0.5 | 0.2 |
-| **M** | 0.4 | 0.3 | 0.3 |
-
-Tính xác suất của chuỗi thời tiết: **H - M - C - H**
-
-**Lời giải:**
-
-Áp dụng công thức xác suất chuỗi Markov:
-
-$$
-\begin{aligned}
-P(H, M, C, H) &= P(H) \times P(M|H) \times P(C|M) \times P(H|C) \\
-&= \pi_H \times A_{H,M} \times A_{M,C} \times A_{C,H} \\
-&= 0.5 \times 0.2 \times 0.3 \times 0.3 \\
-&= 0.009
-\end{aligned}
-$$
+**Phương pháp xử lý:**
+1. **Thay thế từ hiếm bằng `<UNK>`:** Trong tập train, thay các từ xuất hiện ≤ k lần bằng token `<UNK>`. Huấn luyện HMM với `<UNK>` như một từ bình thường. Ở test, unknown word được xem là `<UNK>`.
+2. **Làm trơn (Smoothing):** Cộng thêm một lượng nhỏ vào mọi xác suất phát xạ để tránh xác suất = 0.
+3. **Dùng đặc trưng hình thái:** Xây dựng bộ phân loại phụ dựa vào hậu tố (-tion → danh từ, -ly → trạng từ) để đoán nhãn khả dĩ cho unknown word.
+4. **Dùng mô hình mạnh hơn:** CRF, RNN/LSTM có thể học đặc trưng từ ký tự (character-level features) để xử lý OOV tốt hơn.
 
 ---
 
-### Bài 3.2 (Tương tự slide Week 3 - Bài tập HMM Forward)
+### Chương 3: Mô hình ngôn ngữ
 
-**Đề bài:** Jason ăn kem mỗi ngày với số lượng tùy thuộc vào thời tiết. Có 2 trạng thái thời tiết ẩn: Hot (H) và Cold (C). Jason quan sát số kem ăn được: 1, 2, hoặc 3 cây.
+**Câu 8. Mô hình N-gram là gì? Công thức tính xác suất của câu sử dụng bigram, trigram.**
 
-Tham số mô hình HMM:
+**Mô hình N-gram** là mô hình ngôn ngữ xác suất, tính xác suất một câu W = w₁w₂...wₙ dựa trên giả định Markov bậc N-1 (từ thứ i chỉ phụ thuộc vào N-1 từ trước nó).
 
-- $\pi = [P(H)=0.8, P(C)=0.2]$
-- Ma trận chuyển trạng thái A:
+**Bigram (N=2):**
+```
+P(w₁w₂...wₙ) = P(w₁|<s>) × P(w₂|w₁) × P(w₃|w₂) × ... × P(wₙ|wₙ₋₁) × P(</s>|wₙ)
+```
+hay tổng quát:
+```
+P(w₁w₂...wₙ) ≈ ∏ P(wᵢ | wᵢ₋₁)
+```
 
-|   | H   | C   |
-|---|-----|-----|
-| **H** | 0.6 | 0.4 |
-| **C** | 0.5 | 0.5 |
+**Trigram (N=3):**
+```
+P(w₁w₂...wₙ) = P(w₁|<s><s>) × P(w₂|<s>w₁) × P(w₃|w₁w₂) × ... × P(wₙ|wₙ₋₂wₙ₋₁) × P(</s>|wₙ₋₁wₙ)
+```
 
-- Ma trận phát xạ B (xác suất ăn số kem biết thời tiết):
-
-|   | 1   | 2   | 3   |
-|---|-----|-----|-----|
-| **H** | 0.2 | 0.4 | 0.4 |
-| **C** | 0.5 | 0.4 | 0.1 |
-
-Tính xác suất để Jason ăn chuỗi kem: **O = (3, 1, 3)** sử dụng thuật toán Forward.
-
-**Lời giải:**
-
-**Bước 1: Khởi tạo (t = 1, $o_1 = 3$)**
-
-$$
-\begin{aligned}
-\alpha_1(H) &= \pi_H \times P(3|H) = 0.8 \times 0.4 = 0.32 \\
-\alpha_1(C) &= \pi_C \times P(3|C) = 0.2 \times 0.1 = 0.02
-\end{aligned}
-$$
-
-**Bước 2: Đệ quy (t = 2, $o_2 = 1$)**
-
-$$
-\begin{aligned}
-\alpha_2(H) &= [\alpha_1(H) \times P(H|H) + \alpha_1(C) \times P(H|C)] \times P(1|H) \\
-&= [0.32 \times 0.6 + 0.02 \times 0.5] \times 0.2 \\
-&= [0.192 + 0.01] \times 0.2 \\
-&= 0.202 \times 0.2 = 0.0404
-\end{aligned}
-$$
-
-$$
-\begin{aligned}
-\alpha_2(C) &= [\alpha_1(H) \times P(C|H) + \alpha_1(C) \times P(C|C)] \times P(1|C) \\
-&= [0.32 \times 0.4 + 0.02 \times 0.5] \times 0.5 \\
-&= [0.128 + 0.01] \times 0.5 \\
-&= 0.138 \times 0.5 = 0.069
-\end{aligned}
-$$
-
-**Bước 3: Đệ quy (t = 3, $o_3 = 3$)**
-
-$$
-\begin{aligned}
-\alpha_3(H) &= [\alpha_2(H) \times P(H|H) + \alpha_2(C) \times P(H|C)] \times P(3|H) \\
-&= [0.0404 \times 0.6 + 0.069 \times 0.5] \times 0.4 \\
-&= [0.02424 + 0.0345] \times 0.4 \\
-&= 0.05874 \times 0.4 = 0.023496
-\end{aligned}
-$$
-
-$$
-\begin{aligned}
-\alpha_3(C) &= [\alpha_2(H) \times P(C|H) + \alpha_2(C) \times P(C|C)] \times P(3|C) \\
-&= [0.0404 \times 0.4 + 0.069 \times 0.5] \times 0.1 \\
-&= [0.01616 + 0.0345] \times 0.1 \\
-&= 0.05066 \times 0.1 = 0.005066
-\end{aligned}
-$$
-
-**Bước 4: Kết thúc**
-
-$$
-P(O|\lambda) = \alpha_3(H) + \alpha_3(C) = 0.023496 + 0.005066 = 0.028562
-$$
-
-**Kết luận:** Xác suất Jason ăn chuỗi kem (3, 1, 3) là khoảng **0.0286** (khoảng 2.86%).
+**Công thức MLE cho bigram:**
+```
+P(wᵢ | wᵢ₋₁) = count(wᵢ₋₁, wᵢ) / count(wᵢ₋₁)
+```
 
 ---
 
-### Bài 3.3 (Tương tự slide Week 3 - Thuật toán Viterbi)
+**Câu 9. Phát biểu giả thuyết Markov bậc n trong mô hình ngôn ngữ N-gram. Tại sao giả thuyết này quan trọng?**
 
-**Đề bài:** Sử dụng lại mô hình HMM ở Bài 3.2. Tìm chuỗi thời tiết ẩn khả thi nhất nếu Jason ăn chuỗi kem **O = (3, 1, 3)**.
+**Giả thuyết Markov bậc n:** Xác suất của một từ chỉ phụ thuộc vào n từ đứng ngay trước nó, không cần xét toàn bộ lịch sử.
 
-**Lời giải:**
+```
+P(wₘ | w₁w₂...wₘ₋₁) ≈ P(wₘ | wₘ₋ₙ...wₘ₋₁)
+```
 
-**Bước 1: Khởi tạo (t = 1, $o_1 = 3$)**
+- **Unigram** = Markov bậc 0 (không phụ thuộc từ nào)
+- **Bigram** = Markov bậc 1 (phụ thuộc 1 từ trước)
+- **Trigram** = Markov bậc 2 (phụ thuộc 2 từ trước)
 
-$$
-\begin{aligned}
-v_1(H) &= \pi_H \times P(3|H) = 0.8 \times 0.4 = 0.32, \quad bt_1(H) = \text{null} \\
-v_1(C) &= \pi_C \times P(3|C) = 0.2 \times 0.1 = 0.02, \quad bt_1(C) = \text{null}
-\end{aligned}
-$$
+**Tầm quan trọng:**
+- Nếu không có giả thuyết này, phải ước lượng P(wₘ | w₁...wₘ₋₁) với số lượng lịch sử khổng lồ (Vᵐ cách).
+- Giả thuyết Markov làm giảm độ phức tạp từ O(Vᵐ) xuống O(Vⁿ⁺¹) — khả thi để tính toán.
+- Giúp mô hình ngôn ngữ có thể học từ dữ liệu hữu hạn.
 
-**Bước 2: Đệ quy (t = 2, $o_2 = 1$)**
+---
 
-Với H:
+**Câu 10. Giải thích cơ chế làm trơn Laplace (Add-one smoothing). Tại sao phương pháp này đôi khi "quá tay" với tập dữ liệu lớn?**
 
-$$
-\begin{aligned}
-v_2(H) &= \max[v_1(H) \times P(H|H), v_1(C) \times P(H|C)] \times P(1|H) \\
-&= \max[0.32 \times 0.6, 0.02 \times 0.5] \times 0.2 \\
-&= \max[0.192, 0.01] \times 0.2 \\
-&= 0.192 \times 0.2 = 0.0384
-\end{aligned}
-$$
+**Cơ chế:** Cộng 1 vào mọi giá trị đếm của bigram để đảm bảo không có bigram nào có xác suất = 0.
 
-$bt_2(H) = H$ (vì đường đi từ H có xác suất lớn hơn)
+```
+P_Laplace(wᵢ | wᵢ₋₁) = (count(wᵢ₋₁, wᵢ) + 1) / (count(wᵢ₋₁) + V)
+```
+Trong đó V là kích thước từ vựng.
 
-Với C:
+**Vấn đề "quá tay":**
+- Với tập dữ liệu lớn, V rất lớn (hàng chục nghìn từ).
+- Mỗi bigram xuất hiện được cộng 1, nhưng phải chia cho (count(wᵢ₋₁) + V).
+- Bigram xuất hiện nhiều (VD: count = 200) bị giảm xác suất mạnh (từ 200/200 → 201/(200+V)).
+- Lượng xác suất bị lấy đi từ các bigram đã xuất hiện là rất lớn, phân bổ cho hàng chục nghìn bigram chưa xuất hiện → gây sai lệch nghiêm trọng.
 
-$$
-\begin{aligned}
-v_2(C) &= \max[v_1(H) \times P(C|H), v_1(C) \times P(C|C)] \times P(1|C) \\
-&= \max[0.32 \times 0.4, 0.02 \times 0.5] \times 0.5 \\
-&= \max[0.128, 0.01] \times 0.5 \\
-&= 0.128 \times 0.5 = 0.064
-\end{aligned}
-$$
+→ **Giải pháp:** Dùng **Add-k smoothing** (cộng k nhỏ như 0.01, 0.001) hoặc các phương pháp phức tạp hơn (Backoff, Interpolation).
 
-$bt_2(C) = H$ (vì đường đi từ H có xác suất lớn hơn)
+---
 
-**Bước 3: Đệ quy (t = 3, $o_3 = 3$)**
+**Câu 11. Định nghĩa chỉ số perplexity (PP). Mối quan hệ giữa xác suất tập kiểm tra và perplexity?**
 
-Với H:
+**Perplexity** là thước đo đánh giá chất lượng mô hình ngôn ngữ. PP là nghịch đảo của xác suất trên tập test, được chuẩn hóa theo số từ:
 
-$$
-\begin{aligned}
-v_3(H) &= \max[v_2(H) \times P(H|H), v_2(C) \times P(H|C)] \times P(3|H) \\
-&= \max[0.0384 \times 0.6, 0.064 \times 0.5] \times 0.4 \\
-&= \max[0.02304, 0.032] \times 0.4 \\
-&= 0.032 \times 0.4 = 0.0128
-\end{aligned}
-$$
+```
+PP(W) = P(w₁w₂...wₙ)^{-1/N}
+      = (∏ P(wᵢ | w₁...wᵢ₋₁))^{-1/N}
+```
 
-$bt_3(H) = C$ (vì đường đi từ C có xác suất lớn hơn)
+**Với bigram:**
+```
+PP(W) = (∏ P(wᵢ | wᵢ₋₁))^{-1/N}
+```
 
-Với C:
+**Mối quan hệ:**
+- PP tỉ lệ nghịch với xác suất tập test: xác suất càng cao → PP càng thấp → mô hình càng tốt.
+- PP phản ánh số lượng lựa chọn trung bình cho từ tiếp theo. PP = k nghĩa là mô hình "phân vân" giữa trung bình k từ ở mỗi bước.
+- Giảm thiểu perplexity = tối đa hóa xác suất.
 
-$$
-\begin{aligned}
-v_3(C) &= \max[v_2(H) \times P(C|H), v_2(C) \times P(C|C)] \times P(3|C) \\
-&= \max[0.0384 \times 0.4, 0.064 \times 0.5] \times 0.1 \\
-&= \max[0.01536, 0.032] \times 0.1 \\
-&= 0.032 \times 0.1 = 0.0032
-\end{aligned}
-$$
+---
 
-$bt_3(C) = C$
+**Câu 12. Phân biệt đánh giá trong (intrinsic evaluation) và đánh giá ngoài (extrinsic evaluation).**
 
-**Bước 4: Kết thúc**
+| Tiêu chí | Intrinsic Evaluation | Extrinsic Evaluation |
+|----------|---------------------|---------------------|
+| Cách đo | Trực tiếp trên mô hình ngôn ngữ (perplexity) | Qua tác vụ cụ thể (sửa lỗi, dịch máy,...) |
+| Dữ liệu | Test set độc lập | Hệ thống ứng dụng |
+| Ưu điểm | Nhanh, rẻ, dễ so sánh | Đo được giá trị thực tế |
+| Nhược điểm | Không phản ánh hiệu quả thực tế | Tốn thời gian, tài nguyên |
+| Ví dụ | Tính PP trên test set | Dùng mô hình cho spell checking, đo % lỗi sửa đúng |
 
-$$
-P^* = \max[v_3(H), v_3(C)] = \max[0.0128, 0.0032] = 0.0128
-$$
+---
 
-Chuỗi trạng thái tối ưu bắt đầu từ H tại t=3.
+**Câu 13. Tại sao xác suất mô hình ngôn ngữ thường được tính và lưu dưới dạng Log-probability?**
+
+**2 lý do chính:**
+1. **Tránh underflow số học:** Xác suất thô luôn ≤ 1, tích của nhiều xác suất rất nhỏ → dễ về 0 do giới hạn biểu diễn floating-point. Log-probability là số âm có độ lớn vừa phải.
+2. **Cộng nhanh hơn nhân:** log(a × b) = log(a) + log(b). Cộng nhanh hơn nhân trong tính toán.
+
+```
+log P(câu) = Σ log P(wᵢ | wᵢ₋₁)
+```
+
+---
+
+### Chương 4: Phân tích quan điểm & Trích xuất đặc trưng
+
+**Câu 14. Giải thích sự khác biệt giữa Term Frequency (TF) và TF-IDF.**
+
+| Đặc trưng | TF (Term Frequency) | TF-IDF |
+|-----------|--------------------|--------|
+| Công thức | count(t, d) | count(t, d) × log(N/df(t)) |
+| Ý nghĩa | Tần suất từ trong văn bản | Tần suất từ, điều chỉnh bởi độ hiếm trong toàn corpus |
+| Vấn đề | Thiên lệch về văn bản dài, từ phổ biến | Giảm trọng số từ phổ biến khắp nơi |
+| Công thức IDF | — | IDF(t) = log(N / df(t)) với N = tổng số văn bản, df(t) = số văn bản chứa t |
+
+TF-IDF cân bằng giữa:
+- **TF:** từ xuất hiện nhiều trong văn bản → quan trọng với văn bản đó.
+- **IDF:** từ xuất hiện ở nhiều văn bản → không có giá trị phân biệt → giảm trọng số.
+
+---
+
+**Câu 15. Phân tích quan điểm là gì? Lấy 03 ứng dụng thực tế.**
+
+**Phân tích quan điểm (Sentiment Analysis)** là quá trình phát hiện thái độ (tích cực, tiêu cực, trung tính) của người viết đối với một đối tượng, sự kiện hoặc con người.
+
+**3 ứng dụng thực tế:**
+1. **Đánh giá sản phẩm/dịch vụ:** Phân loại review trên Shopee, Lazada, Amazon thành tích cực/tiêu cực để tổng hợp đánh giá.
+2. **Đo lường tâm lý công chúng:** Phân tích tweet về ứng viên chính trị, dự đoán xu hướng bầu cử.
+3. **Dự đoán thị trường tài chính:** Phân tích tin tức, bài báo để dự đoán xu hướng chứng khoán.
+
+---
+
+**Câu 16. So sánh Count Vectorization và TF-IDF. Khi nào nên dùng TF-IDF thay vì Count?**
+
+| Tiêu chí | Count Vectorization | TF-IDF |
+|----------|-------------------|--------|
+| Giá trị | Số đếm raw count | TF × IDF |
+| Trọng số từ phổ biến | Cao (càng nhiều càng cao) | Giảm (do IDF nhỏ) |
+| Trọng số từ hiếm | Thấp (nếu ít xuất hiện) | Tăng (do IDF lớn) |
+| Khả năng phân biệt | Kém (từ "the" có count lớn) | Tốt (từ "the" bị giảm) |
+
+**Khi nào dùng TF-IDF:**
+- Dữ liệu có nhiều từ dừng (stop words) xuất hiện phổ biến khắp nơi.
+- Cần giảm ảnh hưởng của các từ không mang nhiều ý nghĩa phân loại.
+- Bài toán phân loại văn bản, tìm kiếm thông tin (information retrieval).
+
+**Khi nào dùng Count:**
+- Dữ liệu đã được lọc stop word kỹ.
+- Muốn giữ nguyên tần suất thực tế (VD: đếm số lần xuất hiện).
+- Bài toán đơn giản, muốn tốc độ tính toán nhanh.
+
+---
+
+**Câu 17. Bạn đang xây dựng mô hình phân loại quan điểm. Liệt kê ít nhất 3 kỹ thuật tiền xử lý cơ bản và 3 loại đặc trưng có thể dùng.**
+
+**3 kỹ thuật tiền xử lý:**
+1. **Chuẩn hóa (Normalization):** Chuyển chữ hoa → thường, xóa thẻ HTML/URL, chuẩn hóa từ viết tắt.
+2. **Loại bỏ stop word:** Xóa các từ không mang ý nghĩa cảm xúc ("và", "là", "của", "the", "a").
+3. **Tách từ (Tokenization):** Chia câu thành các token (unigram/bigram/n-gram).
+
+**3 loại đặc trưng:**
+1. **Bag of Words (BoW) / Unigram:** Tần suất từng từ xuất hiện trong văn bản.
+2. **TF-IDF:** Tần suất từ có điều chỉnh theo độ hiếm.
+3. **Từ thể hiện quan điểm (Lexicon-based features):** Đếm số từ tích cực, tiêu cực dựa trên từ điển sentiment kết hợp với từ phủ định (VD: "không tốt" → đảo ngược sentiment).
+
+---
+
+### Chương 5: Phân tích cú pháp
+
+**Câu 18. Trình bày định nghĩa văn phạm phi ngữ cảnh (CFG) và 5 thành phần cấu thành.**
+
+**CFG (Context-Free Grammar)** là văn phạm cấu trúc đoạn, gồm 5 thành phần:
+
+| Thành phần | Ký hiệu | Mô tả | Ví dụ |
+|-----------|---------|-------|-------|
+| Tập ký hiệu kết thúc | T | Các từ thực tế | {John, saw, the, dog} |
+| Tập ký hiệu không kết thúc | N | Các cụm ngữ pháp | {S, NP, VP, Det, N, V} |
+| Ký hiệu khởi đầu | S | Điểm bắt đầu | S |
+| Tập luật sinh | R | Luật dạng A → γ | S → NP VP, VP → V NP |
+| Ký hiệu tiền kết thúc | P ⊂ N | Viết lại thành từ | N → "dog", V → "saw" |
+
+**Dạng luật:** A → γ, trong đó A ∈ N, γ ∈ (T ∪ N)*.
+
+---
+
+**Câu 19. Phân biệt constituency parsing và dependency parsing.**
+
+| Tiêu chí | Constituency Parsing | Dependency Parsing |
+|----------|--------------------|--------------------|
+| Đầu vào | Câu + CFG | Câu |
+| Đầu ra | Cây cấu trúc đoạn (phrase structure tree) | Cây phụ thuộc (dependency tree) |
+| Đơn vị | Các cụm từ (NP, VP, PP) lồng nhau | Mối quan hệ trực tiếp giữa các từ |
+| Số nút | Nhiều nút trung gian (phrases) | N nút (mỗi từ là 1 nút) |
+| Quan hệ | Cấu trúc: "What goes with what" | Phụ thuộc: "What depends on what" |
+| Nhãn | Nhãn cụm từ (NP, VP...) | Nhãn quan hệ (nsubj, dobj...) |
+
+**Khác biệt cốt lõi:**
+1. Constituency gom từ thành cụm → cụm lớn hơn; Dependency nối trực tiếp các từ bằng quan hệ phụ thuộc.
+2. Constituency cần CFG + cây nhị phân; Dependency chỉ cần từ và nhãn quan hệ.
+
+---
+
+**Câu 20. So sánh top-down và bottom-up trong phân tích cú pháp. Thuật toán CKY thuộc chiến lược nào?**
+
+| Tiêu chí | Top-down | Bottom-up |
+|----------|---------|-----------|
+| Hướng tìm kiếm | Từ S (gốc) xuống từ/câu | Từ câu lên S (gốc) |
+| Khởi đầu | Ký hiệu S | Xâu từ cần phân tích |
+| Cách hoạt động | Viết lại ký hiệu đích bằng luật | Khớp vế phải luật → thay bằng vế trái |
+| Văn phạm đệ quy trái | Bất lợi, dễ loop vô hạn | Không bị ảnh hưởng |
+| Điểm mạnh | Có định hướng, biết mục tiêu | Xử lý được đệ quy trái |
+| Điểm yếu | Dễ loop với đệ quy trái, lãng phí khi khởi tạo sai | Có thể sinh nhiều cấu trúc vô nghĩa |
+
+**CKY:** Thuộc chiến lược **bottom-up + dynamic programming**.
+- CKY khắc phục nhược điểm của bottom-up thuần bằng cách **lưu kết quả trung gian vào bảng** → tránh tính toán lặp lại.
+- Yêu cầu văn phạm ở dạng CNF (Chomsky Normal Form): A → BC (2 non-terminal) hoặc A → a (1 terminal).
+- Độ phức tạp O(n³|G|).
+
+---
+
+**Câu 21. Phân biệt CKY Recognition và CKY Parsing.**
+
+| Tiêu chí | CKY Recognition | CKY Parsing |
+|----------|----------------|-------------|
+| Mục tiêu | "Câu có đúng ngữ pháp không?" (Yes/No) | "Cấu trúc câu thế nào?" (Vẽ cây) |
+| Thông tin lưu | Tập non-terminal có thể sinh chuỗi con | Non-terminal + backpointer đến ô con |
+| Bảng CKY | Chỉ lưu nhãn | Lưu nhãn + con trỏ backpointer |
+| Khai thác kết quả | Kiểm tra S ∈ cell[0, n] | Truy vết ngược từ cell[0, n] → cây |
+
+**Khi nào dùng:**
+- **Recognition:** Kiểm tra hợp lệ ngữ pháp, tối ưu bộ nhớ (không cần lưu backpointer).
+- **Parsing:** Cần hiển thị cây cú pháp, xử lý nhập nhằng (nhiều cây).
+
+---
+
+### Chương 6: Word Embeddings & Ngữ nghĩa từ vựng
+
+**Câu 22. Giải thích thuật toán word2vec. Trong word2vec, một từ có một vector duy nhất hay nhiều vector phụ thuộc ngữ cảnh?**
+
+**Word2Vec:** Là phương pháp học word embedding (vector từ dày đặc) từ corpus lớn. Có 2 kiến trúc:
+
+1. **CBOW (Continuous Bag of Words):** Dự đoán từ trung tâm từ các từ ngữ cảnh xung quanh.
+   - Input: các từ ngữ cảnh (one-hot) → embedding → trung bình → dự đoán từ trung tâm.
+   - Nhanh, tốt với từ phổ biến.
+
+2. **Skip-gram:** Dự đoán các từ ngữ cảnh từ từ trung tâm.
+   - Input: từ trung tâm → embedding → dự đoán từ ngữ cảnh.
+   - Tốt với tập nhỏ, biểu diễn tốt từ hiếm.
+   - Thường dùng Negative Sampling để giảm chi phí tính toán.
+
+**Một từ có một vector duy nhất trong word2vec.** Đây là hạn chế: từ "bank" (bờ sông/ngân hàng) chỉ có một vector dù mang nghĩa khác nhau theo ngữ cảnh. Các mô hình hiện đại như ELMo, BERT giải quyết vấn đề này bằng **contextual embeddings** (vector động phụ thuộc ngữ cảnh).
+
+---
+
+**Câu 23. Ngữ nghĩa từ vựng nghiên cứu vấn đề gì? Phân biệt "nghĩa của từ" (word sense) với "từ" (word form).**
+
+**Ngữ nghĩa từ vựng (Lexical Semantics)** nghiên cứu:
+- Quan hệ từ vựng: sự liên hệ ngữ nghĩa giữa các từ (đồng nghĩa, trái nghĩa,...).
+- Ràng buộc về lựa chọn (selectional restrictions): cấu trúc ngữ nghĩa bên trong từ.
+- Phân loại và phân rã nghĩa của từ.
+- Sự khác biệt cấu trúc từ vựng - ngữ nghĩa giữa các ngôn ngữ.
+
+**Phân biệt:**
+- **Word form (từ):** Hình thức (âm thanh/chữ viết) của từ. VD: "bank" là một word form.
+- **Word sense (nghĩa của từ):** Một khía cạnh ý nghĩa riêng biệt. VD: "bank" có các senses: (1) bờ sông, (2) ngân hàng, (3) nghiêng máy bay.
+
+Một word form có thể có nhiều word senses (hiện tượng đa nghĩa/đồng âm).
+
+---
+
+**Câu 24. Trình bày 4 hiện tượng quan hệ nghĩa cơ bản: đồng âm, đa nghĩa, đồng nghĩa, trái nghĩa. Lấy ví dụ.**
+
+| Hiện tượng | Định nghĩa | Đặc điểm | Ví dụ |
+|-----------|-----------|---------|-------|
+| **Đồng âm (Homonymy)** | Từ giống hình thức, khác nghĩa, không liên quan | Nghĩa không có mối liên hệ lịch sử | "cá" (động vật) & "cá" (cá cược); "saw" (cưa) & "saw" (thấy - quá khứ) |
+| **Đa nghĩa (Polysemy)** | Một từ nhiều nghĩa có liên quan | Nghĩa có chung gốc, mở rộng | "đi" (di chuyển) & "đi" (chết); "mặt trời" (thiên thể) & "mặt trời" (nguồn sáng) |
+| **Đồng nghĩa (Synonymy)** | Từ khác nhau về âm, tương đồng về nghĩa | Có thể thay thế trong một số ngữ cảnh | "car" & "automobile"; "cố" & "gắng" |
+| **Trái nghĩa (Antonymy)** | Nghĩa đối lập trên cùng đặc điểm | Đối lập nhị phân hoặc hai đầu thang đo | "hot" & "cold"; "tối" & "sáng" |
+
+---
+
+### Chương 7: Trích xuất thông tin
+
+**Câu 25. Trình bày bài toán NER: đầu vào, đầu ra, các loại thực thể phổ biến và nhãn tương ứng.**
+
+**NER (Named Entity Recognition):** Định vị và phân loại thực thể có tên trong văn bản.
+
+- **Đầu vào:** Văn bản chưa gán nhãn + tập nhãn.
+- **Đầu ra:** Văn bản đã gán nhãn với các thực thể được đánh dấu.
+
+**Các loại thực thể và nhãn (theo lược đồ BIO):**
+
+| Thực thể | Nhãn B (Begin) | Nhãn I (Inside) | Ví dụ |
+|----------|---------------|-----------------|-------|
+| Người (Person) | B-PER | I-PER | B-PER Nguyễn I-PER Văn I-PER A |
+| Tổ chức (Organization) | B-ORG | I-ORG | B-ORG Google I-ORG LLC |
+| Địa điểm (Location) | B-LOC | I-LOC | B-LOC Hà I-LOC Nội |
+| Thời gian (Date) | B-DATE | I-DATE | B-DATE 12/ I-DATE 05/ I-DATE 2026 |
+| O (Outside) | O (không phải thực thể) | O | Các từ thông thường |
+
+**Ví dụ:**
+```
+Hà Nội là thủ đô của Việt Nam
+B-LOC  O  O    O     B-LOC
+```
+
+---
+
+**Câu 26. Trích xuất thông tin (IE) là gì? Nêu sự khác biệt giữa IE và IR.**
+
+**IE (Information Extraction):** Tự động tìm và trích chọn thông tin có cấu trúc từ văn bản phi cấu trúc. Mục tiêu: xây dựng biểu diễn có cấu trúc (database) phục vụ máy tính phân tích.
+
+**Khác biệt IE và IR:**
+
+| Tiêu chí | IE (Trích xuất) | IR (Truy xuất) |
+|----------|----------------|----------------|
+| Mục tiêu | Trích thông tin cụ thể, có cấu trúc | Tìm văn bản/tài liệu liên quan |
+| Đầu ra | Thông tin có cấu trúc (quan hệ, thực thể) | Danh sách tài liệu |
+| Độ sâu xử lý | Phân tích sâu (POS, parsing, NER) | So khớp từ khóa/ngữ nghĩa bề mặt |
+| Ví dụ | "Apple được thành lập năm 1976" → (ORG, founded_year, 1976) | Tìm kiếm "lịch sử Apple" → danh sách trang web |
+
+---
+
+### Chương 8: Hỏi đáp & RAG
+
+**Câu 27. Trình bày bài toán hỏi đáp tự động. Lấy ví dụ 3 dạng câu hỏi, trả lời tương ứng.**
+
+**Hỏi đáp tự động (Question Answering):** Xây dựng hệ thống tự động trả lời câu hỏi bằng ngôn ngữ tự nhiên dựa trên nguồn thông tin (văn bản, CSDL, CSTT).
+
+**3 dạng câu hỏi và trả lời:**
+
+| Dạng | Ví dụ câu hỏi | Câu trả lời |
+|------|--------------|-------------|
+| **Factoid (WH)** | "Thủ đô của Việt Nam là gì?" | "Hà Nội" |
+| **Yes/No** | "Paris có phải thủ đô nước Pháp không?" | "Có" |
+| **Định nghĩa** | "Bệnh bạch cầu là gì?" | "Bệnh bạch cầu là một loại ung thư máu..." |
+
+---
+
+**Câu 28. Mô tả kiến trúc hai giai đoạn Retriever-Reader. Nêu rõ đầu vào, đầu ra và nhiệm vụ của từng thành phần.**
+
+```
+Input: Large document set D + Question Q
+                    ↓
+          ┌─────────┴─────────┐
+          │    RETRIEVER      │  Nhiệm vụ: Tìm K đoạn văn có liên quan
+          └─────────┬─────────┘
+                    ↓
+          ┌─────────┴─────────┐
+          │      READER       │  Nhiệm vụ: Đọc hiểu, trích câu trả lời
+          └─────────┬─────────┘
+                    ↓
+          Output: Answer A
+```
+
+| Thành phần | Đầu vào | Đầu ra | Nhiệm vụ chính |
+|-----------|---------|--------|---------------|
+| **Retriever** | Tập tài liệu D + Câu hỏi Q | K đoạn văn liên quan nhất (P₁,...,P_K) | Tìm kiếm nhanh các đoạn có khả năng chứa câu trả lời (VD: TF-IDF, DPR) |
+| **Reader** | Câu hỏi Q + K đoạn văn | Câu trả lời A | Đọc hiểu, trích xuất/spans câu trả lời chính xác từ đoạn văn (VD: BiDAF, BERT) |
+
+---
+
+**Câu 29. Trình bày các đặc điểm chính của bộ dữ liệu SQuAD.**
+
+| Đặc điểm | Mô tả |
+|----------|-------|
+| Tên đầy đủ | Stanford Question Answering Dataset |
+| Quy mô | ~100,000 mẫu (đoạn văn, câu hỏi, câu trả lời đã gán nhãn) |
+| Nguồn gốc | English Wikipedia, mỗi đoạn ~100-150 từ |
+| Định dạng câu trả lời | Xâu ngắn (span) trích từ đoạn văn |
+| Số câu trả lời/câu hỏi | 3 đáp án mẫu (do nhiều người gán nhãn) |
+| Hạn chế | Không phải mọi câu hỏi đều có câu trả lời dạng span → giới hạn cho QA ngoài miền |
+
+---
+
+**Câu 30. Trình bày ba bước cơ bản của hệ thống Naive RAG.**
+
+**RAG (Retrieval-Augmented Generation)** kết hợp truy hồi và sinh văn bản để cải thiện chất lượng LLM.
+
+| Bước | Đầu vào | Đầu ra | Kỹ thuật chính |
+|------|---------|--------|---------------|
+| **1. Indexing** | Tập tài liệu gốc | Chỉ mục (index) có thể truy vấn | Chunking văn bản → Embedding → Lưu vào Vector DB |
+| **2. Retrieval** | Câu hỏi Q + Index | K đoạn văn liên quan | Embed câu hỏi → Tìm K-NN trong Vector DB |
+| **3. Generation** | Câu hỏi Q + K đoạn văn | Câu trả lời hoàn chỉnh | Prompt = Question + Context → LLM sinh câu trả lời |
+
+---
+
+## Phần 2: Bài tập (6đ)
+
+### Bài tập 1: HMM cho POS Tagging
+
+**Đề:** Cho corpus gồm 4 câu:
+```
+<s> she/PRO likes/VERB fish/NOUN </s>
+<s> he/PRO eats/VERB rice/NOUN </s>
+<s> she/PRO eats/VERB fish/NOUN </s>
+<s> he/PRO likes/VERB rice/NOUN </s>
+```
+
+**a) Tính ma trận chuyển trạng thái A (bao gồm `<s>` và `</s>`).**
+
+Tập trạng thái: Q = {PRO, VERB, NOUN, `<s>`, `</s>`}
+
+Đếm số lần xuất hiện các cặp (trạng thái trước, trạng thái sau):
+
+| Từ → Tới | `<s>` | PRO | VERB | NOUN | `</s>` |
+|----------|-------|-----|------|------|--------|
+| `<s>` | 0 | 4 | 0 | 0 | 0 |
+| PRO | 0 | 0 | 4 | 0 | 0 |
+| VERB | 0 | 0 | 0 | 4 | 0 |
+| NOUN | 0 | 0 | 0 | 0 | 4 |
+| `</s>` | 0 | 0 | 0 | 0 | 0 |
+
+- `<s>` xuất hiện 4 lần, luôn đi với PRO → P(PRO|<s>) = 4/4 = 1
+- PRO xuất hiện 4 lần, luôn đi với VERB → P(VERB|PRO) = 4/4 = 1
+- VERB xuất hiện 4 lần, luôn đi với NOUN → P(NOUN|VERB) = 4/4 = 1
+- NOUN xuất hiện 4 lần, luôn đi với </s> → P(</s>|NOUN) = 4/4 = 1
+
+**Ma trận A:**
+```
+        PRO   VERB  NOUN  <s>   </s>
+PRO       0     1     0     0     0
+VERB      0     0     1     0     0
+NOUN      0     0     0     0     1
+<s>       1     0     0     0     0
+</s>      0     0     0     0     0
+```
+
+Xác suất khởi đầu π: P(PRO|<s>) = 1
+
+**b) Tính ma trận phát xạ B.**
+
+Đếm số lần mỗi từ xuất hiện với mỗi nhãn:
+
+| Từ | PRO | VERB | NOUN |
+|----|-----|------|------|
+| she | 2 | 0 | 0 |
+| he | 2 | 0 | 0 |
+| likes | 0 | 2 | 0 |
+| eats | 0 | 2 | 0 |
+| fish | 0 | 0 | 2 |
+| rice | 0 | 0 | 2 |
+
+Mỗi nhãn xuất hiện 4 lần:
+- P(she|PRO) = 2/4 = 0.5
+- P(he|PRO) = 2/4 = 0.5
+- P(likes|VERB) = 2/4 = 0.5
+- P(eats|VERB) = 2/4 = 0.5
+- P(fish|NOUN) = 2/4 = 0.5
+- P(rice|NOUN) = 2/4 = 0.5
+
+**Ma trận B:**
+```
+        she    he     likes  eats   fish   rice
+PRO     0.5    0.5     0      0      0      0
+VERB     0      0     0.5    0.5     0      0
+NOUN     0      0      0      0     0.5    0.5
+```
+
+**c) Tính xác suất chuỗi "he likes rice" với nhãn "PRO VERB NOUN".**
+
+```
+P("he likes rice", "PRO VERB NOUN")
+= P(PRO|<s>) × P(he|PRO) × P(VERB|PRO) × P(likes|VERB) × P(NOUN|VERB) × P(rice|NOUN) × P(</s>|NOUN)
+= 1 × 0.5 × 1 × 0.5 × 1 × 0.5 × 1
+= 0.125
+```
+
+**d) Viterbi tìm chuỗi nhãn tối ưu cho "she eats rice".**
+
+Từ vựng: V = {she, he, likes, eats, fish, rice}
+Trạng thái: PRO, VERB, NOUN
+
+**Khởi tạo (t=1, w₁ = "she"):**
+```
+v₁(PRO) = P(PRO|<s>) × P(she|PRO) = 1 × 0.5 = 0.5
+v₁(VERB) = P(VERB|<s>) × P(she|VERB) = 0 × 0 = 0
+v₁(NOUN) = P(NOUN|<s>) × P(she|NOUN) = 0 × 0 = 0
+```
+
+**Đệ quy (t=2, w₂ = "eats"):**
+
+v₂(PRO) = max{v₁(PRO)×P(PRO|PRO), v₁(VERB)×P(PRO|VERB), v₁(NOUN)×P(PRO|NOUN)} × P(eats|PRO)
+        = max{0.5×0, 0×0, 0×0} × 0 = 0 × 0 = 0
+
+v₂(VERB) = max{v₁(PRO)×P(VERB|PRO), v₁(VERB)×P(VERB|VERB), v₁(NOUN)×P(VERB|NOUN)} × P(eats|VERB)
+         = max{0.5×1, 0×0, 0×0} × 0.5 = 0.5 × 0.5 = 0.25
+bp₂(VERB) = PRO
+
+v₂(NOUN) = max{v₁(PRO)×P(NOUN|PRO), v₁(VERB)×P(NOUN|VERB), v₁(NOUN)×P(NOUN|NOUN)} × P(eats|NOUN)
+         = max{0.5×0, 0×1, 0×0} × 0 = 0 × 0 = 0
+
+**Đệ quy (t=3, w₃ = "rice"):**
+
+v₃(PRO) = max{v₂(PRO)×P(PRO|PRO), v₂(VERB)×P(PRO|VERB), v₂(NOUN)×P(PRO|NOUN)} × P(rice|PRO)
+        = max{0×0, 0.25×0, 0×0} × 0 = 0
+
+v₃(VERB) = max{v₂(PRO)×P(VERB|PRO), v₂(VERB)×P(VERB|VERB), v₂(NOUN)×P(VERB|NOUN)} × P(rice|VERB)
+         = max{0×0, 0.25×0, 0×0} × 0 = 0
+
+v₃(NOUN) = max{v₂(PRO)×P(NOUN|PRO), v₂(VERB)×P(NOUN|VERB), v₂(NOUN)×P(NOUN|NOUN)} × P(rice|NOUN)
+         = max{0×0, 0.25×1, 0×0} × 0.5 = 0.25 × 0.5 = 0.125
+bp₃(NOUN) = VERB
+
+**Kết thúc:**
+P\* = max v₃(i) = v₃(NOUN) = 0.125
+q₃\* = NOUN
 
 **Truy vết ngược:**
+- t=3: NOUN, backpointer → VERB (t=2)
+- t=2: VERB, backpointer → PRO (t=1)
+- t=1: PRO
 
-- t=3: H -> $bt_3(H) = C$
-- t=2: C -> $bt_2(C) = H$
-- t=1: H
-
-**Chuỗi thời tiết tối ưu: H - C - H**
-
----
-
-### Bài 3.4 (Tương tự slide Week 3 - Huấn luyện HMM có giám sát)
-
-**Đề bài:** Cho tập dữ liệu gán nhãn như sau (chỉ xét các nhãn: DT, NN, VB):
-
-```
-<s> the cat sat </s>    -> DT NN VB
-<s> the dog ran </s>    -> DT NN VB
-<s> a cat ran </s>      -> DT NN VB
-```
-
-Tính các xác suất chuyển trạng thái và phát xạ.
-
-**Lời giải:**
-
-**Xác suất chuyển trạng thái:**
-
-Đếm các cặp nhãn liên tiếp (thêm `<s>` và `</s>`):
-
-Các chuỗi nhãn: `<s> DT NN VB </s>` (x3)
-
-| Cặp nhãn | Count |
-|----------|-------|
-| (<s>, DT) | 3 |
-| (DT, NN) | 3 |
-| (NN, VB) | 3 |
-| (VB, </s>) | 3 |
-
-Tần suất nhãn: `<s>`:3, DT:3, NN:3, VB:3, `</s>`:3`
-
-$$
-\begin{aligned}
-P(DT | <s>) &= 3/3 = 1.0 \\
-P(NN | DT) &= 3/3 = 1.0 \\
-P(VB | NN) &= 3/3 = 1.0 \\
-P(</s> | VB) &= 3/3 = 1.0
-\end{aligned}
-$$
-
-**Xác suất phát xạ:**
-
-| Từ | Nhãn | Count |
-|-----|------|-------|
-| the | DT | 2 |
-| a | DT | 1 |
-| cat | NN | 2 |
-| dog | NN | 1 |
-| sat | VB | 1 |
-| ran | VB | 2 |
-
-$$
-\begin{aligned}
-P(\text{the} | DT) &= 2/3 \\
-P(\text{a} | DT) &= 1/3 \\
-P(\text{cat} | NN) &= 2/3 \\
-P(\text{dog} | NN) &= 1/3 \\
-P(\text{sat} | VB) &= 1/3 \\
-P(\text{ran} | VB) &= 2/3
-\end{aligned}
-$$
+**Kết luận:** Chuỗi nhãn tối ưu: **PRO → VERB → NOUN** (she eats rice)
+Xác suất: **0.125**
 
 ---
 
-## BÀI TẬP CHƯƠNG 4: PHÂN TÍCH CÚ PHÁP
+### Bài tập 2: N-gram Language Model
 
-### Bài 4.1 (Tương tự slide Week 4 - Xác định ngôn ngữ của văn phạm)
+**Đề:** Corpus gồm 4 câu:
+```
+<s> em yêu học NLP </s>
+<s> anh học NLP rất vui </s>
+<s> em học rất chăm </s>
+<s> anh yêu NLP </s>
+```
+Từ vựng V = {em, yêu, học, NLP, anh, rất, vui, chăm, </s>}, |V| = 9.
 
-**Đề bài:** Cho văn phạm $G = (\{a, b\}, \{X\}, X, \{X \rightarrow \varepsilon, X \rightarrow aXb, X \rightarrow XX\})$. Xác định ngôn ngữ $L(G)$.
+**a) Xây dựng mô hình unigram và bigram (không làm trơn).**
 
-**Lời giải:**
+**Unigram:**
 
-Phân tích các luật:
-- $X \rightarrow \varepsilon$: sinh chuỗi rỗng.
-- $X \rightarrow aXb$: sinh các cặp a và b cân bằng, a đứng trước b.
-- $X \rightarrow XX$: phép ghép (concatenation) của hai chuỗi con sinh từ X.
+| Từ | Count | P |
+|----|-------|---|
+| em | 2 | 2/22 = 0.0909 |
+| yêu | 2 | 2/22 = 0.0909 |
+| học | 2 | 2/22 = 0.0909 |
+| NLP | 3 | 3/22 = 0.1364 |
+| anh | 2 | 2/22 = 0.0909 |
+| rất | 2 | 2/22 = 0.0909 |
+| vui | 1 | 1/22 = 0.0455 |
+| chăm | 1 | 1/22 = 0.0455 |
+| `<s>` | 4 | 4/22 = 0.1818 |
+| `</s>` | 3 | 3/22 = 0.1364 |
+| **Tổng** | **22** | **1** |
 
-Thực hiện suy diễn:
+**Bigram:** Đếm số lần xuất hiện các cặp từ:
 
-- $n=0$: $X \Rightarrow \varepsilon$
+| | `</s>` | em | yêu | học | NLP | anh | rất | vui | chăm |
+|---|--------|----|-----|-----|-----|-----|-----|-----|------|
+| `<s>` | 0 | 2 | 0 | 0 | 0 | 2 | 0 | 0 | 0 |
+| em | 0 | 0 | 1 | 1 | 0 | 0 | 0 | 0 | 0 |
+| yêu | 0 | 0 | 0 | 1 | 1 | 0 | 0 | 0 | 0 |
+| học | 2 | 0 | 0 | 0 | 1 | 0 | 1 | 0 | 0 |
+| NLP | 1 | 0 | 0 | 0 | 0 | 0 | 1 | 1 | 0 |
+| anh | 0 | 0 | 1 | 1 | 0 | 0 | 0 | 0 | 0 |
+| rất | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 1 |
+| vui | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| chăm | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 
-- $n=1$: $X \Rightarrow aXb \Rightarrow a\varepsilon b = ab$
+Xác suất bigram (MLE): P(wᵢ|wᵢ₋₁) = count(wᵢ₋₁, wᵢ) / count(wᵢ₋₁)
 
-- $n=2$: $X \Rightarrow aXb \Rightarrow aaXbb \Rightarrow aabb$
+Ví dụ:
+- P(em|<s>) = 2/4 = 0.5
+- P(anh|<s>) = 2/4 = 0.5
+- P(yêu|em) = 1/2 = 0.5
+- P(học|em) = 1/2 = 0.5
+- P(học|yêu) = 1/2 = 0.5
+- P(NLP|yêu) = 1/2 = 0.5
+- ... (các xác suất khác tính tương tự)
 
-- $n=3$: $X \Rightarrow XX \Rightarrow aXb \cdot aXb \Rightarrow ab \cdot ab = abab$
+**b) Tính P(<s> anh chăm học </s>) bằng bigram không làm trơn.**
 
-Chuỗi sinh từ $aXb$ đảm bảo số lượng $a$ và $b$ bằng nhau và mọi $a$ nằm bên trái $b$ tương ứng. Phép $XX$ cho phép nối các chuỗi loại $a^n b^n$ lại với nhau.
+```
+P(<s> anh chăm học </s>)
+= P(anh|<s>) × P(chăm|anh) × P(học|chăm) × P(</s>|học)
+= 0.5 × P(chăm|anh) × P(học|chăm) × 2/?
 
-**Kết luận:**
+P(chăm|anh) = count(anh, chăm) / count(anh) = 0/2 = 0
+```
 
-$$
-L(G) = \{w \in \{a, b\}^* \mid \text{mọi tiền tố của } w \text{ có số } a \geq \text{số } b, \text{ và tổng số } a = \text{tổng số } b\}
-$$
+**Kết quả = 0.** Đây là vấn đề **zero probability**: bigram "anh chăm" và "chăm học" chưa xuất hiện trong tập huấn luyện → xác suất bằng 0.
 
-Hoặc có thể viết đơn giản hơn: tập hợp các chuỗi có thể phân tích thành các đoạn dạng $a^n b^n$ ($n \geq 0$) nối tiếp nhau.
+**c) Unigram với làm trơn Laplace.**
+
+Với V = 9:
+```
+P_Laplace(em) = (2+1)/(22+9) = 3/31 = 0.0968
+P_Laplace(yêu) = (2+1)/31 = 3/31 = 0.0968
+P_Laplace(học) = (2+1)/31 = 3/31 = 0.0968
+P_Laplace(NLP) = (3+1)/31 = 4/31 = 0.1290
+P_Laplace(anh) = (2+1)/31 = 3/31 = 0.0968
+P_Laplace(rất) = (2+1)/31 = 3/31 = 0.0968
+P_Laplace(vui) = (1+1)/31 = 2/31 = 0.0645
+P_Laplace(chăm) = (1+1)/31 = 2/31 = 0.0645
+P_Laplace(</s>) = (3+1)/31 = 4/31 = 0.1290
+```
+
+**d) Bigram với làm trơn Laplace cho P(<s> anh chăm học </s>).**
+
+Công thức Laplace cho bigram:
+```
+P_Laplace(wᵢ|wᵢ₋₁) = (count(wᵢ₋₁, wᵢ) + 1) / (count(wᵢ₋₁) + V)
+```
+với V = 9.
+
+```
+P_Laplace(anh|<s>) = (count(<s>,anh) + 1) / (count(<s>) + 9) = (2+1)/(4+9) = 3/13 ≈ 0.2308
+
+P_Laplace(chăm|anh) = (count(anh,chăm) + 1) / (count(anh) + 9) = (0+1)/(2+9) = 1/11 ≈ 0.0909
+
+P_Laplace(học|chăm) = (count(chăm,học) + 1) / (count(chăm) + 9) = (0+1)/(1+9) = 1/10 = 0.1
+
+P_Laplace(</s>|học) = (count(học,</s>) + 1) / (count(học) + 9) = (0+1)/(2+9) = 1/11 ≈ 0.0909
+```
+
+```
+P(<s> anh chăm học </s>) = 3/13 × 1/11 × 1/10 × 1/11
+                         = 3 / (13 × 11 × 10 × 11) = 3 / 15730 ≈ 0.00019
+```
+
+**e) Perplexity của mô hình bigram đã làm trơn trên câu "anh chăm học".**
+
+Câu: `<s>` anh chăm học `</s>` (N = 4 từ, bỏ `<s>` vì là start token, tính từ sau `<s>`)
+
+Perplexity cho bigram:
+```
+PP(W) = (P(w₁|<s>) × P(w₂|w₁) × P(w₃|w₂) × P(</s>|w₃))^(-1/N)
+      = (3/13 × 1/11 × 1/10 × 1/11)^(-1/4)
+      = (3/15730)^(-1/4)
+      = (15730/3)^(1/4)
+      = (5243.33)^(1/4)
+      ≈ 8.52
+```
 
 ---
 
-### Bài 4.2 (Tương tự slide Week 4 - Vẽ cây cú pháp nhập nhằng)
+### Bài tập 3: TF-IDF & Naive Bayes
 
-**Đề bài:** Cho văn phạm:
-
+**Đề:**
 ```
-S  -> NP VP
-VP -> V NP
-VP -> VP PP
-PP -> P NP
-NP -> NP PP
-NP -> 'I' | 'sushi' | 'chopsticks'
-V  -> 'eat'
-P  -> 'with'
+Positive: "good quality product" | "great value and quality"
+Negative: "bad product poor value" | "very poor quality"
+Test: "great quality product"
 ```
 
-Và câu: "I eat sushi with chopsticks"
+**a) Tính TF-IDF của "quality" trong D1 = "good quality product".**
 
-Vẽ ít nhất 2 cây cú pháp thành phần khả thi và tính xác suất mỗi cây với PCFG có:
+4 documents: d1="good quality product", d2="great value and quality", d3="bad product poor value", d4="very poor quality"
 
-- $P(S \rightarrow NP\ VP) = 1.0$
-- $P(VP \rightarrow V\ NP) = 0.7$
-- $P(VP \rightarrow VP\ PP) = 0.3$
-- $P(PP \rightarrow P\ NP) = 1.0$
-- $P(NP \rightarrow NP\ PP) = 1.0$
-- Xác suất các luật sinh từ vựng (terminal) = 1.0.
+- TF(quality, d1) = 1/3
+- IDF(quality) = log(N/df) = log(4/3) ≈ log(1.333) ≈ 0.125 (log base 10, hoặc ln)
+- TF-IDF(quality, d1) = (1/3) × log(4/3) ≈ 0.333 × 0.125 ≈ 0.0416
 
-**Lời giải:**
+**b) Naive Bayes (Laplace smoothing) phân loại câu test "great quality product".**
 
-**Cây 1:** `[[I] [eat [sushi] [with [chopsticks]]]` - VP -> V NP, rồi NP -> NP PP.
+Từ vựng V = {good, quality, product, great, value, and, bad, poor, very} → |V| = 9
 
-Cấu trúc đúng hơn:
+**Prior:**
+P(Pos) = 2/4 = 0.5
+P(Neg) = 2/4 = 0.5
 
-```
-              S
-            /   \
-          NP     VP
-          |     /|\
-          I    V  NP  PP
-               |  |  /|\
-              eat sushi P  NP
-                     |   |
-                   with chopsticks
-```
+**Likelihood (Laplace smoothing):** P(w|c) = (count(w, c) + 1) / (Σ count(w', c) + |V|)
 
-Cây này tương ứng với: "tôi ăn sushi (mà sushi được ăn bằng đũa)" hoặc "tôi ăn sushi cùng với đũa" - nghĩa là "sushi with chopsticks" là 1 NP.
+Class Positive:
+- Tổng số từ trong Pos = 7 (good, quality, product, great, value, and, quality)
+- P(good|Pos) = (1+1)/(7+9) = 2/16 = 0.125
+- P(quality|Pos) = (2+1)/(7+9) = 3/16 = 0.1875
+- P(product|Pos) = (1+1)/(7+9) = 2/16 = 0.125
 
-Các luật sử dụng:
-- $S \rightarrow NP\ VP$ (1.0)
-- $VP \rightarrow V\ NP$ (0.7)
-- $NP \rightarrow NP\ PP$ (1.0)
-- $PP \rightarrow P\ NP$ (1.0)
-- Các luật sinh từ vựng: I, eat, sushi, with, chopsticks.
+Class Negative:
+- Tổng số từ trong Neg = 7 (bad, product, poor, value, very, poor, quality)
+- P(great|Neg) = (0+1)/(7+9) = 1/16 = 0.0625
+- P(quality|Neg) = (1+1)/(7+9) = 2/16 = 0.125
+- P(product|Neg) = (1+1)/(7+9) = 2/16 = 0.125
 
-$$
-P(\tau_1) = 1.0 \times 0.7 \times 1.0 \times 1.0 \times 1.0 = 0.7
-$$
+**Tính posterior:**
 
-**Cây 2:** `[[I] [[eat sushi] [with chopsticks]]` - VP -> VP PP.
+P(Pos|test) ∝ P(Pos) × P(great|Pos) × P(quality|Pos) × P(product|Pos)
+            ∝ 0.5 × 0.125 × 0.1875 × 0.125
+            ∝ 0.5 × 0.00293 = 0.001465
 
-Cấu trúc chi tiết:
+P(Neg|test) ∝ P(Neg) × P(great|Neg) × P(quality|Neg) × P(product|Neg)
+            ∝ 0.5 × 0.0625 × 0.125 × 0.125
+            ∝ 0.5 × 0.000977 = 0.000488
 
-```
-              S
-            /   \
-          NP     VP
-          |     /|\
-          I    VP  PP
-              /|\  /|\
-             V  NP P  NP
-             |  |  |   |
-            eat sushi with chopsticks
-```
+**Kết luận:** P(Pos|test) > P(Neg|test) → Phân loại là **Positive**.
 
-Các luật sử dụng:
-- $S \rightarrow NP\ VP$ (1.0)
-- $VP \rightarrow VP\ PP$ (0.3)
-- $VP \rightarrow V\ NP$ (0.7)
-- $PP \rightarrow P\ NP$ (1.0)
+**c) Nếu câu test là "not a great quality product", nhận xét.**
 
-$$
-P(\tau_2) = 1.0 \times 0.3 \times 0.7 \times 1.0 = 0.21
-$$
+Với "not a great quality product":
+- "not" và "a" là unknown words (không xuất hiện trong train).
+- Với Laplace smoothing, mỗi unknown word có P(unk|c) = 1/16 = 0.0625 cho cả 2 lớp.
+- Lớp Negative vẫn có P(product|Neg) = P(quality|Neg), nhưng P(great|Pos) > P(great|Neg).
 
-**So sánh:** $P(\tau_1) = 0.7 > P(\tau_2) = 0.21$, nên bộ phân tích sẽ chọn **Cây 1**.
+Tuy nhiên, "not" thường đảo ngược nghĩa: "not great" → negative. Mô hình Naive Bayes không hiểu điều này vì nó chỉ dựa trên tần suất từ.
+
+**Đề xuất:** Thêm kỹ thuật xử lý **phủ định (negation handling)**: khi gặp "not" (hoặc "no", "never"), thêm tiền tố "NOT_" vào từ theo sau (VD: "not great" → "NOT_great") để mô hình học được rằng "NOT_great" có xu hướng tiêu cực.
 
 ---
 
-### Bài 4.3 (Tương tự slide Week 4 - Thuật toán CKY)
+### Bài tập 4: CFG, CNF và CKY Parsing
 
-**Đề bài:** Cho văn phạm CNF:
+**Đề:**
+```
+S → NP VP | VP
+NP → Det N | NP PP | N
+VP → V | V NP | VP PP
+PP → P NP
+Det → "một" | "con"
+N → "mèo" | "chuột" | "bẫy"
+V → "bắt" | "thấy"
+P → "trong"
+```
+
+**a) Vẽ cây cú pháp cho "con mèo bắt con chuột trong bẫy".**
+
+Cây 1 (VP → V NP, NP → NP PP - "bắt" kết hợp với "con chuột trong bẫy"):
+```
+         S
+       /   \
+     NP     VP
+    / \    / | \
+  Det  N  V  NP     PP
+  |   |   | / \   /  \
+  con mèo bắt NP  PP  P  NP
+             / \ / \  |  |
+           Det N P  NP trong bẫy
+            |   |   |
+            con chuột  N
+                       |
+                      bẫy
+```
+→ "con mèo bắt (con chuột trong bẫy)" — con chuột nằm trong bẫy
+
+Cây 2 (VP → VP PP - PP bổ nghĩa cho VP "bắt con chuột"):
+```
+         S
+       /   \
+     NP     VP
+    / \    / | \
+  Det  N  VP PP  P  NP
+  |   |  / \ / \ |  |
+  con mèo V  NP P NP trong bẫy
+          |  |  |  |
+          bắt Det N  N
+              |   |  |
+              con  N bẫy
+                   |
+                 chuột
+```
+→ "con mèo (bắt con chuột) trong bẫy" — con mèo ở trong bẫy
+
+**Hiện tượng nhập nhằng (PP attachment ambiguity):** PP "trong bẫy" có thể bổ nghĩa cho NP "con chuột" (chuột ở trong bẫy) hoặc VP "bắt con chuột" (hành động bắt diễn ra trong bẫy).
+
+**b) Chuyển văn phạm con sang CNF:**
+```
+S → VP | NP VP
+VP → V NP | V NP PP | ε
+PP → P NP
+```
+
+**Bước 1: Loại ε-production (VP → ε)**
+Thay VP bằng ε trong các luật có VP:
+- S → VP | NP VP → S → ε | NP (do VP → ε)
+- VP → V NP | V NP PP | ε
+
+Thêm luật mới:
+```
+S → ε | NP
+```
+Giữ nguyên S → VP cho trường hợp VP không rỗng.
+
+**Bước 2: Loại unit production (S → VP, S → NP)**
+- S → VP: thay VP bằng các luật của VP → S → V NP | V NP PP
+- S → NP: đã có
+
+**Bước 3: Chuyển luật > 2 non-terminal về CNF**
+VP → V NP PP → tạo non-terminal mới: VP → X PP, X → V NP
+
+**Kết quả CNF:**
+```
+S → V NP | V NP PP | ε | NP
+NP → N
+VP → V NP | V NP PP
+PP → P NP
+V → "bắt"
+N → "mèo" | "chuột"
+P → "trong"
+```
+
+**c) CKY cho "mèo bắt chuột" với CNF rút gọn:**
+
+Văn phạm CNF:
+```
+S → NP VP
+NP → N
+VP → V NP
+N → "mèo" | "chuột"
+V → "bắt"
+```
+
+Câu: w₁=mèo, w₂=bắt, w₃=chuột
+
+Bảng CKY 3×3 (tam giác trên):
 
 ```
-S  -> NP VP
-NP -> DT NN
-NP -> NN
-VP -> VB NP
-VP -> VB
-DT -> 'the'
-NN -> 'cat' | 'dog'
-VB -> 'chased' | 'sat'
+            j=1          j=2          j=3
+            (mèo)        (bắt)        (chuột)
+i=0          N            —             S
+i=1            —          V             VP
+i=2                         —           N
 ```
 
-Phân tích câu: "the cat sat" bằng thuật toán CKY. Điền bảng CKY và xác định câu có đúng ngữ pháp không.
+**Điền chi tiết:**
 
-**Lời giải:**
+| cell[0,1] | w₁=mèo: N → "mèo" → {N} |
+| cell[1,2] | w₂=bắt: V → "bắt" → {V} |
+| cell[2,3] | w₃=chuột: N → "chuột" → {N} |
+| cell[0,2] | Xét cell[0,1]={N}, cell[1,2]={V}: không có luật A → N V → rỗng |
+| cell[1,3] | Xét cell[1,2]={V}, cell[2,3]={N}: có luật VP → V N → {VP} |
+| cell[0,3] | Xét cell[0,1]={N}, cell[1,3]={VP}: có luật S → NP VP → {S} |
 
-Câu có 3 từ: "the" (w1), "cat" (w2), "sat" (w3). Ma trận CKY kích thước $4 \times 4$.
+Kết luận: **S ∈ cell[0,3]** → Câu đúng ngữ pháp ✓
 
-**Bước 1: Khởi tạo đường chéo (span = 1)**
+**d) PCFG — Chọn cây nào cho "con mèo bắt chuột trong bẫy"?**
 
-- Ô [0,1]: "the" -> DT
-- Ô [1,2]: "cat" -> NN
-- Ô [2,3]: "sat" -> VB.
+Xác suất cây (dựa trên các luật chính):
 
-Bảng sau bước khởi tạo:
+Cây 1 (PP gắn vào NP "con chuột"):
+```
+S → NP VP → ...
+NP → Det N → "con mèo"
+VP → V NP → "bắt" + NP
+NP → NP PP → "con chuột" + PP (P=0.25)
+PP → P NP → "trong" + "bẫy" (P=1.0)
+```
+P(cây 1) ∝ 0.25 × 1.0 = 0.25 × các xác suất luật còn lại
 
-| i\j | 1   | 2   | 3   |
-|-----|-----|-----|-----|
-| **0** | DT  |     |     |
-| **1** |     | NN  |     |
-| **2** |     |     | VB  |
+Cây 2 (PP gắn vào VP):
+```
+VP → VP PP → "bắt con chuột" + PP (P=0.3)
+PP → P NP → "trong" + "bẫy" (P=1.0)
+```
+P(cây 2) ∝ 0.3 × 1.0 = 0.3 × các xác suất luật còn lại
 
-**Bước 2: Điền span = 2**
-
-- Ô [0,2]: "the cat" - xét k=1
-  - [0,1] chứa DT, [1,2] chứa NN
-  - Có luật NP -> DT NN -> Điền **NP** vào [0,2]
-
-- Ô [1,3]: "cat sat" - xét k=2
-  - [1,2] chứa NN, [2,3] chứa VB
-  - Không có luật nào có vế phải là NN VB -> Ô trống.
-
-| i\j | 1   | 2   | 3   |
-|-----|-----|-----|-----|
-| **0** | DT  | NP  |     |
-| **1** |     | NN  |     |
-| **2** |     |     | VB  |
-
-**Bước 3: Điền span = 3 (ô [0,3])**
-
-Ô [0,3]: "the cat sat" - xét k=1 và k=2.
-
-- k=1: [0,1]={DT}, [1,3]={} -> Không có luật
-- k=2: [0,2]={NP}, [2,3]={VB}
-  - Có luật VP -> VB NP? Không, luật là VP -> VB NP (VB trước NP).
-  - [2,3] = VB, [0,2] = NP. Không khớp vì thứ tự bị đảo.
-
-*Vậy không có cách nào sinh S từ [0,3]?*
-
-Hãy kiểm tra lại: thứ tự trong câu là "the cat sat". Nếu VP -> VB thì chỉ có [2,3]=VB. Khi đó S -> NP VP cần NP ở [0,2] và VP ở [2,3]. [0,2] = NP và [2,3] = VB. Nhưng VB không phải VP.
-
-Ta cần luật VP -> VB. Giả sử thêm luật `VP -> VB` vào văn phạm (như trong phiên bản chuẩn):
-
-- [2,3] = VB, áp dụng VP -> VB -> [2,3] có thêm VP
-- Bây giờ tại k=2: [0,2]={NP}, [2,3]={VP} -> S -> NP VP -> Điền **S** vào [0,3]
-
-**Kết quả cuối cùng:**
-
-| i\j | 1   | 2   | 3   |
-|-----|-----|-----|-----|
-| **0** | DT  | NP  | **S** |
-| **1** |     | NN  |     |
-| **2** |     |     | VB, VP|
-
-**Kết luận:** Câu "the cat sat" **đúng ngữ pháp** vì ô [0,3] chứa S.
+→ Cây 2 có xác suất cao hơn → bộ phân tích ưu tiên cách hiểu PP bổ nghĩa cho VP (hành động bắt diễn ra trong bẫy).
 
 ---
 
-### Bài 4.4 (Tương tự slide Week 4 - Chuyển đổi sang CNF)
+### Bài tập 5: Cosine Similarity & Word Embeddings
 
-**Đề bài:** Chuyển văn phạm sau về dạng chuẩn Chomsky (CNF):
+**Đề:** Ma trận đồng xuất hiện (cửa sổ ±2):
 
-```
-S  -> NP VP PP
-NP -> DT NN | 'John'
-VP -> V NP | V
-PP -> P NP
-DT -> 'the'
-NN -> 'cat'
-V  -> 'chased' | 'sat'
-P  -> 'on'
-```
+| Từ | market | price | trade | river | mountain | forest |
+|----|--------|-------|-------|-------|----------|--------|
+| stock | 15 | 12 | 8 | 0 | 0 | 1 |
+| peak | 2 | 3 | 1 | 4 | 14 | 6 |
+| bond | 10 | 9 | 11 | 0 | 0 | 0 |
 
-**Lời giải:**
+**a) Cosine similarity giữa "stock" và "bond".**
 
-Trong CNF, mọi luật chỉ có 2 dạng: $A \rightarrow B\ C$ hoặc $A \rightarrow a$.
+V(stock) = [15, 12, 8, 0, 0, 1]
+V(bond) = [10, 9, 11, 0, 0, 0]
 
-Các luật cần sửa:
-1. $S \rightarrow NP\ VP\ PP$ (3 non-terminals)
-2. $NP \rightarrow DT\ NN$ (đã đúng - giữ nguyên)
-3. $VP \rightarrow V\ NP$ (đã đúng)
-4. $VP \rightarrow V$ (đã đúng nếu coi V là terminal? Không, V là non-terminal)
+cos(stock, bond) = (15×10 + 12×9 + 8×11 + 0×0 + 0×0 + 1×0) / (||stock|| × ||bond||)
 
-**Cách chuyển đổi:**
+Tử số = 150 + 108 + 88 + 0 + 0 + 0 = 346
 
-**1. Xử lý luật S -> NP VP PP:**
+||stock|| = √(15² + 12² + 8² + 0² + 0² + 1²) = √(225+144+64+0+0+1) = √434 ≈ 20.83
+||bond|| = √(10² + 9² + 11² + 0² + 0² + 0²) = √(100+81+121) = √302 ≈ 17.38
 
-Thêm non-terminal tạm thời, ví dụ VP1:
+cos(stock, bond) = 346 / (20.83 × 17.38) = 346 / 362.03 ≈ **0.956**
 
-```
-S   -> NP VP1
-VP1 -> VP PP
-```
+**Nhận xét:** stock và bond rất gần nhau về vector (cos ≈ 0.96). Cả hai đều là thuật ngữ tài chính, xuất hiện với các từ ngữ cảnh tương tự (market, price, trade) và không xuất hiện với từ địa lý (river, mountain).
 
-**2. Xử lý luật VP -> V:**
+**b) Cosine similarity giữa "stock" và "peak".**
 
-Nếu V chỉ dẫn đến terminal (chased, sat), ta có thể thay trực tiếp:
+V(peak) = [2, 3, 1, 4, 14, 6]
 
-```
-VP -> 'chased' | 'sat'
-```
+cos(stock, peak) = (15×2 + 12×3 + 8×1 + 0×4 + 0×14 + 1×6) / (||stock|| × ||peak||)
+= (30 + 36 + 8 + 0 + 0 + 6) / (20.83 × ||peak||)
+= 80 / (20.83 × ||peak||)
 
-Hoặc nếu V cần được giữ làm non-terminal cho tính tổng quát:
+||peak|| = √(4+9+1+16+196+36) = √262 ≈ 16.19
 
-```
-VP -> V
-V  -> 'chased' | 'sat'
-```
+cos(stock, peak) = 80 / (20.83 × 16.19) = 80 / 337.24 ≈ **0.237**
 
-Luật $VP \rightarrow V$ có vế phải 1 non-terminal. Cần sửa lại: hoặc giữ nguyên nếu hệ thống cho phép, hoặc thay bằng các luật terminal trực tiếp.
+**So sánh:** cos(stock, bond)=0.956 >> cos(stock, peak)=0.237. Stock và bond gần nhau hơn nhiều vì cả hai đều thuộc lĩnh vực tài chính - kinh tế, trong khi peak có thể mang nghĩa địa lý (đỉnh núi).
 
-**Văn phạm sau khi chuyển đổi CNF:**
+**c) "Peak" mang hai nghĩa: đỉnh núi, đỉnh cao → hiện tượng gì?**
 
-```
-S   -> NP VP1
-VP1 -> VP PP
-NP  -> DT NN
-NP  -> 'John'
-VP  -> 'chased'
-VP  -> 'sat'
-PP  -> P NP
-DT  -> 'the'
-NN  -> 'cat'
-P   -> 'on'
-```
+Đây là hiện tượng **đa nghĩa (polysemy)**. Word2Vec sẽ biểu diễn "peak" bằng **một vector duy nhất** — đây là hạn chế vì vector này là trung bình của cả hai nghĩa, không thể hiện chính xác nghĩa nào trong ngữ cảnh cụ thể.
 
-Kiểm tra:
-- $S \rightarrow NP\ VP1$: 2 non-terminals -> hợp lệ
-- $VP1 \rightarrow VP\ PP$: 2 non-terminals -> hợp lệ
-- $NP \rightarrow DT\ NN$: 2 non-terminals -> hợp lệ
-- $NP \rightarrow John$: 1 terminal -> hợp lệ
-- Các luật còn lại đều dạng $A \rightarrow a$ -> hợp lệ.
+**d) Ước tính vector "Nhật Bản" theo công thức tương tự hóa.**
 
-**Kết luận:** Văn phạm đã chuyển đổi thành công về CNF.
+Cho:
+- V(Hà Nội) = [0.8, 1.2, -0.5]
+- V(Việt Nam) = [0.6, 1.0, -0.3]
+- V(Tokyo) = [0.9, -0.5, 1.1]
+
+Quan hệ: Hà Nội là thủ đô của Việt Nam, Tokyo là thủ đô của Nhật Bản.
+
+V(Nhật Bản) = V(Việt Nam) + (V(Tokyo) - V(Hà Nội))
+             = [0.6, 1.0, -0.3] + ([0.9, -0.5, 1.1] - [0.8, 1.2, -0.5])
+             = [0.6, 1.0, -0.3] + [0.1, -1.7, 1.6]
+             = **[0.7, -0.7, 1.3]**
 
 ---
 
-## BÀI TẬP TỔNG HỢP
+### Bài tập 6: NER với BIO
 
-### Bài 5.1:
+**Đề:** "Ngày 08 tháng 4 năm 2026, tại Hà Nội, đồng chí Vũ Hải Quân được phê chuẩn giữ chức Bộ trưởng Bộ Khoa học và Công nghệ nhiệm kỳ 2026-2031."
 
-**Đề bài:** So sánh mô hình N-gram và Neural Language Model. Trong trường hợp nào mỗi mô hình phù hợp hơn?
+Tập nhãn: {B-PER, I-PER, B-ORG, I-ORG, B-LOC, I-LOC, B-DATE, I-DATE, O}
 
-**Lời giải:**
+**a) Bảng token-nhãn:**
 
-| Tiêu chí | N-gram | Neural Language Model |
-|----------|--------|---------------------|
-| **Độ phức tạp** | Đơn giản, dễ cài đặt | Phức tạp, cần nhiều tính toán |
-| **Dữ liệu** | Cần nhiều dữ liệu để ước lượng tin cậy | Có thể học từ dữ liệu vừa phải nhờ embedding |
-| **Tổng quát hóa** | Kém, không biết từ tương tự | Tốt, hiểu được từ tương tự qua embedding |
-| **Phụ thuộc xa** | Chỉ nhìn n từ trước | RNN/Transformer có thể bắt phụ thuộc xa |
-| **Giải thích** | Dễ giải thích | Khó giải thích (hộp đen) |
-| **Ứng dụng** | Hệ thống nhỏ, real-time, baseline | Hệ thống hiện đại, chất lượng cao |
+| Token | Nhãn |
+|-------|------|
+| Ngày | O |
+| 08 | B-DATE |
+| tháng | I-DATE |
+| 4 | I-DATE |
+| năm | I-DATE |
+| 2026 | I-DATE |
+| , | O |
+| tại | O |
+| Hà | B-LOC |
+| Nội | I-LOC |
+| , | O |
+| đồng | O |
+| chí | O |
+| Vũ | B-PER |
+| Hải | I-PER |
+| Quân | I-PER |
+| được | O |
+| phê | O |
+| chuẩn | O |
+| giữ | O |
+| chức | O |
+| Bộ | B-ORG |
+| trưởng | I-ORG |
+| Bộ | I-ORG |
+| Khoa | I-ORG |
+| học | I-ORG |
+| và | I-ORG |
+| Công | I-ORG |
+| nghệ | I-ORG |
+| nhiệm | O |
+| kỳ | O |
+| 2026-2031 | B-DATE |
+| . | O |
 
-**Phù hợp:**
+**b) Tính Precision, Recall, F1 micro-average.**
 
-- **N-gram**: Hệ thống cần tính toán nhanh, nguồn lực hạn chế, hoặc làm baseline.
-- **Neural LM**: Ứng dụng yêu cầu chất lượng cao, có đủ tài nguyên tính toán, hoặc cần hiểu ngữ cảnh dài.
+Gold: PER=40, ORG=30, LOC=30 → Tổng gold = 100
+Dự đoán: PER=35, ORG=28, LOC=32 → Tổng pred = 95
+Đúng: PER=32, ORG=22, LOC=27 → Tổng đúng = 81
+
+**Micro-average:**
+```
+Precision = Tổng đúng / Tổng dự đoán = 81/95 = 0.8526 (85.26%)
+Recall = Tổng đúng / Tổng gold = 81/100 = 0.81 (81%)
+F1 = 2 × P × R / (P + R) = 2 × 0.8526 × 0.81 / (0.8526 + 0.81) = 1.381 / 1.6626 ≈ 0.8307 (83.07%)
+```
+
+**Per-entity type:**
+
+| Loại | Gold | Pred | Đúng | Precision | Recall | F1 |
+|------|------|------|------|-----------|--------|-----|
+| PER | 40 | 35 | 32 | 32/35=91.43% | 32/40=80% | 0.8571 |
+| ORG | 30 | 28 | 22 | 22/28=78.57% | 22/30=73.33% | 0.7586 |
+| LOC | 30 | 32 | 27 | 27/32=84.38% | 27/30=90% | 0.8709 |
+
+ORG có F1 thấp nhất (75.86%). Nguyên nhân có thể: tổ chức thường có cấu trúc phức tạp, nhiều token, dễ sai ranh giới (VD: "Bộ trưởng Bộ Khoa học và Công nghệ" — ranh giới bắt đầu/kết thúc của ORG dễ nhầm).
 
 ---
 
-### Bài 5.2:
+### Bài tập 7: QA Evaluation
 
-**Đề bài:** Trong HMM cho POS tagging, tại sao ta không đơn giản là gán cho mỗi từ nhãn có tần suất cao nhất trong từ điển (most frequent tag)?
+**Đề:** Câu hỏi "PTIT được thành lập năm nào?"
+Dự đoán: "năm 1997"
+Đáp án mẫu: Ref1="1997", Ref2="năm 1997", Ref3="được thành lập năm 1997"
 
-**Lời giải:**
+**a) Exact Match (EM):**
+- Ref1: "năm 1997" ≠ "1997" → không match
+- Ref2: "năm 1997" = "năm 1997" → **match**
+- Ref3: "năm 1997" ≠ "được thành lập năm 1997" → không match
 
-Gán nhãn dựa trên tần suất đơn lẻ (baseline greedy) có độ chính xác khoảng 90% nhờ sử dụng thống kê unigram, nhưng thất bại trong các trường hợp:
+**EM = 1/3** (chỉ match với Ref2)
 
-1. **Nhập nhằng từ vựng**: Từ "book" có thể là NN hoặc VB tùy ngữ cảnh.
-   - "I want to **book** a flight" -> VB
-   - "I read a **book**" -> NN.
+**b) Token-level F1:**
 
-2. **Phụ thuộc ngữ cảnh**: HMM (và Viterbi) xét cả chuỗi nhãn, không chỉ từng từ riêng lẻ.
-   - Xác suất chuyển trạng thái $P(t_i | t_{i-1})$ giúp hạn chế các nhãn không hợp lý về mặt cú pháp.
-   - Ví dụ: sau mạo từ DT thì rất khó có động từ VB, mà thường là danh từ NN.
+**Với Ref1: "1997":**
+- Gold tokens: {1997}
+- Pred tokens: {năm, 1997}
+- Common: {1997} → 1
+- Precision = 1/2 = 0.5
+- Recall = 1/1 = 1.0
+- F1 = 2 × 0.5 × 1.0 / (0.5 + 1.0) = 1.0/1.5 = 0.6667
 
-3. **Tối ưu toàn cục**: Viterbi tìm chuỗi nhãn có xác suất đồng thời cao nhất cho CÂU, không phải chọn tốt nhất cục bộ cho từng TỪ. Có thể một từ gán nhãn "sai" cục bộ nhưng giúp chuỗi tổng thể tốt hơn.
+**Với Ref2: "năm 1997":**
+- Gold tokens: {năm, 1997}
+- Pred tokens: {năm, 1997}
+- Common: {năm, 1997} → 2
+- Precision = 2/2 = 1.0
+- Recall = 2/2 = 1.0
+- F1 = 1.0
+
+**Với Ref3: "được thành lập năm 1997":**
+- Gold tokens: {được, thành, lập, năm, 1997}
+- Pred tokens: {năm, 1997}
+- Common: {năm, 1997} → 2
+- Precision = 2/2 = 1.0
+- Recall = 2/5 = 0.4
+- F1 = 2 × 1.0 × 0.4 / (1.0 + 0.4) = 0.8/1.4 = 0.5714
+
+**F1 max:**
+max(0.6667, 1.0, 0.5714) = **1.0**
 
 ---
-
-## TÀI LIỆU THAM KHẢO
-
-- Speech and Language Processing, Daniel Jurafsky & James H. Martin, 3rd ed. (draft).
-- Foundations of Statistical Natural Language Processing, Manning & Schutze, 2001.
-- Neural Network Methods in Natural Language Processing, Yoav Goldberg, 2017.
-- Slide bài giảng Khoa Trí tuệ Nhân tạo - ThS. Võ Ngọc Bích Uyên.
