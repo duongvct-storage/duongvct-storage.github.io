@@ -34,12 +34,52 @@ description:
 
 **Câu 2. Tại sao sự nhập nhằng lại là thách thức lớn nhất của NLP? Cho ví dụ về nhập nhằng từ vựng trong tiếng Việt.**
 
-**Nhập nhằng (Ambiguity)** là hiện tượng một câu/cụm từ có nhiều cách hiểu khác nhau. Đây là thách thức lớn nhất vì:
+**Nhập nhằng (Ambiguity)** là hiện tượng một câu/cụm từ có nhiều cách hiểu khác nhau. Đây là thách thức lớn nhất của NLP vì:
 
-- Ngôn ngữ con người vốn dĩ nhập nhằng ở nhiều mức độ (âm thanh, từ vựng, cú pháp, ngữ nghĩa, thực dụng).
+- Ngôn ngữ con người nhập nhằng ở nhiều mức độ khác nhau.
 - Cùng một câu có thể có nhiều cách phân tích hợp lệ, nhưng chỉ một cách đúng trong ngữ cảnh cụ thể.
 - Máy tính không có tri thức nền tảng như con người để khử nhập nhằng.
 - Nhập nhằng xuất hiện ở hầu hết mọi bài toán NLP: tách từ, POS tagging, parsing, dịch máy.
+
+**Các mức độ nhập nhằng trong NLP (theo slide bài giảng):**
+
+**1. Nhập nhằng mức từ (Word segmentation ambiguity):**
+
+Một câu có thể có n khả năng tách từ, nhưng chỉ 1 trong chúng là đúng.
+
+- "Học_sinh học_sinh_học" (học sinh học môn sinh học)
+- "Học_sinh học sinh_học" (học sinh học tập sinh học)
+
+**2. Nhập nhằng trong gán nhãn từ loại (POS tagging ambiguity):**
+
+"Con ngựa đá con ngựa đá."
+- Con_ngựa / đá / con_ngựa / đá
+  DT     ĐgT   DT
+
+"Ông già đi nhanh quá."
+- Cách 1: Ông / già / đi / nhanh / quá
+          ĐaT  TT   PT   TT     trạng_từ
+- Cách 2: Ông_già / đi / nhanh / quá
+            DT     ĐgT   TT     trạng_từ
+
+**3. Nhập nhằng ở mức độ âm thanh (Phonetic ambiguity):**
+
+- "… a computer that understands you **like** your mother"
+- "… a computer that understands you **lie cured** mother"
+
+**4. Nhập nhằng ở mức độ cú pháp (Syntactic ambiguity):**
+
+Một câu có thể có nhiều cấu trúc cú pháp khác nhau.
+
+**5. Nhập nhằng ở mức độ từ vựng (Lexical ambiguity):**
+
+- "I walked to the bank …"
+  - … of the river. (bờ sông)
+  - … to get money. (ngân hàng)
+
+- "I work for John Hancock …"
+  - … and he is a good boss. (tên người)
+  - … which is a good company. (tên công ty)
 
 **Ví dụ nhập nhằng từ vựng trong tiếng Việt:**
 
