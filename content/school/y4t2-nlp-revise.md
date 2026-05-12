@@ -20,10 +20,12 @@ description:
 **Câu 1. NLP là gì? Kể tên 3 ứng dụng phổ biến của NLP trong đời sống hiện nay.**
 
 **NLP (Natural Language Processing)** là một nhánh của trí tuệ nhân tạo và ngôn ngữ học tính toán, nghiên cứu về vấn đề sinh ngôn ngữ tự động và hiểu ngôn ngữ con người. NLP bao gồm hai mảng chính:
+
 - **NLU (Natural Language Understanding):** Chuyển đổi ngôn ngữ con người thành biểu diễn để máy tính xử lý.
 - **NLG (Natural Language Generation):** Chuyển đổi thông tin từ cơ sở dữ liệu thành ngôn ngữ giống con người.
 
 **3 ứng dụng phổ biến:**
+
 1. **Dịch máy (Machine Translation):** Google Translate, ChatGPT dịch văn bản giữa các ngôn ngữ.
 2. **Trợ lý ảo/Chatbot:** ChatGPT, Google Assistant, Alexa, Siri — hiểu và phản hồi hội thoại.
 3. **Phân tích quan điểm (Sentiment Analysis):** Phân loại đánh giá sản phẩm thành tích cực/tiêu cực trên các nền tảng thương mại điện tử.
@@ -33,12 +35,14 @@ description:
 **Câu 2. Tại sao sự nhập nhằng lại là thách thức lớn nhất của NLP? Cho ví dụ về nhập nhằng từ vựng trong tiếng Việt.**
 
 **Nhập nhằng (Ambiguity)** là hiện tượng một câu/cụm từ có nhiều cách hiểu khác nhau. Đây là thách thức lớn nhất vì:
+
 - Ngôn ngữ con người vốn dĩ nhập nhằng ở nhiều mức độ (âm thanh, từ vựng, cú pháp, ngữ nghĩa, thực dụng).
 - Cùng một câu có thể có nhiều cách phân tích hợp lệ, nhưng chỉ một cách đúng trong ngữ cảnh cụ thể.
 - Máy tính không có tri thức nền tảng như con người để khử nhập nhằng.
 - Nhập nhằng xuất hiện ở hầu hết mọi bài toán NLP: tách từ, POS tagging, parsing, dịch máy.
 
 **Ví dụ nhập nhằng từ vựng trong tiếng Việt:**
+
 - "Con ngựa đá con ngựa đá" có thể hiểu là: "Con_ngựa đá con_ngựa đá" (con ngựa dùng chân đá con ngựa đang đá).
 - "Học_sinh học sinh_học" (học sinh học môn sinh học) vs "Học_sinh học_sinh học" (học sinh học tập sinh học).
 - "Ông già đi nhanh quá" có thể là "Ông_già đi nhanh quá" (DT ĐgT TT) hoặc "Ông già đi nhanh quá" (ĐaT TT PT).
@@ -52,12 +56,14 @@ description:
 **POS Tagging (Part-of-Speech Tagging)** là quá trình gán cho mỗi từ trong câu một nhãn từ loại tương ứng (danh từ, động từ, tính từ,...).
 
 **Tại sao cần:**
+
 - Là bước tiền xử lý quan trọng cho hầu hết các tác vụ NLP.
 - Cung cấp thông tin ngữ pháp giúp hiểu cấu trúc câu.
 - Một từ có thể thuộc nhiều từ loại → cần POS để khử nhập nhằng.
 - Dễ thực hiện và dễ đánh giá (đếm số thẻ gán đúng).
 
 **Ứng dụng thực tế:**
+
 - **Text-to-speech:** Từ "record" là danh từ (ˈrekɔːd) hay động từ (rɪˈkɔːd) → phát âm khác nhau.
 - Tiền xử lý cho phân tích cú pháp (parsing).
 - Nhận dạng tiếng nói, trích xuất thông tin.
@@ -75,6 +81,7 @@ HMM cho POS tagging gồm 3 thành phần chính:
 | Ma trận phát xạ | B = P(wᵢ | tᵢ) | Xác suất một từ được sinh ra khi biết nhãn của nó |
 
 Ngoài ra còn có:
+
 - **Q:** Tập các trạng thái ẩn (các nhãn từ loại) — không quan sát được.
 - **O:** Chuỗi quan sát (các từ trong câu) — quan sát được.
 
@@ -96,6 +103,7 @@ P(t₁..tₙ, w₁..wₙ) = P(t₁) × ∏ P(tᵢ|tᵢ₋₁) × P(wᵢ|tᵢ)
 | Ví dụ | Danh từ, động từ, tính từ, trạng từ | Giới từ, mạo từ, đại từ, liên từ |
 
 **Tầm quan trọng trong POS tagging:**
+
 - Closed class có số lượng nhỏ và ổn định → dễ xây dựng từ điển, dự đoán chính xác hơn.
 - Open class có số lượng lớn và biến động → khó xử lý từ mới (OOV), cần các kỹ thuật đặc biệt.
 - Hỗ trợ khử nhập nhằng: một từ có thể vừa là open vừa là closed → dựa vào ngữ cảnh để quyết định.
@@ -105,12 +113,14 @@ P(t₁..tₙ, w₁..wₙ) = P(t₁) × ∏ P(tᵢ|tᵢ₋₁) × P(wᵢ|tᵢ)
 **Câu 6. Tại sao backpointer là cần thiết cho thuật toán Viterbi? Nếu bỏ backpointer đi, thuật toán có thể tính được xác suất cao nhất không?**
 
 **Vai trò của backpointer:**
+
 - Thuật toán Viterbi tìm chuỗi trạng thái có xác suất cao nhất Q\* = argmax P(O, Q|λ).
 - **v-table:** lưu xác suất tối đa đến trạng thái j tại thời điểm t: vⱼ(t) = max P(q₁,...,qₜ₋₁, o₁,...,oₜ, qₜ=j)
 - **Backpointer (bp-table):** lưu trạng thái trước đó (tại t-1) dẫn đến trạng thái j tại t có xác suất max.
 - Sau khi tính forward pass (v-table), backpointer cho phép **truy vết ngược (backtrace)** để khôi phục lại chuỗi trạng thái tối ưu.
 
 **Nếu bỏ backpointer:**
+
 - Vẫn tính được **giá trị xác suất** của chuỗi trạng thái tốt nhất (P\* = max v_T(i)).
 - Nhưng **không thể khôi phục** chuỗi trạng thái cụ thể nào đã đạt được xác suất đó.
 - Trong POS tagging, ta cần biết nhãn cụ thể cho từng từ → backpointer là bắt buộc.
@@ -120,12 +130,14 @@ P(t₁..tₙ, w₁..wₙ) = P(t₁) × ∏ P(tᵢ|tᵢ₋₁) × P(wᵢ|tᵢ)
 **Câu 7. Phân tích nguyên nhân "unknown words" gây vấn đề trong HMM và đề xuất phương pháp xử lý.**
 
 **Nguyên nhân:**
+
 - HMM dùng ước lượng MLE: P(wᵢ|tᵢ) = count(tᵢ, wᵢ) / count(tᵢ).
 - Nếu từ w không xuất hiện với nhãn t nào trong tập huấn luyện → P(w|t) = 0 với mọi t.
 - Khi gặp unknown word ở test, tất cả các chuỗi nhãn đều có xác suất = 0.
 - HMM không có cơ chế tận dụng thông tin hình thái (hậu tố, tiền tố) của từ.
 
 **Phương pháp xử lý:**
+
 1. **Thay thế từ hiếm bằng `<UNK>`:** Trong tập train, thay các từ xuất hiện ≤ k lần bằng token `<UNK>`. Huấn luyện HMM với `<UNK>` như một từ bình thường. Ở test, unknown word được xem là `<UNK>`.
 2. **Làm trơn (Smoothing):** Cộng thêm một lượng nhỏ vào mọi xác suất phát xạ để tránh xác suất = 0.
 3. **Dùng đặc trưng hình thái:** Xây dựng bộ phân loại phụ dựa vào hậu tố (-tion → danh từ, -ly → trạng từ) để đoán nhãn khả dĩ cho unknown word.
@@ -173,6 +185,7 @@ P(wₘ | w₁w₂...wₘ₋₁) ≈ P(wₘ | wₘ₋ₙ...wₘ₋₁)
 - **Trigram** = Markov bậc 2 (phụ thuộc 2 từ trước)
 
 **Tầm quan trọng:**
+
 - Nếu không có giả thuyết này, phải ước lượng P(wₘ | w₁...wₘ₋₁) với số lượng lịch sử khổng lồ (Vᵐ cách).
 - Giả thuyết Markov làm giảm độ phức tạp từ O(Vᵐ) xuống O(Vⁿ⁺¹) — khả thi để tính toán.
 - Giúp mô hình ngôn ngữ có thể học từ dữ liệu hữu hạn.
@@ -189,6 +202,7 @@ P_Laplace(wᵢ | wᵢ₋₁) = (count(wᵢ₋₁, wᵢ) + 1) / (count(wᵢ₋₁
 Trong đó V là kích thước từ vựng.
 
 **Vấn đề "quá tay":**
+
 - Với tập dữ liệu lớn, V rất lớn (hàng chục nghìn từ).
 - Mỗi bigram xuất hiện được cộng 1, nhưng phải chia cho (count(wᵢ₋₁) + V).
 - Bigram xuất hiện nhiều (VD: count = 200) bị giảm xác suất mạnh (từ 200/200 → 201/(200+V)).
@@ -213,6 +227,7 @@ PP(W) = (∏ P(wᵢ | wᵢ₋₁))^{-1/N}
 ```
 
 **Mối quan hệ:**
+
 - PP tỉ lệ nghịch với xác suất tập test: xác suất càng cao → PP càng thấp → mô hình càng tốt.
 - PP phản ánh số lượng lựa chọn trung bình cho từ tiếp theo. PP = k nghĩa là mô hình "phân vân" giữa trung bình k từ ở mỗi bước.
 - Giảm thiểu perplexity = tối đa hóa xác suất.
@@ -234,6 +249,7 @@ PP(W) = (∏ P(wᵢ | wᵢ₋₁))^{-1/N}
 **Câu 13. Tại sao xác suất mô hình ngôn ngữ thường được tính và lưu dưới dạng Log-probability?**
 
 **2 lý do chính:**
+
 1. **Tránh underflow số học:** Xác suất thô luôn ≤ 1, tích của nhiều xác suất rất nhỏ → dễ về 0 do giới hạn biểu diễn floating-point. Log-probability là số âm có độ lớn vừa phải.
 2. **Cộng nhanh hơn nhân:** log(a × b) = log(a) + log(b). Cộng nhanh hơn nhân trong tính toán.
 
@@ -255,6 +271,7 @@ log P(câu) = Σ log P(wᵢ | wᵢ₋₁)
 | Công thức IDF | — | IDF(t) = log(N / df(t)) với N = tổng số văn bản, df(t) = số văn bản chứa t |
 
 TF-IDF cân bằng giữa:
+
 - **TF:** từ xuất hiện nhiều trong văn bản → quan trọng với văn bản đó.
 - **IDF:** từ xuất hiện ở nhiều văn bản → không có giá trị phân biệt → giảm trọng số.
 
@@ -265,6 +282,7 @@ TF-IDF cân bằng giữa:
 **Phân tích quan điểm (Sentiment Analysis)** là quá trình phát hiện thái độ (tích cực, tiêu cực, trung tính) của người viết đối với một đối tượng, sự kiện hoặc con người.
 
 **3 ứng dụng thực tế:**
+
 1. **Đánh giá sản phẩm/dịch vụ:** Phân loại review trên Shopee, Lazada, Amazon thành tích cực/tiêu cực để tổng hợp đánh giá.
 2. **Đo lường tâm lý công chúng:** Phân tích tweet về ứng viên chính trị, dự đoán xu hướng bầu cử.
 3. **Dự đoán thị trường tài chính:** Phân tích tin tức, bài báo để dự đoán xu hướng chứng khoán.
@@ -281,11 +299,13 @@ TF-IDF cân bằng giữa:
 | Khả năng phân biệt | Kém (từ "the" có count lớn) | Tốt (từ "the" bị giảm) |
 
 **Khi nào dùng TF-IDF:**
+
 - Dữ liệu có nhiều từ dừng (stop words) xuất hiện phổ biến khắp nơi.
 - Cần giảm ảnh hưởng của các từ không mang nhiều ý nghĩa phân loại.
 - Bài toán phân loại văn bản, tìm kiếm thông tin (information retrieval).
 
 **Khi nào dùng Count:**
+
 - Dữ liệu đã được lọc stop word kỹ.
 - Muốn giữ nguyên tần suất thực tế (VD: đếm số lần xuất hiện).
 - Bài toán đơn giản, muốn tốc độ tính toán nhanh.
@@ -295,11 +315,13 @@ TF-IDF cân bằng giữa:
 **Câu 17. Bạn đang xây dựng mô hình phân loại quan điểm. Liệt kê ít nhất 3 kỹ thuật tiền xử lý cơ bản và 3 loại đặc trưng có thể dùng.**
 
 **3 kỹ thuật tiền xử lý:**
+
 1. **Chuẩn hóa (Normalization):** Chuyển chữ hoa → thường, xóa thẻ HTML/URL, chuẩn hóa từ viết tắt.
 2. **Loại bỏ stop word:** Xóa các từ không mang ý nghĩa cảm xúc ("và", "là", "của", "the", "a").
 3. **Tách từ (Tokenization):** Chia câu thành các token (unigram/bigram/n-gram).
 
 **3 loại đặc trưng:**
+
 1. **Bag of Words (BoW) / Unigram:** Tần suất từng từ xuất hiện trong văn bản.
 2. **TF-IDF:** Tần suất từ có điều chỉnh theo độ hiếm.
 3. **Từ thể hiện quan điểm (Lexicon-based features):** Đếm số từ tích cực, tiêu cực dựa trên từ điển sentiment kết hợp với từ phủ định (VD: "không tốt" → đảo ngược sentiment).
@@ -336,6 +358,7 @@ TF-IDF cân bằng giữa:
 | Nhãn | Nhãn cụm từ (NP, VP...) | Nhãn quan hệ (nsubj, dobj...) |
 
 **Khác biệt cốt lõi:**
+
 1. Constituency gom từ thành cụm → cụm lớn hơn; Dependency nối trực tiếp các từ bằng quan hệ phụ thuộc.
 2. Constituency cần CFG + cây nhị phân; Dependency chỉ cần từ và nhãn quan hệ.
 
@@ -353,6 +376,7 @@ TF-IDF cân bằng giữa:
 | Điểm yếu | Dễ loop với đệ quy trái, lãng phí khi khởi tạo sai | Có thể sinh nhiều cấu trúc vô nghĩa |
 
 **CKY:** Thuộc chiến lược **bottom-up + dynamic programming**.
+
 - CKY khắc phục nhược điểm của bottom-up thuần bằng cách **lưu kết quả trung gian vào bảng** → tránh tính toán lặp lại.
 - Yêu cầu văn phạm ở dạng CNF (Chomsky Normal Form): A → BC (2 non-terminal) hoặc A → a (1 terminal).
 - Độ phức tạp O(n³|G|).
@@ -369,6 +393,7 @@ TF-IDF cân bằng giữa:
 | Khai thác kết quả | Kiểm tra S ∈ cell[0, n] | Truy vết ngược từ cell[0, n] → cây |
 
 **Khi nào dùng:**
+
 - **Recognition:** Kiểm tra hợp lệ ngữ pháp, tối ưu bộ nhớ (không cần lưu backpointer).
 - **Parsing:** Cần hiển thị cây cú pháp, xử lý nhập nhằng (nhiều cây).
 
@@ -396,12 +421,14 @@ TF-IDF cân bằng giữa:
 **Câu 23. Ngữ nghĩa từ vựng nghiên cứu vấn đề gì? Phân biệt "nghĩa của từ" (word sense) với "từ" (word form).**
 
 **Ngữ nghĩa từ vựng (Lexical Semantics)** nghiên cứu:
+
 - Quan hệ từ vựng: sự liên hệ ngữ nghĩa giữa các từ (đồng nghĩa, trái nghĩa,...).
 - Ràng buộc về lựa chọn (selectional restrictions): cấu trúc ngữ nghĩa bên trong từ.
 - Phân loại và phân rã nghĩa của từ.
 - Sự khác biệt cấu trúc từ vựng - ngữ nghĩa giữa các ngôn ngữ.
 
 **Phân biệt:**
+
 - **Word form (từ):** Hình thức (âm thanh/chữ viết) của từ. VD: "bank" là một word form.
 - **Word sense (nghĩa của từ):** Một khía cạnh ý nghĩa riêng biệt. VD: "bank" có các senses: (1) bờ sông, (2) ngân hàng, (3) nghiêng máy bay.
 
@@ -583,6 +610,7 @@ Xác suất khởi đầu π: P(PRO|<s>) = 1
 | rice | 0 | 0 | 2 |
 
 Mỗi nhãn xuất hiện 4 lần:
+
 - P(she|PRO) = 2/4 = 0.5
 - P(he|PRO) = 2/4 = 0.5
 - P(likes|VERB) = 2/4 = 0.5
@@ -648,6 +676,7 @@ P\* = max v₃(i) = v₃(NOUN) = 0.125
 q₃\* = NOUN
 
 **Truy vết ngược:**
+
 - t=3: NOUN, backpointer → VERB (t=2)
 - t=2: VERB, backpointer → PRO (t=1)
 - t=1: PRO
@@ -703,6 +732,7 @@ Từ vựng V = {em, yêu, học, NLP, anh, rất, vui, chăm, </s>}, |V| = 9.
 Xác suất bigram (MLE): P(wᵢ|wᵢ₋₁) = count(wᵢ₋₁, wᵢ) / count(wᵢ₋₁)
 
 Ví dụ:
+
 - P(em|<s>) = 2/4 = 0.5
 - P(anh|<s>) = 2/4 = 0.5
 - P(yêu|em) = 1/2 = 0.5
@@ -805,12 +835,14 @@ P(Neg) = 2/4 = 0.5
 **Likelihood (Laplace smoothing):** P(w|c) = (count(w, c) + 1) / (Σ count(w', c) + |V|)
 
 Class Positive:
+
 - Tổng số từ trong Pos = 7 (good, quality, product, great, value, and, quality)
 - P(good|Pos) = (1+1)/(7+9) = 2/16 = 0.125
 - P(quality|Pos) = (2+1)/(7+9) = 3/16 = 0.1875
 - P(product|Pos) = (1+1)/(7+9) = 2/16 = 0.125
 
 Class Negative:
+
 - Tổng số từ trong Neg = 7 (bad, product, poor, value, very, poor, quality)
 - P(great|Neg) = (0+1)/(7+9) = 1/16 = 0.0625
 - P(quality|Neg) = (1+1)/(7+9) = 2/16 = 0.125
@@ -831,6 +863,7 @@ P(Neg|test) ∝ P(Neg) × P(great|Neg) × P(quality|Neg) × P(product|Neg)
 **c) Nếu câu test là "not a great quality product", nhận xét.**
 
 Với "not a great quality product":
+
 - "not" và "a" là unknown words (không xuất hiện trong train).
 - Với Laplace smoothing, mỗi unknown word có P(unk|c) = 1/16 = 0.0625 cho cả 2 lớp.
 - Lớp Negative vẫn có P(product|Neg) = P(quality|Neg), nhưng P(great|Pos) > P(great|Neg).
@@ -904,6 +937,7 @@ PP → P NP
 
 **Bước 1: Loại ε-production (VP → ε)**
 Thay VP bằng ε trong các luật có VP:
+
 - S → VP | NP VP → S → ε | NP (do VP → ε)
 - VP → V NP | V NP PP | ε
 
@@ -914,6 +948,7 @@ S → ε | NP
 Giữ nguyên S → VP cho trường hợp VP không rỗng.
 
 **Bước 2: Loại unit production (S → VP, S → NP)**
+
 - S → VP: thay VP bằng các luật của VP → S → V NP | V NP PP
 - S → NP: đã có
 
@@ -1037,6 +1072,7 @@ cos(stock, peak) = 80 / (20.83 × 16.19) = 80 / 337.24 ≈ **0.237**
 **d) Ước tính vector "Nhật Bản" theo công thức tương tự hóa.**
 
 Cho:
+
 - V(Hà Nội) = [0.8, 1.2, -0.5]
 - V(Việt Nam) = [0.6, 1.0, -0.3]
 - V(Tokyo) = [0.9, -0.5, 1.1]
@@ -1126,6 +1162,7 @@ Dự đoán: "năm 1997"
 Đáp án mẫu: Ref1="1997", Ref2="năm 1997", Ref3="được thành lập năm 1997"
 
 **a) Exact Match (EM):**
+
 - Ref1: "năm 1997" ≠ "1997" → không match
 - Ref2: "năm 1997" = "năm 1997" → **match**
 - Ref3: "năm 1997" ≠ "được thành lập năm 1997" → không match
@@ -1135,6 +1172,7 @@ Dự đoán: "năm 1997"
 **b) Token-level F1:**
 
 **Với Ref1: "1997":**
+
 - Gold tokens: {1997}
 - Pred tokens: {năm, 1997}
 - Common: {1997} → 1
@@ -1143,6 +1181,7 @@ Dự đoán: "năm 1997"
 - F1 = 2 × 0.5 × 1.0 / (0.5 + 1.0) = 1.0/1.5 = 0.6667
 
 **Với Ref2: "năm 1997":**
+
 - Gold tokens: {năm, 1997}
 - Pred tokens: {năm, 1997}
 - Common: {năm, 1997} → 2
@@ -1151,6 +1190,7 @@ Dự đoán: "năm 1997"
 - F1 = 1.0
 
 **Với Ref3: "được thành lập năm 1997":**
+
 - Gold tokens: {được, thành, lập, năm, 1997}
 - Pred tokens: {năm, 1997}
 - Common: {năm, 1997} → 2
