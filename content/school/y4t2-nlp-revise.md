@@ -579,10 +579,10 @@ Tập trạng thái: Q = {PRO, VERB, NOUN, `<s>`, `</s>`}
 | NOUN | 0 | 0 | 0 | 0 | 4 |
 | `</s>` | 0 | 0 | 0 | 0 | 0 |
 
-- `<s>` xuất hiện 4 lần, luôn đi với PRO → P(PRO|<s>) = 4/4 = 1
+- `<s>` xuất hiện 4 lần, luôn đi với PRO → P(PRO|`<s>`) = 4/4 = 1
 - PRO xuất hiện 4 lần, luôn đi với VERB → P(VERB|PRO) = 4/4 = 1
 - VERB xuất hiện 4 lần, luôn đi với NOUN → P(NOUN|VERB) = 4/4 = 1
-- NOUN xuất hiện 4 lần, luôn đi với </s> → P(</s>|NOUN) = 4/4 = 1
+- NOUN xuất hiện 4 lần, luôn đi với `</s>` → P(`</s>`|NOUN) = 4/4 = 1
 
 **Ma trận A:**
 ```
@@ -594,7 +594,7 @@ NOUN      0     0     0     0     1
 </s>      0     0     0     0     0
 ```
 
-Xác suất khởi đầu π: P(PRO|<s>) = 1
+Xác suất khởi đầu π: P(PRO|`<s>`) = 1
 
 **b) Tính ma trận phát xạ B.**
 
@@ -695,7 +695,7 @@ Xác suất: **0.125**
 <s> em học rất chăm </s>
 <s> anh yêu NLP </s>
 ```
-Từ vựng V = {em, yêu, học, NLP, anh, rất, vui, chăm, </s>}, |V| = 9.
+Từ vựng V = {em, yêu, học, NLP, anh, rất, vui, chăm, `</s>`}, |V| = 9.
 
 **a) Xây dựng mô hình unigram và bigram (không làm trơn).**
 
@@ -733,15 +733,15 @@ Xác suất bigram (MLE): P(wᵢ|wᵢ₋₁) = count(wᵢ₋₁, wᵢ) / count(w
 
 Ví dụ:
 
-- P(em|<s>) = 2/4 = 0.5
-- P(anh|<s>) = 2/4 = 0.5
+- P(em|`<s>`) = 2/4 = 0.5
+- P(anh|`<s>`) = 2/4 = 0.5
 - P(yêu|em) = 1/2 = 0.5
 - P(học|em) = 1/2 = 0.5
 - P(học|yêu) = 1/2 = 0.5
 - P(NLP|yêu) = 1/2 = 0.5
 - ... (các xác suất khác tính tương tự)
 
-**b) Tính P(<s> anh chăm học </s>) bằng bigram không làm trơn.**
+**b) Tính P(`<s>` anh chăm học `</s>`) bằng bigram không làm trơn.**
 
 ```
 P(<s> anh chăm học </s>)
@@ -768,7 +768,7 @@ P_Laplace(chăm) = (1+1)/31 = 2/31 = 0.0645
 P_Laplace(</s>) = (3+1)/31 = 4/31 = 0.1290
 ```
 
-**d) Bigram với làm trơn Laplace cho P(<s> anh chăm học </s>).**
+**d) Bigram với làm trơn Laplace cho P(`<s>` anh chăm học `</s>`).**
 
 Công thức Laplace cho bigram:
 ```
