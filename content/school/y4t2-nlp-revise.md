@@ -625,36 +625,44 @@ Input: Large document set D + Question Q
 
 ### Bài tập 1: HMM cho POS Tagging
 
-**Đề:** Cho corpus gồm 4 câu:
-```
-<s> she/PRO likes/VERB fish/NOUN </s>
-<s> he/PRO eats/VERB rice/NOUN </s>
-<s> she/PRO eats/VERB fish/NOUN </s>
-<s> he/PRO likes/VERB rice/NOUN </s>
-```
+**Đề:** Cho corpus gồm 4 câu đã được gán nhãn từ loại (POS tags). Mỗi câu gồm một chuỗi **từ** (quan sát được) và một chuỗi **nhãn** (trạng thái ẩn):
+
+| # | Câu (chuỗi từ) | Nhãn tương ứng (chuỗi trạng thái) |
+|---|----------------|-----------------------------------|
+| 1 | `<s>` she likes fish `</s>` | `<s>` PRO VERB NOUN `</s>` |
+| 2 | `<s>` he eats rice `</s>` | `<s>` PRO VERB NOUN `</s>` |
+| 3 | `<s>` she eats fish `</s>` | `<s>` PRO VERB NOUN `</s>` |
+| 4 | `<s>` he likes rice `</s>` | `<s>` PRO VERB NOUN `</s>` |
+
+Trong đó:
+- **Từ vựng (observations):** V = {she, he, likes, eats, fish, rice}
+- **Trạng thái ẩn (hidden states):** Q = {PRO, VERB, NOUN, `<s>`, `</s>`}
+  - PRO = đại từ (pronoun), VERB = động từ, NOUN = danh từ
+  - `<s>` = bắt đầu câu, `</s>` = kết thúc câu
 
 **a) Tính ma trận chuyển trạng thái A (bao gồm `<s>` và `</s>`).**
 
-Tập trạng thái: Q = {PRO, VERB, NOUN, `<s>`, `</s>`}
+Ma trận A chứa xác suất chuyển từ nhãn này sang nhãn tiếp theo: $P(t_i | t_{i-1})$.
 
-Đếm số lần xuất hiện các cặp (trạng thái trước, trạng thái sau):
+Đếm số lần xuất hiện các cặp (nhãn trước, nhãn sau) trong 4 câu:
 
-| Từ → Tới | `<s>` | PRO | VERB | NOUN | `</s>` |
-|----------|-------|-----|------|------|--------|
+| Nhãn trước → Nhãn sau | `<s>` | PRO | VERB | NOUN | `</s>` |
+|----------------------|-------|-----|------|------|--------|
 | `<s>` | 0 | 4 | 0 | 0 | 0 |
 | PRO | 0 | 0 | 4 | 0 | 0 |
 | VERB | 0 | 0 | 0 | 4 | 0 |
 | NOUN | 0 | 0 | 0 | 0 | 4 |
 | `</s>` | 0 | 0 | 0 | 0 | 0 |
 
-- `<s>` xuất hiện 4 lần, luôn đi với PRO → P(PRO|`<s>`) = 4/4 = 1
-- PRO xuất hiện 4 lần, luôn đi với VERB → $P(VERB|PRO)$ = 4/4 = 1
-- VERB xuất hiện 4 lần, luôn đi với NOUN → $P(NOUN|VERB)$ = 4/4 = 1
-- NOUN xuất hiện 4 lần, luôn đi với `</s>` → P(`</s>`|NOUN) = 4/4 = 1
+Giải thích:
+- `<s>` xuất hiện 4 lần (đầu mỗi câu), và sau `<s>` luôn là nhãn PRO → P(PRO|`<s>`) = $4/4 = 1$
+- PRO xuất hiện 4 lần, sau PRO luôn là VERB → $P(VERB|PRO)$ = $4/4 = 1$
+- VERB xuất hiện 4 lần, sau VERB luôn là NOUN → $P(NOUN|VERB)$ = $4/4 = 1$
+- NOUN xuất hiện 4 lần, sau NOUN luôn là `</s>` → P(`</s>`|NOUN) = $4/4 = 1$
 
 **Ma trận A:**
 ```
-        PRO   VERB  NOUN  <s>   </s>
+         PRO   VERB  NOUN  <s>   </s>
 PRO       0     1     0     0     0
 VERB      0     0     1     0     0
 NOUN      0     0     0     0     1
@@ -662,9 +670,11 @@ NOUN      0     0     0     0     1
 </s>      0     0     0     0     0
 ```
 
-Xác suất khởi đầu π: P(PRO|`<s>`) = 1
+Xác suất khởi đầu π: P(PRO|`<s>`) = 1 (từ đầu tiên của mọi câu luôn là PRO)
 
 **b) Tính ma trận phát xạ B.**
+
+Ma trận B chứa xác suất một **từ** (quan sát) được sinh ra khi biết **nhãn** (trạng thái): $P(w_i | t_i)$.
 
 Đếm số lần mỗi từ xuất hiện với mỗi nhãn:
 
@@ -679,12 +689,9 @@ Xác suất khởi đầu π: P(PRO|`<s>`) = 1
 
 Mỗi nhãn xuất hiện 4 lần:
 
-- $P(she|PRO)$ = 2/4 = 0.5
-- $P(he|PRO)$ = 2/4 = 0.5
-- $P(likes|VERB)$ = 2/4 = 0.5
-- $P(eats|VERB)$ = 2/4 = 0.5
-- $P(fish|NOUN)$ = 2/4 = 0.5
-- $P(rice|NOUN)$ = 2/4 = 0.5
+- PRO gặp "she" 2 lần, "he" 2 lần → $P(she|PRO) = 2/4 = 0.5$, $P(he|PRO) = 2/4 = 0.5$
+- VERB gặp "likes" 2 lần, "eats" 2 lần → $P(likes|VERB) = 2/4 = 0.5$, $P(eats|VERB) = 2/4 = 0.5$
+- NOUN gặp "fish" 2 lần, "rice" 2 lần → $P(fish|NOUN) = 2/4 = 0.5$, $P(rice|NOUN) = 2/4 = 0.5$
 
 **Ma trận B:**
 ```
@@ -694,89 +701,82 @@ VERB     0      0     0.5    0.5     0      0
 NOUN     0      0      0      0     0.5    0.5
 ```
 
-**c) Tính xác suất chuỗi "he likes rice" với nhãn "PRO VERB NOUN".**
+**c) Tính xác suất đồng thời của câu "he likes rice" với chuỗi nhãn "PRO VERB NOUN".**
 
-```
-P("he likes rice", "PRO VERB NOUN")
-= P(PRO|<s>) × P(he|PRO) × P(VERB|PRO) × P(likes|VERB) × P(NOUN|VERB) × P(rice|NOUN) × P(</s>|NOUN)
-= 1 × 0.5 × 1 × 0.5 × 1 × 0.5 × 1
-= 0.125
-```
+$$
+\begin{aligned}
+P(\text{"he likes rice"}, \text{"PRO VERB NOUN"}) = &\; P(PRO|\langle s\rangle) \\
+&\times P(he|PRO) \\
+&\times P(VERB|PRO) \\
+&\times P(likes|VERB) \\
+&\times P(NOUN|VERB) \\
+&\times P(rice|NOUN) \\
+&\times P(\langle/s\rangle|NOUN) \\
+= &\; 1 \times 0.5 \times 1 \times 0.5 \times 1 \times 0.5 \times 1 \\
+= &\; 0.125
+\end{aligned}
+$$
 
-**d) Viterbi tìm chuỗi nhãn tối ưu cho "she eats rice".**
+**d) Viterbi: tìm chuỗi nhãn tối ưu cho câu "she eats rice".**
 
 Từ vựng: V = {she, he, likes, eats, fish, rice}
-Trạng thái: PRO, VERB, NOUN
+Trạng thái: PRO, VERB, NOUN (bỏ `<s>`, `</s>` trong vòng lặp)
 
-**Khởi tạo (t=1, w₁ = "she"):**
+**Khởi tạo (t=1, từ "she"):**
 
-```
-v₁(PRO) = P(PRO|<s>) × P(she|PRO)
-        = 1 × 0.5
-        = 0.5
+$$
+\begin{aligned}
+v_1(PRO) &= P(PRO|\langle s\rangle) \times P(she|PRO) = 1 \times 0.5 = 0.5 \\
+v_1(VERB) &= P(VERB|\langle s\rangle) \times P(she|VERB) = 0 \times 0 = 0 \\
+v_1(NOUN) &= P(NOUN|\langle s\rangle) \times P(she|NOUN) = 0 \times 0 = 0
+\end{aligned}
+$$
 
-v₁(VERB) = P(VERB|<s>) × P(she|VERB)
-         = 0 × 0
-         = 0
+**Đệ quy (t=2, từ "eats"):**
 
-v₁(NOUN) = P(NOUN|<s>) × P(she|NOUN)
-         = 0 × 0
-         = 0
-```
+$$
+\begin{aligned}
+v_2(PRO) &= \max\{v_1(PRO) \times P(PRO|PRO),\; v_1(VERB) \times P(PRO|VERB),\; v_1(NOUN) \times P(PRO|NOUN)\} \times P(eats|PRO) \\
+        &= \max\{0.5 \times 0,\; 0 \times 0,\; 0 \times 0\} \times 0 = 0 \\[4pt]
+v_2(VERB) &= \max\{v_1(PRO) \times P(VERB|PRO),\; v_1(VERB) \times P(VERB|VERB),\; v_1(NOUN) \times P(VERB|NOUN)\} \times P(eats|VERB) \\
+         &= \max\{0.5 \times 1,\; 0 \times 0,\; 0 \times 0\} \times 0.5 = 0.5 \times 0.5 = 0.25 \\
+         &\quad bp_2(VERB) = PRO \\[4pt]
+v_2(NOUN) &= \max\{v_1(PRO) \times P(NOUN|PRO),\; v_1(VERB) \times P(NOUN|VERB),\; v_1(NOUN) \times P(NOUN|NOUN)\} \times P(eats|NOUN) \\
+         &= \max\{0.5 \times 0,\; 0 \times 1,\; 0 \times 0\} \times 0 = 0
+\end{aligned}
+$$
 
-**Đệ quy (t=2, w₂ = "eats"):**
+**Đệ quy (t=3, từ "rice"):**
 
-```
-v₂(PRO) = max{v₁(PRO)×P(PRO|PRO), v₁(VERB)×P(PRO|VERB), v₁(NOUN)×P(PRO|NOUN)} × P(eats|PRO)
-        = max{0.5×0, 0×0, 0×0} × 0
-        = 0 × 0
-        = 0
-
-v₂(VERB) = max{v₁(PRO)×P(VERB|PRO), v₁(VERB)×P(VERB|VERB), v₁(NOUN)×P(VERB|NOUN)} × P(eats|VERB)
-         = max{0.5×1, 0×0, 0×0} × 0.5
-         = 0.5 × 0.5
-         = 0.25
-bp₂(VERB) = PRO
-
-v₂(NOUN) = max{v₁(PRO)×P(NOUN|PRO), v₁(VERB)×P(NOUN|VERB), v₁(NOUN)×P(NOUN|NOUN)} × P(eats|NOUN)
-         = max{0.5×0, 0×1, 0×0} × 0
-         = 0 × 0
-         = 0
-```
-
-**Đệ quy (t=3, w₃ = "rice"):**
-
-```
-v₃(PRO) = max{v₂(PRO)×P(PRO|PRO), v₂(VERB)×P(PRO|VERB), v₂(NOUN)×P(PRO|NOUN)} × P(rice|PRO)
-        = max{0×0, 0.25×0, 0×0} × 0
-        = 0
-
-v₃(VERB) = max{v₂(PRO)×P(VERB|PRO), v₂(VERB)×P(VERB|VERB), v₂(NOUN)×P(VERB|NOUN)} × P(rice|VERB)
-         = max{0×0, 0.25×0, 0×0} × 0
-         = 0
-
-v₃(NOUN) = max{v₂(PRO)×P(NOUN|PRO), v₂(VERB)×P(NOUN|VERB), v₂(NOUN)×P(NOUN|NOUN)} × P(rice|NOUN)
-         = max{0×0, 0.25×1, 0×0} × 0.5
-         = 0.25 × 0.5
-         = 0.125
-bp₃(NOUN) = VERB
-```
+$$
+\begin{aligned}
+v_3(PRO) &= \max\{v_2(PRO) \times P(PRO|PRO),\; v_2(VERB) \times P(PRO|VERB),\; v_2(NOUN) \times P(PRO|NOUN)\} \times P(rice|PRO) \\
+        &= \max\{0 \times 0,\; 0.25 \times 0,\; 0 \times 0\} \times 0 = 0 \\[4pt]
+v_3(VERB) &= \max\{v_2(PRO) \times P(VERB|PRO),\; v_2(VERB) \times P(VERB|VERB),\; v_2(NOUN) \times P(VERB|NOUN)\} \times P(rice|VERB) \\
+         &= \max\{0 \times 0,\; 0.25 \times 0,\; 0 \times 0\} \times 0 = 0 \\[4pt]
+v_3(NOUN) &= \max\{v_2(PRO) \times P(NOUN|PRO),\; v_2(VERB) \times P(NOUN|VERB),\; v_2(NOUN) \times P(NOUN|NOUN)\} \times P(rice|NOUN) \\
+         &= \max\{0 \times 0,\; 0.25 \times 1,\; 0 \times 0\} \times 0.5 = 0.25 \times 0.5 = 0.125 \\
+         &\quad bp_3(NOUN) = VERB
+\end{aligned}
+$$
 
 **Kết thúc:**
 
-```
-P* = max v₃(i) = v₃(NOUN) = 0.125
-q₃* = NOUN
-```
+$$
+P^* = \max_{1\le i\le N} v_3(i) = v_3(NOUN) = 0.125
+$$
+$$
+q_3^* = NOUN
+$$
 
-**Truy vết ngược:**
+**Truy vết ngược (backtrace):**
 
 - t=3: NOUN, backpointer → VERB (t=2)
 - t=2: VERB, backpointer → PRO (t=1)
 - t=1: PRO
 
-**Kết luận:** Chuỗi nhãn tối ưu: **PRO → VERB → NOUN** (she eats rice)
-Xác suất: **0.125**
+**Kết luận:** Chuỗi nhãn tối ưu cho câu "she eats rice" là **PRO → VERB → NOUN**.
+Xác suất của chuỗi trạng thái này: **0.125**.
 
 
 
