@@ -793,111 +793,128 @@ Từ vựng V = {em, yêu, học, NLP, anh, rất, vui, chăm, `</s>`}, |V| = 9.
 
 **a) Xây dựng mô hình unigram và bigram (không làm trơn).**
 
+Tổng số token (kể cả `<s>` và `</s>`) trong 4 câu:
+
+- Câu 1: `<s>` em yêu học NLP `</s>` → 6 token
+- Câu 2: `<s>` anh học NLP rất vui `</s>` → 7 token
+- Câu 3: `<s>` em học rất chăm `</s>` → 6 token
+- Câu 4: `<s>` anh yêu NLP `</s>` → 5 token
+- **Tổng: 24 token**
+
 **Unigram:**
 
-| Từ | Count | P |
-|----|-------|---|
-| em | 2 | 2/22 = 0.0909 |
-| yêu | 2 | 2/22 = 0.0909 |
-| học | 2 | 2/22 = 0.0909 |
-| NLP | 3 | 3/22 = 0.1364 |
-| anh | 2 | 2/22 = 0.0909 |
-| rất | 2 | 2/22 = 0.0909 |
-| vui | 1 | 1/22 = 0.0455 |
-| chăm | 1 | 1/22 = 0.0455 |
-| `<s>` | 4 | 4/22 = 0.1818 |
-| `</s>` | 3 | 3/22 = 0.1364 |
-| **Tổng** | **22** | **1** |
+| Từ | Đếm | P = count / 24 |
+|----|-----|----------------|
+| `<s>` | 4 | 4/24 = 0.1667 |
+| em | 2 | 2/24 = 0.0833 |
+| yêu | 2 | 2/24 = 0.0833 |
+| học | 3 | 3/24 = 0.1250 |
+| NLP | 3 | 3/24 = 0.1250 |
+| anh | 2 | 2/24 = 0.0833 |
+| rất | 2 | 2/24 = 0.0833 |
+| vui | 1 | 1/24 = 0.0417 |
+| chăm | 1 | 1/24 = 0.0417 |
+| `</s>` | 4 | 4/24 = 0.1667 |
+| **Tổng** | **24** | **1** |
 
-**Bigram:** Đếm số lần xuất hiện các cặp từ:
+**Bigram:** Đếm số lần xuất hiện các cặp từ kề nhau (kể cả `<s>` và `</s>`):
 
 | | `</s>` | em | yêu | học | NLP | anh | rất | vui | chăm |
 |---|--------|----|-----|-----|-----|-----|-----|-----|------|
 | `<s>` | 0 | 2 | 0 | 0 | 0 | 2 | 0 | 0 | 0 |
 | em | 0 | 0 | 1 | 1 | 0 | 0 | 0 | 0 | 0 |
 | yêu | 0 | 0 | 0 | 1 | 1 | 0 | 0 | 0 | 0 |
-| học | 2 | 0 | 0 | 0 | 1 | 0 | 1 | 0 | 0 |
+| học | 0 | 0 | 0 | 0 | 2 | 0 | 1 | 0 | 0 |
 | NLP | 1 | 0 | 0 | 0 | 0 | 0 | 1 | 1 | 0 |
 | anh | 0 | 0 | 1 | 1 | 0 | 0 | 0 | 0 | 0 |
 | rất | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 1 |
 | vui | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | chăm | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 
-Xác suất bigram (MLE): $P(w_i|w_{i-1}) = \operatorname{count}(w_{i-1}, w_i) / \operatorname{count}(w_{i-1})$
+Kiểm tra tổng số bigram = tổng số token - 1 (cho mỗi câu):
+
+- Câu 1: 5 bigram, Câu 2: 6 bigram, Câu 3: 5 bigram, Câu 4: 4 bigram → **20 bigram** (tổng các ô trong bảng = 2+2+1+1+1+1+2+1+1+1+1+1+1+1+1+1+1+1 = 20 ✓)
+
+Xác suất bigram (MLE): $P(w_i|w_{i-1}) = \frac{\text{count}(w_{i-1}, w_i)}{\text{count}(w_{i-1})}$
 
 Ví dụ:
 
-- P(em|`<s>`) = 2/4 = 0.5
-- P(anh|`<s>`) = 2/4 = 0.5
-- $P(yêu|em)$ = 1/2 = 0.5
-- $P(học|em)$ = 1/2 = 0.5
-- $P(học|yêu)$ = 1/2 = 0.5
-- $P(NLP|yêu)$ = 1/2 = 0.5
-- ... (các xác suất khác tính tương tự)
+- $P(em|\langle s\rangle) = 2/4 = 0.5,\quad P(anh|\langle s\rangle) = 2/4 = 0.5$
+- $P(yêu|em) = 1/2 = 0.5,\quad P(học|em) = 1/2 = 0.5$
+- $P(học|yêu) = 1/2 = 0.5,\quad P(NLP|yêu) = 1/2 = 0.5$
+- $P(NLP|học) = 2/3 \approx 0.6667,\quad P(rất|học) = 1/3 \approx 0.3333$
+- $P(rất|NLP) = 1/3 \approx 0.3333,\quad P(vui|NLP) = 1/3 \approx 0.3333,\quad P(\langle/s\rangle|NLP) = 1/3 \approx 0.3333$
 
 **b) Tính P(`<s>` anh chăm học `</s>`) bằng bigram không làm trơn.**
 
-```
-P(<s> anh chăm học </s>)
-= P(anh|<s>) × P(chăm|anh) × P(học|chăm) × P(</s>|học)
-= 0.5 × P(chăm|anh) × P(học|chăm) × 2/?
+$$
+\begin{aligned}
+P(\text{"anh chăm học"}) =&\; P(anh|\langle s\rangle) \times P(chăm|anh) \times P(học|chăm) \times P(\langle/s\rangle|học) \\
+=&\; 0.5 \times \frac{0}{2} \times \frac{0}{1} \times \frac{0}{3} \\
+=&\; 0
+\end{aligned}
+$$
 
-P(chăm|anh) = count(anh, chăm) / count(anh) = 0/2 = 0
-```
+**Kết quả = 0** vì bigram "anh chăm", "chăm học", "học `</s>`" chưa từng xuất hiện trong tập huấn luyện → **zero probability problem**.
 
-**Kết quả = 0.** Đây là vấn đề **zero probability**: bigram "anh chăm" và "chăm học" chưa xuất hiện trong tập huấn luyện → xác suất bằng 0.
+**c) Unigram với làm trơn Laplace (add-1).**
 
-**c) Unigram với làm trơn Laplace.**
+$$
+P_{\text{Laplace}}(w) = \frac{\text{count}(w) + 1}{N + |V|}
+$$
 
-Với V = 9:
-```
-P_Laplace(em) = (2+1)/(22+9) = 3/31 = 0.0968
-P_Laplace(yêu) = (2+1)/31 = 3/31 = 0.0968
-P_Laplace(học) = (2+1)/31 = 3/31 = 0.0968
-P_Laplace(NLP) = (3+1)/31 = 4/31 = 0.1290
-P_Laplace(anh) = (2+1)/31 = 3/31 = 0.0968
-P_Laplace(rất) = (2+1)/31 = 3/31 = 0.0968
-P_Laplace(vui) = (1+1)/31 = 2/31 = 0.0645
-P_Laplace(chăm) = (1+1)/31 = 2/31 = 0.0645
-P_Laplace(</s>) = (3+1)/31 = 4/31 = 0.1290
-```
+với $N = 24$ (tổng số token), $V = \{\text{em, yêu, học, NLP, anh, rất, vui, chăm, }\langle/s\rangle\}$, $|V| = 9$.
+
+| Từ | P_Laplace |
+|----|-----------|
+| `<s>` | không tính (special token không smoothing) |
+| em | $(2+1)/(24+9) = 3/33 = 1/11 \approx 0.0909$ |
+| yêu | $(2+1)/(24+9) = 3/33 = 1/11 \approx 0.0909$ |
+| học | $(3+1)/(24+9) = 4/33 \approx 0.1212$ |
+| NLP | $(3+1)/(24+9) = 4/33 \approx 0.1212$ |
+| anh | $(2+1)/(24+9) = 3/33 = 1/11 \approx 0.0909$ |
+| rất | $(2+1)/(24+9) = 3/33 = 1/11 \approx 0.0909$ |
+| vui | $(1+1)/(24+9) = 2/33 \approx 0.0606$ |
+| chăm | $(1+1)/(24+9) = 2/33 \approx 0.0606$ |
+| `</s>` | $(4+1)/(24+9) = 5/33 \approx 0.1515$ |
 
 **d) Bigram với làm trơn Laplace cho P(`<s>` anh chăm học `</s>`).**
 
-Công thức Laplace cho bigram:
-```
-P_Laplace(wᵢ|wᵢ₋₁) = (count(wᵢ₋₁, wᵢ) + 1) / (count(wᵢ₋₁) + V)
-```
-với V = 9.
+$$
+P_{\text{Laplace}}(w_i|w_{i-1}) = \frac{\text{count}(w_{i-1}, w_i) + 1}{\text{count}(w_{i-1}) + |V|}
+$$
 
-```
-P_Laplace(anh|<s>) = (count(<s>,anh) + 1) / (count(<s>) + 9) = (2+1)/(4+9) = 3/13 ≈ 0.2308
+với $|V| = 9$.
 
-P_Laplace(chăm|anh) = (count(anh,chăm) + 1) / (count(anh) + 9) = (0+1)/(2+9) = 1/11 ≈ 0.0909
+$$
+\begin{aligned}
+P_{\text{Laplace}}(anh|\langle s\rangle) &= \frac{\text{count}(\langle s\rangle, anh) + 1}{\text{count}(\langle s\rangle) + 9} = \frac{2+1}{4+9} = \frac{3}{13} \approx 0.2308 \\[4pt]
+P_{\text{Laplace}}(chăm|anh) &= \frac{\text{count}(anh, chăm) + 1}{\text{count}(anh) + 9} = \frac{0+1}{2+9} = \frac{1}{11} \approx 0.0909 \\[4pt]
+P_{\text{Laplace}}(học|chăm) &= \frac{\text{count}(chăm, học) + 1}{\text{count}(chăm) + 9} = \frac{0+1}{1+9} = \frac{1}{10} = 0.1 \\[4pt]
+P_{\text{Laplace}}(\langle/s\rangle|học) &= \frac{\text{count}(học, \langle/s\rangle) + 1}{\text{count}(học) + 9} = \frac{0+1}{3+9} = \frac{1}{12} \approx 0.0833
+\end{aligned}
+$$
 
-P_Laplace(học|chăm) = (count(chăm,học) + 1) / (count(chăm) + 9) = (0+1)/(1+9) = 1/10 = 0.1
-
-P_Laplace(</s>|học) = (count(học,</s>) + 1) / (count(học) + 9) = (0+1)/(2+9) = 1/11 ≈ 0.0909
-```
-
-```
-P(<s> anh chăm học </s>) = 3/13 × 1/11 × 1/10 × 1/11
-                         = 3 / (13 × 11 × 10 × 11) = 3 / 15730 ≈ 0.00019
-```
+$$
+\begin{aligned}
+P(\text{"anh chăm học"}) &= \frac{3}{13} \times \frac{1}{11} \times \frac{1}{10} \times \frac{1}{12} \\
+&= \frac{3}{13 \times 11 \times 10 \times 12} = \frac{3}{17160} \approx 0.000175
+\end{aligned}
+$$
 
 **e) Perplexity của mô hình bigram đã làm trơn trên câu "anh chăm học".**
 
-Câu: `<s>` anh chăm học `</s>` (N = 4 từ, bỏ `<s>` vì là start token, tính từ sau `<s>`)
+Câu: `<s>` anh chăm học `</s>`, bỏ `<s>` → $N = 4$ từ tính xác suất.
 
-Perplexity cho bigram:
-```
-PP(W) = (P(w₁|<s>) × P(w₂|w₁) × P(w₃|w₂) × P(</s>|w₃))^(-1/N)
-      = (3/13 × 1/11 × 1/10 × 1/11)^(-1/4)
-      = (3/15730)^(-1/4)
-      = (15730/3)^(1/4)
-      = (5243.33)^(1/4)
-      ≈ 8.52
-```
+$$
+\begin{aligned}
+PP(W) &= \big(P(anh|\langle s\rangle) \times P(chăm|anh) \times P(học|chăm) \times P(\langle/s\rangle|học)\big)^{-1/N} \\
+&= \left(\frac{3}{13} \times \frac{1}{11} \times \frac{1}{10} \times \frac{1}{12}\right)^{-1/4} \\
+&= \left(\frac{3}{17160}\right)^{-1/4}
+= \left(\frac{17160}{3}\right)^{1/4} \\
+&= 5720^{1/4} \approx 8.70
+\end{aligned}
+$$
 
 
 
