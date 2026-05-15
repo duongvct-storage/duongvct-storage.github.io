@@ -791,6 +791,8 @@ Xác suất của chuỗi trạng thái này: **0.125**.
 ```
 Từ vựng V = {em, yêu, học, NLP, anh, rất, vui, chăm, `</s>`}, |V| = 9.
 
+![Câu 2a](/img/y4t2-nlp/revise/ex2-a.jpg)
+
 **a) Xây dựng mô hình unigram và bigram (không làm trơn).**
 
 Tổng số token (kể cả `<s>` và `</s>`) trong 4 câu:

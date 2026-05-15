@@ -36,6 +36,33 @@ local function file_exists(fname)
   end
 end
 
+local image_ext = {
+  [".jpg"] = true, [".jpeg"] = true, [".png"] = true,
+  [".gif"] = true, [".webp"] = true, [".bmp"] = true,
+}
+
+local function escape_html(s)
+  return s:gsub("&", "&amp;"):gsub("<", "&lt;"):gsub(">", "&gt;"):gsub('"', "&quot;")
+end
+
+local function format_image(img, caption_str)
+  local alt = escape_html(pandoc.utils.stringify(img.content))
+  local src = escape_html(img.src)
+  local attr_str = ""
+  if img.title and img.title ~= "" then
+    attr_str = attr_str .. fmt(' title="%s"', escape_html(img.title))
+  end
+  for k, v in pairs(img.attributes) do
+    attr_str = attr_str .. fmt(' %s="%s"', escape_html(k), escape_html(v))
+  end
+  local tag = fmt('<img src="%s" alt="%s" loading="lazy"%s>', src, alt, attr_str)
+  if caption_str and caption_str ~= "" then
+    return pandoc.RawBlock("html",
+      fmt('<figure>%s<figcaption>%s</figcaption></figure>', tag, escape_html(caption_str)))
+  end
+  return pandoc.RawBlock("html", tag)
+end
+
 -- Copy contents from a file to another, creating any directory needed in the process.
 local function copy(source, target)
   mkparent(target)
@@ -213,7 +240,6 @@ return {
     end,
 
     Block = function(block)
-      -- Turn blocks containing only a svg into a figure with a raw <object> tag
       if block.content and #block.content == 1 and block.content[1].tag == "Image" then
         local img = block.content[1]
         local _, ext = path.split_extension(img.src)
@@ -230,6 +256,39 @@ return {
             , img.attr
             )
         end
+
+        if image_ext[ext] then
+          local alt = pandoc.utils.stringify(img.content)
+          return format_image(img, alt)
+        end
+      end
+    end,
+
+    Figure = function(fig)
+      if fig.content and #fig.content == 1 then
+        local para = fig.content[1]
+        if para.tag == "Para" and #para.content == 1 and para.content[1].tag == "Image" then
+          local img = para.content[1]
+          local _, ext = path.split_extension(img.src)
+
+          if ext == ".svg" then
+            return format_tag(img.src, img)
+          end
+
+          if ext == ".pdf" then
+            local height = img.attributes["height"] or "600px"
+            return pandoc.Figure(
+               { pandoc.RawBlock("html", fmt('<iframe src="%s" width="100%%" height="%s"></iframe>', img.src, height)) }
+              , {}
+              , img.attr
+              )
+          end
+
+          if image_ext[ext] then
+            local cap_str = fig.caption and pandoc.utils.stringify(fig.caption.long) or ""
+            return format_image(img, cap_str)
+          end
+        end
       end
     end,
 
@@ -240,6 +299,14 @@ return {
           local text = illustrator.format(block)
           return make_figure(illustrator, block, text)
         end
+      end
+    end,
+
+    Image = function(img)
+      local _, ext = path.split_extension(img.src)
+      if image_ext[ext] or ext == ".svg" then
+        img.attributes.loading = "lazy"
+        return img
       end
     end,
 
