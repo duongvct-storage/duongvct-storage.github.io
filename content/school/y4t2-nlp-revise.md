@@ -753,7 +753,7 @@ $$
 v_3(PRO) &= \max\{v_2(PRO) \times P(PRO|PRO),\; v_2(VERB) \times P(PRO|VERB),\; v_2(NOUN) \times P(PRO|NOUN)\} \times P(rice|PRO) \\
         &= \max\{0 \times 0,\; 0.25 \times 0,\; 0 \times 0\} \times 0 = 0 \\[4pt]
 v_3(VERB) &= \max\{v_2(PRO) \times P(VERB|PRO),\; v_2(VERB) \times P(VERB|VERB),\; v_2(NOUN) \times P(VERB|NOUN)\} \times P(rice|VERB) \\
-         &= \max\{0 \times 0,\; 0.25 \times 0,\; 0 \times 0\} \times 0 = 0 \\[4pt]
+         &= \max\{0 \times 1,\; 0.25 \times 0,\; 0 \times 0\} \times 0 = 0 \\[4pt]
 v_3(NOUN) &= \max\{v_2(PRO) \times P(NOUN|PRO),\; v_2(VERB) \times P(NOUN|VERB),\; v_2(NOUN) \times P(NOUN|NOUN)\} \times P(rice|NOUN) \\
          &= \max\{0 \times 0,\; 0.25 \times 1,\; 0 \times 0\} \times 0.5 = 0.25 \times 0.5 = 0.125 \\
          &\quad bp_3(NOUN) = VERB
@@ -1294,5 +1294,3 @@ Dự đoán: "năm 1997"
 
 **F1 max:**
 max(0.6667, 1.0, 0.5714) = **1.0**
-
-
