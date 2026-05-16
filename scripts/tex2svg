@@ -17,7 +17,10 @@ trap '{ rm -rf -- "$TMPPATH"; }' EXIT
 
 TMPFILE="$TMPPATH/convert"
 
-cp "$INFILE" "${TMPFILE}.tex"
+# Add dvisvgm backend metadata for modern LaTeX (l3backend)
+echo "\DocumentMetadata{backend=dvisvgm}" > "${TMPFILE}.tex"
+cat "$INFILE" >> "${TMPFILE}.tex"
+
 # tex -> dvi
 lualatex --output-format=dvi --halt-on-error --file-line-error --interaction nonstopmode --output-directory "$TMPPATH" "${TMPFILE}.tex"
 # dvi -> svg

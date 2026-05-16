@@ -95,13 +95,11 @@ illustrators.graphviz = {
 
 local template_tikz = [[
 \PassOptionsToPackage{dvisvgm}{graphicx}
-\PassOptionsToPackage{dvisvgm}{graphics}
-\PassOptionsToPackage{dvisvgm}{xcolor}
-\documentclass{standalone}
+\documentclass[dvisvgm]{standalone}
 
 \def\pgfsysdriver{pgfsys-dvisvgm.def}
 
-\usepackage{xcolor,lmodern,amsfonts,tikz}
+\usepackage{lmodern,amsfonts,tikz}
 
 %% Additional packages: usepackage
 \usepackage{%s}
