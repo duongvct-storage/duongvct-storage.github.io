@@ -1203,6 +1203,30 @@ V(Nhật Bản) = V(Việt Nam) + (V(Tokyo) - V(Hà Nội))
 
 Tập nhãn: {B-PER, I-PER, B-ORG, I-ORG, B-LOC, I-LOC, B-DATE, I-DATE, O}
 
+### Nhắc lại lược đồ BIO
+
+Quá trình tokenize dựa trên khoảng trắng; dấu câu được tách thành token riêng.
+
+| Ký hiệu | Ý nghĩa |
+|---------|---------|
+| **B** (Begin) | Âm tiết bắt đầu một thực thể |
+| **I** (Inside) | Âm tiết tiếp theo trong cùng thực thể |
+| **O** (Outside) | Không thuộc thực thể nào |
+
+**Các loại thực thể:**
+
+| Nhãn | Loại | Ví dụ |
+|------|------|-------|
+| PER | Person (người) | Vũ Hải Quân |
+| ORG | Organization (tổ chức) | Bộ Khoa học và Công nghệ |
+| LOC | Location (địa điểm) | Hà Nội |
+| DATE | Thời gian | Ngày 08 tháng 4 năm 2026 |
+
+**Một số lưu ý:**
+
+- Chức danh "Bộ trưởng" là chức vụ → O, không phải tổ chức.
+- Token "2026-2031" đi liền → 1 token B-DATE (nếu tokenizer cắt dấu gạch ngang thì 2026 B-DATE, - I-DATE, 2031 I-DATE).
+
 **a) Bảng token-nhãn:**
 
 | Token | Nhãn | Giải thích |
