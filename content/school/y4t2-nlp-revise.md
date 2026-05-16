@@ -1151,6 +1151,9 @@ P(cây 2) ∝ 0.3 × 1.0 = 0.3 × các xác suất luật còn lại
 | peak | 2 | 3 | 1 | 4 | 14 | 6 |
 | bond | 10 | 9 | 11 | 0 | 0 | 0 |
 
+
+![Câu 5](/img/y4t2-nlp/revise/ex5.jpg)
+
 **a) Cosine similarity giữa "stock" và "bond".**
 
 V(stock) = [15, 12, 8, 0, 0, 1]
