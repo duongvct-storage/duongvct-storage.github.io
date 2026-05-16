@@ -45,24 +45,6 @@ local function escape_html(s)
   return s:gsub("&", "&amp;"):gsub("<", "&lt;"):gsub(">", "&gt;"):gsub('"', "&quot;")
 end
 
-local function format_image(img, caption_str)
-  local alt = escape_html(pandoc.utils.stringify(img.content))
-  local src = escape_html(img.src)
-  local attr_str = ""
-  if img.title and img.title ~= "" then
-    attr_str = attr_str .. fmt(' title="%s"', escape_html(img.title))
-  end
-  for k, v in pairs(img.attributes) do
-    attr_str = attr_str .. fmt(' %s="%s"', escape_html(k), escape_html(v))
-  end
-  local tag = fmt('<img src="%s" alt="%s" loading="lazy"%s>', src, alt, attr_str)
-  if caption_str and caption_str ~= "" then
-    return pandoc.RawBlock("html",
-      fmt('<figure>%s<figcaption>%s</figcaption></figure>', tag, escape_html(caption_str)))
-  end
-  return pandoc.RawBlock("html", tag)
-end
-
 -- Copy contents from a file to another, creating any directory needed in the process.
 local function copy(source, target)
   mkparent(target)
@@ -258,36 +240,18 @@ return {
         end
 
         if image_ext[ext] then
-          local alt = pandoc.utils.stringify(img.content)
-          return format_image(img, alt)
-        end
-      end
-    end,
-
-    Figure = function(fig)
-      if fig.content and #fig.content == 1 then
-        local para = fig.content[1]
-        if para.tag == "Para" and #para.content == 1 and para.content[1].tag == "Image" then
-          local img = para.content[1]
-          local _, ext = path.split_extension(img.src)
-
-          if ext == ".svg" then
-            return format_tag(img.src, img)
+          local alt = escape_html(pandoc.utils.stringify(img.content))
+          local src = escape_html(img.src)
+          local attr_str = ""
+          local w = img.attributes["width"]
+          if w and w ~= "" then
+            attr_str = attr_str .. fmt(' width="%s"', escape_html(w))
           end
-
-          if ext == ".pdf" then
-            local height = img.attributes["height"] or "600px"
-            return pandoc.Figure(
-               { pandoc.RawBlock("html", fmt('<iframe src="%s" width="100%%" height="%s"></iframe>', img.src, height)) }
-              , {}
-              , img.attr
-              )
+          if img.title and img.title ~= "" then
+            attr_str = attr_str .. fmt(' title="%s"', escape_html(img.title))
           end
-
-          if image_ext[ext] then
-            local cap_str = fig.caption and pandoc.utils.stringify(fig.caption.long) or ""
-            return format_image(img, cap_str)
-          end
+          local tag = fmt('<img src="%s" alt="%s" loading="lazy"%s>', src, alt, attr_str)
+          return pandoc.RawBlock("html", tag)
         end
       end
     end,
