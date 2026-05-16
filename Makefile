@@ -43,6 +43,7 @@ define generate_page
   $(PANDOC) --defaults=pandoc.yaml \
     --lua-filter=filters/post-list.lua \
     --lua-filter=filters/url.lua \
+    --lua-filter=filters/table.lua \
     -f $(3) -o "$(2)" "$(1)" \
     $(4)
 endef
@@ -56,6 +57,7 @@ define generate_post
             --lua-filter=filters/url.lua  \
             --lua-filter=filters/bib.lua  \
             --lua-filter=filters/figure.lua \
+            --lua-filter=filters/table.lua \
             --citeproc \
     -f $(3) -o "$(2)" "$(1)" \
     $(4)
