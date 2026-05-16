@@ -2202,19 +2202,98 @@ $\text{Pearson}(X,Y) = 4.667/4.667 = 1.0$
 | P7 | 259 | 10.0 | 3× | 3.0 | yes | yes | no |
 | P8 | 278 | 9.1 | 10× | 3.0 | yes | yes | yes |
 
+---
+
 **Câu 1:** Áp dụng truy vấn liên kết (query linking) để tìm các sản phẩm thỏa mãn:
 
 a) $\sigma_{\text{price} < 200}(P)$ — Giá nhỏ hơn 200€
 
+**Lời giải:**
+
+Kiểm tra từng sản phẩm:
+
+| id | price | price < 200? | Kết quả |
+|----|-------|-------------|---------|
+| P1 | 148 | ✓ (148 < 200) | **Chọn** |
+| P2 | 182 | ✓ (182 < 200) | **Chọn** |
+| P3 | 189 | ✓ (189 < 200) | **Chọn** |
+| P4 | 196 | ✓ (196 < 200) | **Chọn** |
+| P5 | 151 | ✓ (151 < 200) | **Chọn** |
+| P6 | 199 | ✓ (199 < 200) | **Chọn** |
+| P7 | 259 | ✗ (259 > 200) | Loại |
+| P8 | 278 | ✗ (278 > 200) | Loại |
+
+**Kết quả:** $\sigma_{\text{price} < 200}(P) = \{P1, P2, P3, P4, P5, P6\}$ — 6 sản phẩm có giá dưới 200€
+
 b) $\sigma_{\text{mpix} \geq 10 \wedge \text{price} < 300}(P)$ — Độ phân giải từ 10MP trở lên VÀ giá dưới 300€
 
+**Lời giải:**
+
+Cần thỏa mãn ĐỒNG THỜI cả 2 điều kiện: mpix ≥ 10 VÀ price < 300.
+
+Kiểm tra từng sản phẩm:
+
+| id | mpix | price | mpix ≥ 10? | price < 300? | Cả 2 điều kiện? | Kết quả |
+|----|------|-------|-----------|-------------|-----------------|---------|
+| P1 | 8.0 | 148 | ✗ | ✓ | ✗ | Loại |
+| P2 | 8.0 | 182 | ✗ | ✓ | ✗ | Loại |
+| P3 | 8.0 | 189 | ✗ | ✓ | ✗ | Loại |
+| P4 | 10.0 | 196 | ✓ | ✓ | ✓ | **Chọn** |
+| P5 | 7.1 | 151 | ✗ | ✓ | ✗ | Loại |
+| P6 | 9.0 | 199 | ✗ | ✓ | ✗ | Loại |
+| P7 | 10.0 | 259 | ✓ | ✓ | ✓ | **Chọn** |
+| P8 | 9.1 | 278 | ✗ | ✓ | ✗ | Loại |
+
+**Phân tích chi tiết các sản phẩm được chọn:**
+- **P4:** mpix=10.0 (≥10 ✓), price=196 (<300 ✓) → Thỏa mãn
+- **P7:** mpix=10.0 (≥10 ✓), price=259 (<300 ✓) → Thỏa mãn
+
+**Kết quả:** $\sigma_{\text{mpix} \geq 10 \wedge \text{price} < 300}(P) = \{P4, P7\}$ — 2 sản phẩm có độ phân giải từ 10MP trở lên và giá dưới 300€
+
+---
+
 **Câu 2:** User có yêu cầu: "LCD lớn hơn 2.7 inch, có quay video, và giá dưới 200€". Liệt kê các sản phẩm thỏa mãn tất cả các ràng buộc này.
+
+**Lời giải:**
+
+3 ràng buộc cần thỏa mãn đồng thời:
+1. **LCD-size > 2.7**
+2. **movies = yes**
+3. **price < 200**
+
+Kiểm tra từng sản phẩm:
+
+| id | LCD-size | movies | price | LCD > 2.7? | movies=yes? | price < 200? | Cả 3? | Kết quả |
+|----|----------|--------|-------|-----------|------------|-------------|-------|---------|
+| P1 | 2.5 | no | 148 | ✗ | ✗ | ✓ | ✗ | Loại |
+| P2 | 2.7 | yes | 182 | ✗ (2.7 không lớn hơn) | ✓ | ✓ | ✗ | Loại |
+| P3 | 2.5 | yes | 189 | ✗ | ✓ | ✓ | ✗ | Loại |
+| P4 | 2.7 | yes | 196 | ✗ (2.7 không lớn hơn) | ✓ | ✓ | ✗ | Loại |
+| P5 | 3.0 | yes | 151 | ✓ | ✓ | ✓ | ✓ | **Chọn** |
+| P6 | 3.0 | yes | 199 | ✓ | ✓ | ✓ | ✓ | **Chọn** |
+| P7 | 3.0 | yes | 259 | ✓ | ✓ | ✗ (259 > 200) | ✗ | Loại |
+| P8 | 3.0 | yes | 278 | ✓ | ✓ | ✗ (278 > 200) | ✗ | Loại |
+
+**Phân tích chi tiết:**
+
+- **P1:** LCD=2.5 (≤2.7 → Loại), movies=no → Loại
+- **P2:** LCD=2.7 (không lớn hơn 2.7, chỉ bằng) → Loại
+- **P3:** LCD=2.5 (≤2.7 → Loại) → Loại
+- **P4:** LCD=2.7 (không lớn hơn 2.7) → Loại
+- **P5:** LCD=3.0 (>2.7 ✓), movies=yes ✓, price=151 (<200 ✓) → **Thỏa mãn tất cả**
+- **P6:** LCD=3.0 (>2.7 ✓), movies=yes ✓, price=199 (<200 ✓) → **Thỏa mãn tất cả**
+- **P7:** LCD=3.0 (>2.7 ✓), movies=yes ✓, nhưng price=259 (>200) → Loại
+- **P8:** LCD=3.0 (>2.7 ✓), movies=yes ✓, nhưng price=278 (>200) → Loại
+
+**Kết quả:** $\sigma_{\text{LCD}>2.7 \wedge \text{movies}=yes \wedge \text{price}<200}(P) = \{P5, P6\}$ — 2 sản phẩm thỏa mãn tất cả yêu cầu.
+
+**Lưu ý quan trọng:** P2 và P4 có LCD=2.7, nhưng điều kiện yêu cầu LCD **lớn hơn** 2.7 (strictly greater), không phải lớn hơn hoặc bằng. Do đó P2 và P4 bị loại.
 
 ---
 
 **Phần B: Utility-based Ranking**
 
-**Đề:** Tính utility của mỗi sản phẩm cho từng khách hàng dựa trên bảng giá trị (value table) từ slide L5:
+**Đề:** Tính utility của mỗi sản phẩm cho từng khách hàng dựa trên bảng giá trị (value table) từ slide L5.
 
 **Bảng giá trị (quality và economy):**
 
@@ -2245,81 +2324,199 @@ b) $\sigma_{\text{mpix} \geq 10 \wedge \text{price} < 300}(P)$ — Độ phân g
 **Công thức utility:**
 $$ \text{utility}(c, p) = w_{\text{quality}} \times \sum_i \text{quality}_i(p) + w_{\text{economy}} \times \sum_i \text{economy}_i(p) $$
 
+---
+
 **Câu 3:** Tính utility cho P1 (price=148, mpix=8.0, opt-zoom=4×, LCD=2.5, movies=no, sound=no, waterproof=yes)
 
-**Bước 1: Xác định giá trị quality cho từng thuộc tính của P1:**
+**Lời giải chi tiết:**
 
-- price=148 (≤250): quality=5, economy=10
-- mpix=8.0 (≤8): quality=4, economy=10
-- opt-zoom=4× (≤9): quality=6, economy=9
-- LCD=2.5 (≤2.7): quality=6, economy=10
-- movies=no: quality=3, economy=10
-- sound=no: quality=7, economy=10
-- waterproof=yes: quality=10, economy=6
+**Bước 1: Tra bảng giá trị cho từng thuộc tính của P1:**
+
+| Thuộc tính | Giá trị P1 | Điều kiện | Quality | Economy |
+|------------|------------|-----------|---------|---------|
+| price | 148 | 148 ≤ 250 | 5 | 10 |
+| mpix | 8.0 | 8.0 ≤ 8 | 4 | 10 |
+| opt-zoom | 4× | 4 ≤ 9 | 6 | 9 |
+| LCD-size | 2.5 | 2.5 ≤ 2.7 | 6 | 10 |
+| movies | no | no | 3 | 10 |
+| sound | no | no | 7 | 10 |
+| waterproof | yes | yes | 10 | 6 |
 
 **Bước 2: Tính tổng quality và economy:**
-- $\sum\text{quality} = 5 + 4 + 6 + 6 + 3 + 7 + 10 = 41$
-- $\sum\text{economy} = 10 + 10 + 9 + 10 + 10 + 10 + 6 = 65$
+$$ \sum\text{quality} = 5 + 4 + 6 + 6 + 3 + 7 + 10 = 41 $$
+$$ \sum\text{economy} = 10 + 10 + 9 + 10 + 10 + 10 + 6 = 65 $$
 
-**Bước 3: Tính utility cho từng customer:**
-- $\text{utility}(\text{Cu1}, P1) = 0.8 \times 41 + 0.2 \times 65 = 32.8 + 13.0 = 45.8$
-- $\text{utility}(\text{Cu2}, P1) = 0.4 \times 41 + 0.6 \times 65 = 16.4 + 39.0 = 55.4$
+**Bước 3: Tính utility cho từng khách hàng:**
+
+- $\text{utility}(\text{Cu1}, P1) = 0.8 \times 41 + 0.2 \times 65 = 32.8 + 13.0 = \mathbf{45.8}$
+- $\text{utility}(\text{Cu2}, P1) = 0.4 \times 41 + 0.6 \times 65 = 16.4 + 39.0 = \mathbf{55.4}$
+
+---
 
 **Câu 4:** Tính utility cho P4 (price=196, mpix=10.0, opt-zoom=12×, LCD=2.7, movies=yes, sound=no, waterproof=yes)
 
-**Bước 1: Xác định giá trị quality cho từng thuộc tính của P4:**
+**Lời giải chi tiết:**
 
-- price=196 (≤250): quality=5, economy=10
-- mpix=10.0 (>8): quality=10, economy=6
-- opt-zoom=12× (>9): quality=10, economy=6
-- LCD=2.7 (≤2.7): quality=6, economy=10
-- movies=yes: quality=10, economy=7
-- sound=no: quality=7, economy=10
-- waterproof=yes: quality=10, economy=6
+**Bước 1: Tra bảng giá trị cho từng thuộc tính của P4:**
+
+| Thuộc tính | Giá trị P4 | Điều kiện | Quality | Economy |
+|------------|------------|-----------|---------|---------|
+| price | 196 | 196 ≤ 250 | 5 | 10 |
+| mpix | 10.0 | 10.0 > 8 | 10 | 6 |
+| opt-zoom | 12× | 12 > 9 | 10 | 6 |
+| LCD-size | 2.7 | 2.7 ≤ 2.7 | 6 | 10 |
+| movies | yes | yes | 10 | 7 |
+| sound | no | no | 7 | 10 |
+| waterproof | yes | yes | 10 | 6 |
 
 **Bước 2: Tính tổng quality và economy:**
-- $\sum\text{quality} = 5 + 10 + 10 + 6 + 10 + 7 + 10 = 58$
-- $\sum\text{economy} = 10 + 6 + 6 + 10 + 7 + 10 + 6 = 55$
+$$ \sum\text{quality} = 5 + 10 + 10 + 6 + 10 + 7 + 10 = 58 $$
+$$ \sum\text{economy} = 10 + 6 + 6 + 10 + 7 + 10 + 6 = 55 $$
 
-**Bước 3: Tính utility cho từng customer:**
-- $\text{utility}(\text{Cu1}, P4) = 0.8 \times 58 + 0.2 \times 55 = 46.4 + 11.0 = 57.4$
-- $\text{utility}(\text{Cu2}, P4) = 0.4 \times 58 + 0.6 \times 55 = 23.2 + 33.0 = 56.2$
+**Bước 3: Tính utility cho từng khách hàng:**
 
-**Câu 5:** Xếp hạng tất cả các sản phẩm P1-P8 theo utility cho Cu1 (quality 80%, economy 20%):
+- $\text{utility}(\text{Cu1}, P4) = 0.8 \times 58 + 0.2 \times 55 = 46.4 + 11.0 = \mathbf{57.4}$
+- $\text{utility}(\text{Cu2}, P4) = 0.4 \times 58 + 0.6 \times 55 = 23.2 + 33.0 = \mathbf{56.2}$
 
-| Sản phẩm | Tổng Quality | Tổng Economy | Utility(Cu1) | Hạng |
-|----------|-------------|--------------|--------------|------|
-| P1 | 41 | 65 | 45.8 | 8 |
-| P2 | 49 | 64 | 52.0 | 7 |
-| P3 | 53 | 61 | 54.6 | 5 |
-| P4 | 58 | 55 | 57.4 | 4 |
-| P5 | 53 | 60 | 54.4 | 6 |
-| P6 | 58 | 55 | 57.4 | 3 |
-| P7 | 63 | 50 | 60.4 | 2 |
-| P8 | 69 | 43 | 63.8 | 1 |
+---
+
+**Câu 5:** Xếp hạng tất cả các sản phẩm P1-P8 theo utility cho Cu1 (quality 80%, economy 20%)
+
+**Lời giải chi tiết:**
+
+**Bước 1: Tra bảng và tính tổng quality/economy cho tất cả sản phẩm:**
+
+| P | price | mpix | zoom | LCD | movies | sound | waterproof | Σ Quality | Σ Economy |
+|---|-------|------|------|-----|-------|-------|------------|-----------|-----------|
+| P1 | 148≤250→5,10 | 8.0≤8→4,10 | 4≤9→6,9 | 2.5≤2.7→6,10 | no→3,10 | no→7,10 | yes→10,6 | **41** | **65** |
+| P2 | 182≤250→5,10 | 8.0≤8→4,10 | 5≤9→6,9 | 2.7≤2.7→6,10 | yes→10,7 | yes→10,8 | no→8,10 | **49** | **64** |
+| P3 | 189≤250→5,10 | 8.0≤8→4,10 | 10>9→10,6 | 2.5≤2.7→6,10 | yes→10,7 | yes→10,8 | no→8,10 | **53** | **61** |
+| P4 | 196≤250→5,10 | 10.0>8→10,6 | 12>9→10,6 | 2.7≤2.7→6,10 | yes→10,7 | no→7,10 | yes→10,6 | **58** | **55** |
+| P5 | 151≤250→5,10 | 7.1≤8→4,10 | 3≤9→6,9 | 3.0>2.7→9,5 | yes→10,7 | yes→10,8 | no→8,10 | **53** | **60** |
+| P6 | 199≤250→5,10 | 9.0>8→10,6 | 3≤9→6,9 | 3.0>2.7→9,5 | yes→10,7 | yes→10,8 | no→8,10 | **58** | **55** |
+| P7 | 259>250→10,5 | 10.0>8→10,6 | 3≤9→6,9 | 3.0>2.7→9,5 | yes→10,7 | yes→10,8 | no→8,10 | **63** | **50** |
+| P8 | 278>250→10,5 | 9.1>8→10,6 | 10>9→10,6 | 3.0>2.7→9,5 | yes→10,7 | yes→10,8 | yes→10,6 | **69** | **43** |
+
+**Bước 2: Tính utility cho Cu1 = 0.8×Quality + 0.2×Economy**
+
+| Sản phẩm | 0.8 × Quality | 0.2 × Economy | Utility(Cu1) |
+|----------|--------------|--------------|--------------|
+| P1 | 0.8 × 41 = 32.8 | 0.2 × 65 = 13.0 | **45.8** |
+| P2 | 0.8 × 49 = 39.2 | 0.2 × 64 = 12.8 | **52.0** |
+| P3 | 0.8 × 53 = 42.4 | 0.2 × 61 = 12.2 | **54.6** |
+| P4 | 0.8 × 58 = 46.4 | 0.2 × 55 = 11.0 | **57.4** |
+| P5 | 0.8 × 53 = 42.4 | 0.2 × 60 = 12.0 | **54.4** |
+| P6 | 0.8 × 58 = 46.4 | 0.2 × 55 = 11.0 | **57.4** |
+| P7 | 0.8 × 63 = 50.4 | 0.2 × 50 = 10.0 | **60.4** |
+| P8 | 0.8 × 69 = 55.2 | 0.2 × 43 = 8.6 | **63.8** |
+
+**Bước 3: Sắp xếp theo thứ tự giảm dần của utility:**
+
+| Hạng | Sản phẩm | Utility(Cu1) |
+|------|----------|--------------|
+| 1 | **P8** | 63.8 |
+| 2 | **P7** | 60.4 |
+| 3 | **P6** | 57.4 |
+| 4 | P4 | 57.4 |
+| 5 | P3 | 54.6 |
+| 6 | P5 | 54.4 |
+| 7 | P2 | 52.0 |
+| 8 | P1 | 45.8 |
 
 **Top 3 cho Cu1:** P8 (63.8), P7 (60.4), P6 (57.4)
 
-**Câu 6:** Xếp hạng tất cả các sản phẩm P1-P8 theo utility cho Cu2 (quality 40%, economy 60%):
+---
 
-| Sản phẩm | Tổng Quality | Tổng Economy | Utility(Cu2) | Hạng |
-|----------|-------------|--------------|--------------|------|
-| P1 | 41 | 65 | 55.4 | 6 |
-| P2 | 49 | 64 | 58.0 | 1 |
-| P3 | 53 | 61 | 57.8 | 2 |
-| P4 | 58 | 55 | 56.2 | 4 |
-| P5 | 53 | 60 | 57.2 | 3 |
-| P6 | 58 | 55 | 56.2 | 5 |
-| P7 | 63 | 50 | 55.2 | 7 |
-| P8 | 69 | 43 | 53.4 | 8 |
+**Câu 6:** Xếp hạng tất cả các sản phẩm P1-P8 theo utility cho Cu2 (quality 40%, economy 60%)
+
+**Lời giải chi tiết:**
+
+**Bước 1 & 2: Tính utility cho Cu2 = 0.4×Quality + 0.6×Economy**
+
+| Sản phẩm | 0.4 × Quality | 0.6 × Economy | Utility(Cu2) |
+|----------|--------------|--------------|--------------|
+| P1 | 0.4 × 41 = 16.4 | 0.6 × 65 = 39.0 | **55.4** |
+| P2 | 0.4 × 49 = 19.6 | 0.6 × 64 = 38.4 | **58.0** |
+| P3 | 0.4 × 53 = 21.2 | 0.6 × 61 = 36.6 | **57.8** |
+| P4 | 0.4 × 58 = 23.2 | 0.6 × 55 = 33.0 | **56.2** |
+| P5 | 0.4 × 53 = 21.2 | 0.6 × 60 = 36.0 | **57.2** |
+| P6 | 0.4 × 58 = 23.2 | 0.6 × 55 = 33.0 | **56.2** |
+| P7 | 0.4 × 63 = 25.2 | 0.6 × 50 = 30.0 | **55.2** |
+| P8 | 0.4 × 69 = 27.6 | 0.6 × 43 = 25.8 | **53.4** |
+
+**Bước 2: Sắp xếp theo thứ tự giảm dần của utility:**
+
+| Hạng | Sản phẩm | Utility(Cu2) |
+|------|----------|--------------|
+| 1 | **P2** | 58.0 |
+| 2 | **P3** | 57.8 |
+| 3 | **P5** | 57.2 |
+| 4 | P4 | 56.2 |
+| 5 | P6 | 56.2 |
+| 6 | P1 | 55.4 |
+| 7 | P7 | 55.2 |
+| 8 | P8 | 53.4 |
 
 **Top 3 cho Cu2:** P2 (58.0), P3 (57.8), P5 (57.2)
 
-**Nhận xét:** Cu1 (ưa chuộng quality) sẽ được gợi ý P8, P7, P6; còn Cu2 (ưa chuộng economy/giá rẻ) sẽ được gợi ý P2, P3, P5. Điều này cho thấy utility-based ranking cá nhân hóa được kết quả theo sở thích khách hàng.
+---
+
+**Bảng tổng hợp so sánh xếp hạng:**
+
+| Hạng | Cu1 (Quality 80%) | Cu2 (Economy 60%) |
+|------|------------------|-------------------|
+| 1 | P8 (63.8) | P2 (58.0) |
+| 2 | P7 (60.4) | P3 (57.8) |
+| 3 | P6 (57.4) | P5 (57.2) |
+| 4 | P4 (57.4) | P4 (56.2) |
+| 5 | P3 (54.6) | P6 (56.2) |
+| 6 | P5 (54.4) | P1 (55.4) |
+| 7 | P2 (52.0) | P7 (55.2) |
+| 8 | P1 (45.8) | P8 (53.4) |
+
+**Nhận xét:**
+- **Cu1** (ưa chuộng quality — trả thêm tiền cho chất lượng cao): Được gợi ý P8, P7, P6 — các sản phẩm đắt tiền nhưng có tính năng tốt (P8: waterproof, P7: cao cấp, P6: LCD lớn)
+- **Cu2** (ưa chuộng economy — tìm giá trị tốt nhất): Được gợi ý P2, P3, P5 — các sản phẩm giá rẻ hơn với tính năng cơ bản tốt
+- P8 và P8 đứng ở 2 vị trí đối diện nhau: Cu1 xếp P8 hạng 1, Cu2 xếp P8 hạng 8
+- Điều này cho thấy utility-based ranking cá nhân hóa được kết quả theo sở thích khách hàng
 
 ---
 
 **Bài tập mở rộng:** Giả sử user có yêu cầu không hợp lệ (không sản phẩm nào thỏa mãn), hãy mô tả:
 
-1. Cách hệ thống constraint-based diagnosis tìm tập xung đột (conflict set)
-2. Cách tính toán các repair (nới lỏng ràng buộc) để đề xuất cho user
+**1. Cách hệ thống constraint-based diagnosis tìm tập xung đột (conflict set)**
+
+Khi user đưa ra yêu cầu nhưng không có sản phẩm nào thỏa mãn, hệ thống cần tìm **tập xung đột** (conflict set) — tập hợp con các ràng buộc mà khi bỏ đi một ràng buộc thì sẽ có sản phẩm thỏa mãn.
+
+**Ví dụ:** Yêu cầu của user: "price < 150 VÀ mpix > 10 VÀ waterproof = yes"
+
+Kiểm tra từng sản phẩm:
+- P1: price=148 ✓, mpix=8.0 ✗ → Loại
+- P2: price=182 ✗ → Loại
+- P3: price=189 ✗ → Loại
+- P4: price=196 ✗ → Loại
+- P5: price=151 ✗ → Loại
+- P6: price=199 ✗ → Loại
+- P7: price=259 ✗ → Loại
+- P8: price=278 ✗ → Loại
+
+→ Không có sản phẩm nào thỏa mãn.
+
+**Tính diagnosis:**
+Hệ thống tìm các tập xung đột {d₁, d₂, d₃}:
+
+- **d₁ = {price < 150, mpix > 10}:** Bỏ đi "price < 150" → còn lại "mpix > 10 AND waterproof = yes" → P4 (mpix=10.0, waterproof=yes) thỏa mãn
+- **d₂ = {price < 150, waterproof = yes}:** Bỏ đi "price < 150" → còn lại "mpix > 10 AND waterproof = yes" → P4 thỏa mãn
+- **d₃ = {mpix > 10, waterproof = yes}:** Bỏ đi "mpix > 10" → còn lại "price < 150 AND waterproof = yes" → P1 (price=148, waterproof=yes) thỏa mãn
+
+**2. Cách tính toán các repair (nới lỏng ràng buộc) để đề xuất cho user**
+
+Với mỗi diagnosis, hệ thống tính toán các **repair** — cách nới lỏng ràng buộc để tìm sản phẩm phù hợp:
+
+| Repair | Ràng buộc nới lỏng | Kết quả | Giải thích |
+|--------|-------------------|---------|------------|
+| Rep1 | price < 150 → price ≤ 278 | P8 (price=278, waterproof=yes) | Giá tăng lên nhưng thỏa mãn các ràng buộc còn lại |
+| Rep2 | mpix > 10 → mpix ≥ 8.0 | Không có sản phẩm thỏa mãn | P4 cần bỏ thêm waterproof=no |
+| Rep3 | waterproof=yes → waterproof bất kỳ | P4 (price=196, mpix=10.0) | Bỏ yêu cầu chống nước |
+
+Hệ thống sẽ đề xuất các repair này cho user, kèm theo giải thích: "Không có sản phẩm nào thỏa mãn tất cả yêu cầu của bạn. Bạn có muốn: (1) tăng ngân sách lên 278€ để có P8, hoặc (2) bỏ yêu cầu chống nước để có P4 với giá 196€?"
