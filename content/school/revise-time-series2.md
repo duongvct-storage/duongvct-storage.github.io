@@ -1454,6 +1454,612 @@ $$\alpha_1(2) = \pi_2 \times B_2(O_1) = 0.5 \times 0.8 = 0.4$$
 
 ---
 
+# PHAN 5: HOC MAY VA HOC SAU CHO CHUOI THOI GIAN
+
+## 5.1 Gioi thieu
+
+### 5.1.1 Diem khac biet cua chuoi thoi gian
+
+| Dac diem | Mo ta |
+|----------|-------|
+| **Phu thuoc theo thoi gian** | Gia tri tai t lien quan truc tiep toi t-k |
+| **Khong i.i.d** | Nhieu thuat toan ML gia dinh doc lap se khong ap dung truc tiep |
+| **Trat tu quan trong** | Shuffle du lieu = sai hoan toan |
+
+### 5.1.2 That bai khi ap dung ML truc tiep
+
+- **Su phu thuoc mo hinh**: Can dung cac "window" hoac mo hinh sequence
+- **Du bao**: Mot buoc hoac nhieu buoc
+- **Dac trung mang dac thu thoi gian**
+
+---
+
+## 5.2 Phan loai chuoi thoi gian
+
+### 5.2.1 Cay Quyet dinh (Decision Tree)
+
+**Nguyen ly**: Phan anh cach con nguoi dua ra quyet dinh phuc tap - tung buoc mot, theo cach phi tuyen tinh cao.
+
+**Vi du ung dung**:
+- Nha giao dich chung khoan su dung cac chi bao ky thuat theo kieu phan cap: dau tien xem dong luong, sau do kiem tra muc bien dong
+- Bac si doc EEG hoac ECG: tim dac diem truoc, sau do xem xet cac dac diem khac
+
+### 5.2.2 Rung ngau nhien (Random Forest)
+
+**Dinh nghia**: Su dung nhieu cay quyet dinh, ket qua cuoi cung dua tren trung binh cac ket qua.
+
+**Dac diem**:
+- So luong cay va do sau toi da la cac tham so quan trong
+- Moi cay su dung mau ngau nhien cua du lieu va dac trung
+- Cac cay thuong duoc tham so hoa don gian de tran overfitting
+
+**Han che voi time series**:
+- Khong phai cong cu tot cho du lieu thô
+- Huu ich khi nen du lieu thanh dac trung tom tat
+- Hieu qua hon cho phan loai so voi du bao
+
+### 5.2.3 Cay tang cuong gradient (Gradient Boosting)
+
+**Nguyen ly**: Tao cac mo hinh tuan tu, mo hinh sau sua loi cua mo hinh truoc.
+
+**XGBoost hoat dong nhu the nao**:
+
+1. **Cay dau tien**: Khop truc tiep voi du lieu (phan loai hoac gia tri so)
+2. **Cay thu hai**: Du bao phan du cua tong hop cay truoc do
+3. **Cay thu ba**: Du bao phan du con lai
+
+**Dac diem quan trong**:
+- XGBoost giam thieu ham mat mat ket hop so hang phat do phuc tap
+- So hang phat gioi han so luong cay duoc tao
+- Co the truc tiep gioi han so cay
+
+**Uu diem**:
+- Thuong vuot tri hon mo hinh thong ke voi du lieu du lon
+- Tu dong loai bo dac diem khong lien quan
+- Tap trung vao dac diem quan trong nhat
+
+---
+
+## 5.3 Phan cum voi du lieu chuoi thoi gian
+
+### 5.3.1 Ung dung cua phan cum
+
+- **Phan loai**: Xac dinh so luong cum, thiet lap cac loai chuoi thoi gian
+- **Du bao**: Phan cum thuan tuy hoac dua tren khoang cach
+
+### 5.3.2 Cac phuong phap phan cum
+
+**Cach 1: Su dung lop thanh vien**
+- Xac dinh cum dua tren N buoc dau tien
+- Suy ra hanh vi tuong lai dua tren thanh vien cum
+- Tran lookahead bang cach chi phan cum dua tren qua khu
+
+**Cach 2: Du bao dua tren lang gieng gan nhat**
+- Tim lang gieng gan nhat dua tren N buoc dau tien
+- Tinh trung binh hanh vi tai buoc N+h cua cac lang gieng
+- Su dung khoang cach phu hop
+
+### 5.3.3 Cac chi so khoang cach
+
+#### a) Do xoan thoi gian dong (Dynamic Time Warping - DTW)
+
+**Quy tac DTW**:
+1. Moi diem phai duoc khop voi it nhat mot diem cua chuoi khac
+2. Chi so dau va cuoi phai duoc khop voi cac phan tuong ung
+3. Anh xa phai sao cho thoi gian di chuyen ve phia truoc
+
+**Vi du**:
+```
+Chuoi A (di nhanh): 1 2 3 4 5
+Chuoi B (di cham):  1 1.5 2 3 4 5
+
+- Khoang cach Euclid: Cac diem khong khop thoi gian -> lon va sai
+- DTW: Be cong truc thoi gian de can thang hai chuoi
+```
+
+**Khi nao dung DTW**:
+- Hai chuoi khong dong toc
+- Khong thang hang
+- Co toc do thay doi khac nhau
+
+#### b) Khoang cach Fréchet
+
+Be cong thoi gian cua cac duong cong de giam thieu khoang cach giua hai duong cong.
+
+#### c) He so tuong quan Pearson
+
+- Do tuong quan giua hai chuoi
+- Yeu cau cung so diem du lieu
+- Tuong doi de tinh toan
+
+#### d) Day con chung dai nhat (LCS)
+
+- Xac dinh do dai day cac gia tri lien tiep giong het nhau
+- Vi tri chinh xac khong bat buoc phai khop
+
+---
+
+## 5.4 Mang nơ-ron
+
+### 5.4.1 Hoc sau cho chuoi thoi gian
+
+**Uu diem**:
+- Rat linh hoat, mo hinh hoa hanh vi phi tuyen tinh phuc tap
+- Khong yeu cau tinh dung
+- Xu ly du lieu khong dong nhat tot
+
+**Luu y**: Hoc sau khong thuc hien tot voi trend troi khi duoc dieu chinh phu hop.
+
+### 5.4.2 Mang nơ-ron nhan tao - Cau truc co ban
+
+```
+Dau vao -> Tong co trong so -> Ham kich hoat -> Dau ra
+   x          Σ(w*x) + b           f(Σ)            ŷ
+```
+
+**Cac thanh phan chinh**:
+- **Nơ-ron**: Thiet bi tinh toan don gian
+- **Lien ket**: Truyen tin hieu voi trong so
+- **Ham kich hoat**: ReLU, Sigmoid, Tanh, Softmax
+
+### 5.4.3 Mang chuyen tiep (Feed Forward Networks)
+
+**Dac diem**:
+- Kha nang song song hoa cao, tinh toan nhanh
+- La phep thu tot de xac dinh dong luc thoi gian phuc tap
+- Thuong duoc tich hop vao kien truc hoc sau phuc tap hon
+
+### 5.4.4 Co che Attention
+
+**Y tuong**: Cung cap co che de mo hinh hoc thong tin nao quan trong vao thoi diem nao.
+
+**Cach hoat dong**:
+- Trong so attention phu hop voi tung buoc thoi gian
+- Mo hinh hoc cach ket hop thong tin tu cac buoc khac nhau
+- Giup mang chuyen tiep nhan thuc thoi gian tot hon
+
+---
+
+## 5.5 Mang nơ-ron tich chap (CNN)
+
+### 5.5.1 Tai sao CNN khong phu hop truc tiep voi time series
+
+- Dac diem chinh cua tich chap: Tat ca cac khong gian duoc xu ly nhu nhau
+- Dung voi hinh anh, nhung khong dung voi chuoi thoi gian
+- Mot so diem thoi gian nhat dinh phai gan nhau hon nhung diem khac
+
+### 5.5.2 Cau truc CNN
+
+| Lop | Chuc nang |
+|-----|-----------|
+| **Convolution** | Ap hat nhan (kernel) truot qua du lieu |
+| **ReLU** | Ham kich hoat phi tuyen |
+| **Pooling** | Giam kich thuoc, lay max/mean |
+| **Flatten** | Lam phang du lieu cho lop fully connected |
+| **Output** | Bo phan loai (thuong dung softmax) |
+
+### 5.5.3 Tich chap nhan qua (Causal Convolution)
+
+**Phan nhan qua**: Chi nhung diem truoc do moi di vao bo loc tich chap.
+
+**Phan gian no (Dilation)**: Bo qua mot so diem trong qua trinh sap xep bo loc, cho phep mo hinh nhin xa hon trong qua khu.
+
+**Loi ich**:
+- Tinh thua thot, giam tich chap du thua
+- Nhin xa hon ve qua khu
+- Tinh toan van hop ly
+
+### 5.5.4 Chuyen doi chuoi thoi gian thanh hinh anh
+
+**Bieu do hoi quy (Recurrence Plot)**:
+- Mo ta trong khong gian pha-trang thai
+- R(i,j) = 1 neu f(i) - f(j) du nho, nguoc lai = 0
+- Tao anh nhi phan den trang
+- i va j tham chieu den cac gia tri thoi gian
+
+---
+
+## 5.6 Mang nơ-ron hoi quy (RNN)
+
+### 5.6.1 Dac diem cua RNN
+
+| Dac diem | Mo ta |
+|----------|-------|
+| **Xu ly tuan tu** | Nhin thay tung buoc thoi gian mot, theo thu tu |
+| **Trang thai an** | Duy tri trang thai tu buoc nay sang buoc khac |
+| **Tham so chung** | Cung tham so duoc ap dung lap di lap lai |
+
+### 5.6.2 Long Short-Term Memory (LSTM)
+
+**Muc dich**: Khac phuc RNN nhanh quen qua khu.
+
+**Cau truc**:
+- **Cell state (bo nho dai han)**: Luu tru thong tin quan trong
+- **3 cong**:
+  - Forget gate: Quyet dinh bo thong tin nao
+  - Input gate: Quyet dinh thong tin moi nao duoc them
+  - Output gate: Quyet dinh dau ra tai buoc hien tai
+
+### 5.6.3 Gated Recurrent Unit (GRU)
+
+**So sanh LSTM vs GRU**:
+
+| Dac diem | LSTM | GRU |
+|----------|------|-----|
+| So cong | 3 | 2 |
+| So tham so | Nhieu hon | It hon |
+| Toc do huan luyen | Cham hon | Nhanh hon |
+| Hieu suat | Thuong tot hon | Co the vuot LSTM |
+
+**GRU dac biet vuot tri voi cac nhiem vu phi ngon ngu.**
+
+### 5.6.4 Autoencoder (Seq2Seq)
+
+**Cau truc**:
+- Lop encoder: Xu ly hoan toan chuoi, tao trang thai an tom tat
+- Lop decoder: Su dung trang thai an va dau ra cua chinh no de tao chuoi moi
+
+**Ung dung**: Du bao chuoi thoi gian don bien hoac da bien.
+
+---
+
+## 5.7 Cac chi so danh gia
+
+### 5.7.1 Van de danh gia trong time series
+
+**4 van de lon can tran**:
+
+| Van de | Giai thich |
+|--------|------------|
+| **No shuffling** | Khong xao tron train/test - tran nhin thay tuong lai |
+| **Phu thuoc** | Loi khong doc lap do autocorrelation |
+| **Trend/Seasonality** | Danh gia theo nhieu horizon |
+| **Data drift** | Danh gia theo windows, khong phai mot lan |
+
+### 5.7.2 Sai so cho du bao (Forecasting)
+
+#### a) Mean Absolute Error (MAE)
+
+$$\text{MAE} = \frac{1}{n}\sum_{t=1}^{n}|y_t - \hat{y}_t|$$
+
+#### b) Mean Squared Error (MSE)
+
+$$\text{MSE} = \frac{1}{n}\sum_{t=1}^{n}(y_t - \hat{y}_t)^2$$
+
+#### c) Root Mean Squared Error (RMSE)
+
+$$\text{RMSE} = \sqrt{\text{MSE}}$$
+
+#### d) Mean Absolute Percentage Error (MAPE)
+
+$$\text{MAPE} = \frac{1}{n}\sum_{t=1}^{n}\left|\frac{y_t - \hat{y}_t}{y_t}\right| \times 100$$
+
+### 5.7.3 Sai so cho phan loai
+
+#### Confusion Matrix
+
+|  | Thuc te Positive | Thuc te Negative |
+|--|-----------------|-----------------|
+| **Du bao Positive** | TP | FP |
+| **Du bao Negative** | FN | TN |
+
+**Ky hieu**:
+- **TP (True Positive)**: Du bao Positive, thuc te dung
+- **TN (True Negative)**: Du bao Negative, thuc te dung
+- **FP (False Positive)**: Du bao nham duong tinh (loi loai I)
+- **FN (False Negative)**: Du bao nham am tinh (loi loai II)
+
+#### Cac chi so phai sinh
+
+**Accuracy**:
+$$\text{Accuracy} = \frac{TP + TN}{TP + TN + FP + FN}$$
+
+**Precision**:
+$$\text{Precision} = \frac{TP}{TP + FP}$$
+
+**Recall**:
+$$\text{Recall} = \frac{TP}{TP + FN}$$
+
+**F1-Score**:
+$$\text{F1} = 2 \times \frac{\text{Precision} \times \text{Recall}}{\text{Precision} + \text{Recall}}$$
+
+---
+
+## BAI TAP
+
+### 5.1 Bai tap phan loai chuoi thoi gian
+
+**Bai 1**: Tai sao Random Forest khong phai cong cu tot cho du lieu chuoi thoi gian thô? Khi nao thi no van huu ich?
+
+**Bai 2**: Giai thich cach XGBoost xay dung cac cay tuan tu de sua loi cua cac cay truoc do.
+
+**Bai 3**: So sanh Decision Tree va Random Forest. Tai sao Random Forest giam overfitting?
+
+### 5.2 Bai tap phan cum
+
+**Bai 4**: Cho hai chuoi:
+- A: [1, 2, 3, 4, 5]
+- B: [1, 1.5, 2, 3, 4, 5]
+
+a) Giai thich tai sao khoang cach Euclid khong phu hop
+b) Giai thich tai sao DTW se cho ket qua tot hon
+
+**Bai 5**: Liet ke va mo ta 4 chi so khoang cach dung trong phan cum chuoi thoi gian.
+
+**Bai 6**: Tai sao phan cum chuoi thoi gian can tran lookahead? Cho vi du.
+
+### 5.3 Bai tap mang nơ-ron
+
+**Bai 7**: Mo ta cau truc co ban cua mot nơ-ron nhan tao voi cac thanh phan: dau vao, trong so, ham tong, ham kich hoat, dau ra.
+
+**Bai 8**: Giai thich su khac nhau giua:
+a) Feed Forward Network va RNN
+b) LSTM va GRU
+c) CNN va RNN
+
+**Bai 9**: Tai sao RNN truyen thong bi "quen" qua khu? LSTM giai quyet van de nay bang cach nao?
+
+**Bai 10**: Giai thich co che Attention trong mang nơ-ron. No giup gi cho viec xu ly chuoi thoi gian?
+
+### 5.4 Bai tap CNN
+
+**Bai 11**: Tai sao tich chap truyen thong khong phu hop truc tiep voi chuoi thoi gian?
+
+**Bai 12**: Giai thich cac thanh phan trong kien truc CNN: Convolution, ReLU, Pooling, Flatten, Output.
+
+**Bai 13**: Tich chap nhan qua (causal convolution) khac voi tich chap thong thuong o diem nao?
+
+### 5.5 Bai tap danh gia
+
+**Bai 14**: Cho ket qua du bao va thuc te:
+```
+Thuc te:   1 1 0 1 0 1 0 0 1 0
+Du bao:    1 0 0 1 1 1 0 0 0 0
+```
+
+Tinh: TP, TN, FP, FN, Accuracy, Precision, Recall, F1-Score
+
+**Bai 15**: Giai thich 4 van de lon khi danh gia mo hinh time series.
+
+**Bai 16**: Tai sao khong duoc xao tron du lieu khi chia train/test cho time series?
+
+**Bai 17**: So sanh MAE, MSE, RMSE va MAPE. Khi nao dung cai nao?
+
+**Bai 18**: Cho du lieu du bao: [102, 98, 105, 110, 95] va thuc te: [100, 100, 100, 100, 100]
+Tinh MAE va RMSE.
+
+---
+
+## LOI GIAI
+
+### Bai 1:
+
+**Tai sao RF khong tot cho time series thô**:
+- RF gia dinh cac quan sat doc lap (i.i.d)
+- Time series co autocorrelation - quan sat phu thuoc theo thoi gian
+- Shuffle du lieu pha vo cau truc thoi gian
+
+**Khi nao RF van huu ich**:
+- Khi du lieu da duoc nen thanh dac trung tom tat
+- Cho phan loai (classification) tot hon du bao
+- Giam overfitting nho trung binh nhieu cay
+
+### Bai 2:
+
+**Cach XGBoost xay dung cay tuan tu**:
+
+1. **Cay dau tien**: Khop truc tiep voi du lieu goc
+2. **Cay thu hai**: Du bao phan du (sai so) cua cay 1
+3. **Cay thu ba**: Du bao phan du cua tong cay 1 va 2
+4. Tiep tuc cho den khi dat so cay gioi han hoac khong cai thien
+
+**Cong thuc tong quat**:
+$$F_m(x) = F_{m-1}(x) + \eta \cdot h_m(x)$$
+
+Trong do $h_m(x)$ la cay thu m va $\eta$ la learning rate.
+
+### Bai 3:
+
+| Dac diem | Decision Tree | Random Forest |
+|----------|--------------|---------------|
+| So cay | 1 | Nhieu |
+| Overfitting | De overfit | Giam overfitting |
+| Phuong phap | Toan bo du lieu | Bootstrap + feature randomness |
+| Ket qua | Mot cay duy nhat | Trung binh/bau phieu |
+
+**Tai sao RF giam overfitting**:
+- Moi cay chi thay mot phan du lieu (bootstrap)
+- Moi cay chi thay mot phan dac trung (feature randomness)
+- Trung binh nhieu cay giam variance
+- Khong co cay nao dac biet tot nhung tat ca deu du tong quat
+
+### Bai 4:
+
+**a) Khoang cach Euclid**:
+Van de: A co 5 diem, B co 6 diem -> khong so sanh duoc truc tiep
+
+**b) DTW tot hon vi**:
+- DTW cho phep "be cong" truc thoi gian
+- A[2] = 2 co the khop voi B[2] = 1.5 hoac B[3] = 2
+- A[3] = 3 co the khop voi B[3] = 2 hoac B[4] = 3
+- Ket qua: Hai chuoi "cung dang" nhung toc do khac nhau
+
+### Bai 5:
+
+| Chi so | Mo ta |
+|--------|-------|
+| **DTW** | Do khoang cach voi "xoan" thoi gian, so khop diem khong cung thoi diem |
+| **Fréchet** | Be cong duong cong de giam thieu khoang cach |
+| **Pearson** | He so tuong quan tuyen tinh, yeu cau cung do dai |
+| **LCS** | Do dai day con chung dai nhat, khong can vi tri khop |
+
+### Bai 6:
+
+**Tai sao tran lookahead**:
+- Phan cum dua tren toan bo chuoi se su dung thong tin tuong lai
+- Trong thuc te, khi du bao, ta chi co qua khu
+- Dieu nay gay data leakage -> danh gia qua lac quan
+
+**Vi du**:
+- Sai: Phan cum ca 100 buoc roi du bao buoc 50
+- Dung: Phan cum chi 50 buoc dau, roi du bao buoc 51-100
+
+### Bai 7:
+
+Mo ta cau truc nơ-ron don:
+- Dau vao: x1, x2, x3
+- Tong co trong so: Σ = w1*x1 + w2*x2 + w3*x3 + b
+- Ham kich hoat: f(Σ)
+- Dau ra: ŷ
+
+### Bai 8:
+
+**a) FFN vs RNN**:
+- FFN: Xu ly dau vao doc lap, khong co trang thai
+- RNN: Xu ly tuan tu, co trang thai an duoc truyen
+
+**b) LSTM vs GRU**:
+- LSTM: 3 cong (forget, input, output), nhieu tham so
+- GRU: 2 cong (update, reset), it tham so hon, huan luyen nhanh hon
+
+**c) CNN vs RNN**:
+- CNN: Xu ly song song, dung bo loc truot
+- RNN: Xu ly tuan tu, co trang thai
+
+### Bai 9:
+
+**RNN quen qua khu**:
+- Gradient co the triet tieu (vanishing gradient) khi truyen nguoc
+- Thong tin tu buoc xa bi mat
+
+**LSTM giai quyet bang**:
+- Cell state: Duong truyen thang cho thong tin dai han
+- Cac cong kiem soat: Thong tin nao giu, them, xuat
+
+### Bai 10:
+
+**Co che Attention**:
+- Gan trong so cho tung buoc thoi gian
+- Mo hinh tu hoc diem nao quan trong
+- Ket hop thong tin tu cac buoc co trong so cao
+- Giup mang FFN "nhin" duoc thoi gian
+
+### Bai 11:
+
+**Van de voi tich chap truyen thong**:
+- Convolution xu ly tat ca cac diem nhu nhau
+- Khong co khai niem "thu tu thoi gian"
+- Diem thoi gian xa va gan duoc doi xu bat bang
+
+### Bai 12:
+
+| Lop | Chuc nang |
+|-----|-----------|
+| **Convolution** | Ap kernel truot qua, tao feature map |
+| **ReLU** | max(0, x) - loai bo gia tri am |
+| **Pooling** | Giam kich thuoc (max/mean) |
+| **Flatten** | Lam phang thanh vector |
+| **Output** | Softmax cho phan loai |
+
+### Bai 13:
+
+**Tich chap nhan qua**:
+- Chi su dung cac diem tu qua khu
+- Dam bao tinh nhan qua: output tai t chi phu thuoc vao input tai t, t-1, t-2,...
+
+**Gian no (Dilation)**:
+- Bo qua mot so diem khi truot kernel
+- Nhin xa hon trong qua khu voi it tham so hon
+
+### Bai 14:
+
+```
+Thuc te:   1 1 0 1 0 1 0 0 1 0
+Du bao:    1 0 0 1 1 1 0 0 0 0
+```
+
+**Dem**:
+- TP = 3 (vi tri 1, 4, 6)
+- TN = 4 (vi tri 3, 7, 8, 10)
+- FP = 1 (vi tri 5)
+- FN = 2 (vi tri 2, 9)
+
+**Tinh**:
+- Accuracy = (3 + 4) / 10 = 0.7
+- Precision = 3 / (3 + 1) = 0.75
+- Recall = 3 / (3 + 2) = 0.6
+- F1 = 2 * (0.75 * 0.6) / (0.75 + 0.6) = 0.667
+
+### Bai 15:
+
+| Van de | Giai thich |
+|--------|------------|
+| **No shuffling** | Time series co trat tu, shuffle = nhin tuong lai |
+| **Phu thuoc** | Autocorrelation khiến loi khong doc lap |
+| **Trend/Seasonality** | Du bao 1 buoc vs 10 buoc rat khac nhau |
+| **Data drift** | Phan phoi thay doi theo thoi gian |
+
+### Bai 16:
+
+**Tai sao khong shuffle**:
+- Time series: $y_t$ phu thuoc vao $y_{t-1}, y_{t-2}, ...$
+- Shuffle: Mo hinh thay $y_{t+1}$ truoc $y_t$
+- Khi do: Mo hinh hoc "gian lan" bang cach nhin tuong lai
+- Ket qua: Danh gia hoan toan sai
+
+### Bai 17:
+
+| Metric | Uu diem | Nhuoc diem | Khi dung |
+|--------|---------|------------|----------|
+| **MAE** | Don gian, unit goc | Khong phat loi lon | Khi khong muon phat manh |
+| **MSE** | Phat loi lon nhieu | Nhay cam outlier | Khi loi lon quan trong |
+| **RMSE** | Cung unit voi goc | Nhay cam outlier | De dien giai |
+| **MAPE** | Ty le %, khong phu thuoc scale | Chia cho 0 neu co 0 | So sanh chuoi khac scale |
+
+### Bai 18:
+
+**Du lieu**:
+- Du bao: [102, 98, 105, 110, 95]
+- Thuc te: [100, 100, 100, 100, 100]
+
+**Loi**: [2, -2, 5, 10, -5]
+
+**MAE**:
+$$\text{MAE} = (|2| + |-2| + |5| + |10| + |-5|) / 5 = 24 / 5 = 4.8$$
+
+**RMSE**:
+$$\text{RMSE} = \sqrt{(4 + 4 + 25 + 100 + 25) / 5} = \sqrt{158 / 5} = \sqrt{31.6} \approx 5.62$$
+
+---
+
+## BANG TONG HOP SO SANH
+
+### So sanh cac kien truc mang
+
+| Kien truc | Xu ly | Trang thai | Ung dung |
+|-----------|-------|------------|----------|
+| **FFN** | Song song | Khong co | Baseline, feature extraction |
+| **CNN** | Song song | Co the co (dilated) | Pattern cuc bo |
+| **RNN** | Tuan tu | Co | Sequential dependency |
+| **LSTM** | Tuan tu | Dai han | Long-term dependency |
+| **GRU** | Tuan tu | Dai han (don gian hon) | Khi can nhanh |
+
+### So sanh cac phuong phap ML
+
+| Phuong phap | Uu diem | Han che |
+|-------------|---------|---------|
+| **Decision Tree** | De hieu, nhanh | Overfitting |
+| **Random Forest** | Giam overfitting | Cham voi nhieu cay |
+| **XGBoost** | Hieu suat cao | Can tuning |
+| **DTW** | So khop khong dong toc | Tinh toan lon |
+
+---
+
+*Tai lieu duoc tong hop tu Slide Chuong 5: Hoc may va Hoc sau*
+*Giang vien: Do Tien Dung*
+
+---
+
 # PHAN 7: MEO THI
 
 ## ✅ Truoc khi thi
