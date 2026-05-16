@@ -44,7 +44,13 @@ Year 4 Term 2 - Recommender system learning resources
 
 ## Offline resource
 
+### Images
 
+- ![Bài tập 1](/img/y4t2-rs/photo_1_2026-05-16_11-49-15.jpg)
+- ![Bài tập 2](/img/y4t2-rs/photo_2_2026-05-16_11-49-15.jpg)
+- ![Bài tập 3](/img/y4t2-rs/photo_3_2026-05-16_11-49-15.jpg)
+
+### PDFs
 
 - [L0 - Giới thiệu môn học](/pdfs/y4t2-recommender-system/L0_Gioi_thieu_mon_hoc.pdf)
 
