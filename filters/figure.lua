@@ -98,6 +98,7 @@ local template_tikz = [[
 
 \def\pgfsysdriver{pgfsys-dvisvgm.def}
 
+\PassOptionsToPackage{dvisvgm}{xcolor}
 \usepackage{xcolor,lmodern,amsfonts,tikz}
 
 %% Additional packages: usepackage
