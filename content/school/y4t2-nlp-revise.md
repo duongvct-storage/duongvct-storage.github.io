@@ -996,6 +996,12 @@ V → "bắt" | "thấy"
 P → "trong"
 ```
 
+
+![Câu 4 Phần 1](/img/y4t2-nlp/revise/ex4-1.jpg)
+
+
+![Câu 4 Phần 2](/img/y4t2-nlp/revise/ex4-2.jpg)
+
 **a) Vẽ cây cú pháp cho "con mèo bắt con chuột trong bẫy".**
 
 Cây 1 (VP → V NP, NP → NP PP - "bắt" kết hợp với "con chuột trong bẫy"):
