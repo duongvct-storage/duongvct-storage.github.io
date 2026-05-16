@@ -17,9 +17,33 @@ trap '{ rm -rf -- "$TMPPATH"; }' EXIT
 
 TMPFILE="$TMPPATH/convert"
 
-# Add dvisvgm backend metadata for modern LaTeX (l3backend)
-echo "\DocumentMetadata{backend=dvisvgm}" > "${TMPFILE}.tex"
-cat "$INFILE" >> "${TMPFILE}.tex"
+# Build the temporary tex file with dvisvgm driver fixes prepended.
+#
+# Problem: When lualatex runs in DVI mode (--output-format=dvi), the modern
+# LaTeX l3backend defaults to dvips, loading l3backend-dvips.def. This emits
+# dvips-style color specials that dvisvgm cannot parse, causing
+# "error in special: unknown color statement" and a non-zero exit code.
+#
+# Fix: We prepend two things before the original file content:
+#   1. Clear the l3backend cached backend string so it doesn't lock in dvips.
+#   2. \PassOptionsToPackage{dvisvgm}{xcolor} — ensures xcolor (and by
+#      extension l3backend) uses the dvisvgm driver instead of dvips.
+{
+  # Clear the l3backend cached backend string. In DVI mode, lualatex
+  # pre-sets this to "dvips" before \documentclass is even processed.
+  # Clearing it allows the dvisvgm option (passed via packages) to take effect.
+  printf '%s\n' '\ExplSyntaxOn'
+  printf '%s\n' '\str_clear:N \c_sys_backend_str'
+  printf '%s\n' '\ExplSyntaxOff'
+
+  # Force xcolor to use dvisvgm driver (skip if source already does this)
+  if ! grep -q 'PassOptionsToPackage{dvisvgm}{xcolor}\|PassOptionsToPackage{xcolor}{dvisvgm}' "$INFILE" 2>/dev/null; then
+    printf '%s\n' '\PassOptionsToPackage{dvisvgm}{xcolor}'
+  fi
+
+  # Append the original file
+  cat "$INFILE"
+} > "${TMPFILE}.tex"
 
 # tex -> dvi
 lualatex --output-format=dvi --halt-on-error --file-line-error --interaction nonstopmode --output-directory "$TMPPATH" "${TMPFILE}.tex"
