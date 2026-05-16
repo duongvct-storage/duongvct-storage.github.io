@@ -16,6 +16,8 @@ TMPPATH="$(mktemp --directory --tmpdir tex2svg.XXXXXXXXXX)"
 trap '{ rm -rf -- "$TMPPATH"; }' EXIT
 
 TMPFILE="$TMPPATH/convert"
+INFILE_STABLE="$TMPPATH/input.tex"
+cat "$INFILE" > "$INFILE_STABLE"
 
 # Build the temporary tex file with dvisvgm driver fixes prepended.
 #
@@ -37,12 +39,12 @@ TMPFILE="$TMPPATH/convert"
   printf '%s\n' '\ExplSyntaxOff'
 
   # Force xcolor to use dvisvgm driver (skip if source already does this)
-  if ! grep -q 'PassOptionsToPackage{dvisvgm}{xcolor}\|PassOptionsToPackage{xcolor}{dvisvgm}' "$INFILE" 2>/dev/null; then
+  if ! grep -q 'PassOptionsToPackage{dvisvgm}{xcolor}\|PassOptionsToPackage{xcolor}{dvisvgm}' "$INFILE_STABLE" 2>/dev/null; then
     printf '%s\n' '\PassOptionsToPackage{dvisvgm}{xcolor}'
   fi
 
   # Append the original file
-  cat "$INFILE"
+  cat "$INFILE_STABLE"
 } > "${TMPFILE}.tex"
 
 # tex -> dvi
