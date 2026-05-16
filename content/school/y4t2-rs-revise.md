@@ -1548,74 +1548,216 @@ $$ \text{pred}(A, s3) = 3.5 + \frac{1.0 \times (-0.5) + (-1.0) \times (-1.5)}{|1
 | 5 | Sữa, Tạp chí, Bơ |
 | 6 | Bánh mì, Sữa, Tạp chí, Trứng |
 
-Giả sử ngưỡng độ hỗ trợ tối thiểu $\text{minsup} = 0.5$.
+Giả sử ngưỡng độ hỗ trợ tối thiểu $\text{minsup} = 0.5$ (tức support count $\geq 3$ với N=6 giao dịch).
+
+---
 
 **1. Liệt kê các tập mục thường xuyên mức 1 (1-itemsets).**
 
-Đếm support count cho mỗi item:
+**Bước 1: Đếm support count cho mỗi item.**
 
-| Item | Count | Support | Frequent? |
-|------|-------|---------|-----------|
-| Bánh mì | 4 | 4/6 = 0.667 | ✓ |
-| Sữa | 5 | 5/6 = 0.833 | ✓ |
-| Trứng | 2 | 2/6 = 0.333 | ✗ |
-| Tạp chí | 4 | 4/6 = 0.667 | ✓ |
-| Bơ | 3 | 3/6 = 0.500 | ✓ |
+Đếm số giao dịch chứa mỗi item:
 
-Với minsup = 0.5 (support count ≥ 3):
+| Item | Xuất hiện trong TID | Count |
+|------|-------------------|-------|
+| **Bánh mì** | TID 1, 2, 3, 4, 6 | **5** |
+| **Sữa** | TID 1, 2, 3, 5, 6 | **5** |
+| **Trứng** | TID 1, 6 | **2** |
+| **Tạp chí** | TID 2, 4, 5, 6 | **4** |
+| **Bơ** | TID 3, 4, 5 | **3** |
 
-**Frequent 1-itemsets:** {Bánh mì}, {Sữa}, {Tạp chí}, {Bơ}
+Kiểm tra chi tiết từng TID:
+- TID 1: Bánh mì ✓, Sữa ✓, Trứng ✓ → không có Tạp chí, không có Bơ
+- TID 2: Sữa ✓, Tạp chí ✓, Bánh mì ✓ → không có Trứng, không có Bơ
+- TID 3: Bánh mì ✓, Sữa ✓, Bơ ✓ → không có Tạp chí, không có Trứng
+- TID 4: Bánh mì ✓, Tạp chí ✓, Bơ ✓ → không có Sữa, không có Trứng
+- TID 5: Sữa ✓, Tạp chí ✓, Bơ ✓ → không có Bánh mì, không có Trứng
+- TID 6: Bánh mì ✓, Sữa ✓, Tạp chí ✓, Trứng ✓ → không có Bơ
+
+**Bước 2: Tính support và kiểm tra minsup = 0.5 (count ≥ 3).**
+
+| Item | Count | Support = Count/6 | Frequent? |
+|------|-------|-------------------|-----------|
+| Bánh mì | 5 | 5/6 = 0.833 | ✓ (5 ≥ 3) |
+| Sữa | 5 | 5/6 = 0.833 | ✓ (5 ≥ 3) |
+| Trứng | 2 | 2/6 = 0.333 | ✗ (2 < 3) |
+| Tạp chí | 4 | 4/6 = 0.667 | ✓ (4 ≥ 3) |
+| Bơ | 3 | 3/6 = 0.500 | ✓ (3 ≥ 3) |
+
+**Kết quả Frequent 1-itemsets:** {Bánh mì}, {Sữa}, {Tạp chí}, {Bơ}
+
+---
 
 **2. Dựa trên nguyên tắc cắt tỉa của Apriori, itemset nào bị loại bỏ và không cần xét ở bước tiếp theo? Tại sao?**
 
-Itemset {Trứng} bị loại vì support = 2/6 = 0.333 < minsup = 0.5.
+Itemset **{Trứng}** bị loại vì:
+- Count(Trứng) = 2 < minsup_count = 3
+- Support = 2/6 = 0.333 < 0.5
 
-Theo nguyên tắc Apriori (anti-monotone): Nếu một itemset không thường xuyên thì tất cả supersets của nó đều không thường xuyên. Vì vậy, không cần xét bất kỳ itemset nào chứa Trứng ở các mức tiếp theo.
+**Nguyên tắc Apriori (Anti-monotone):** Nếu một itemset không thường xuyên thì **tất cả supersets của nó đều không thường xuyên**.
+
+$$ \forall X, Y: (X \subseteq Y) \Rightarrow s(X) \geq s(Y) $$
+
+Vì vậy, **không cần xét bất kỳ itemset nào chứa Trứng** ở các mức tiếp theo (2-itemsets, 3-itemsets...), vì chúng sẽ có support ≤ support(Trứng) = 0.333 < minsup.
+
+---
 
 **3. Tìm các tập mục thường xuyên mức 2 (2-itemsets).**
 
-Sinh các 2-itemsets từ 4 items thường xuyên: C(4,2) = 6 itemsets.
+**Bước 1: Sinh tất cả 2-itemsets từ 4 frequent 1-itemsets.**
 
-| Itemset | Count | Support | Frequent? |
-|---------|-------|---------|-----------|
+Frequent 1-itemsets: {Bánh mì}, {Sữa}, {Tạp chí}, {Bơ}
+Số lượng: C(4,2) = 6 itemsets:
+1. {Bánh mì, Sữa}
+2. {Bánh mì, Tạp chí}
+3. {Bánh mì, Bơ}
+4. {Sữa, Tạp chí}
+5. {Sữa, Bơ}
+6. {Tạp chí, Bơ}
+
+**Bước 2: Đếm support count cho từng 2-itemset.**
+
+Kiểm tra từng cặp:
+
+**{Bánh mì, Sữa}:**
+- TID 1: Bánh mì ✓, Sữa ✓ → ✓
+- TID 2: Bánh mì ✓, Sữa ✓ → ✓
+- TID 3: Bánh mì ✓, Sữa ✓ → ✓
+- TID 4: Bánh mì ✓, Sữa ✗ → ✗
+- TID 5: Bánh mì ✗, Sữa ✓ → ✗
+- TID 6: Bánh mì ✓, Sữa ✓ → ✓
+- **Count = 4** (TID 1, 2, 3, 6)
+
+**{Bánh mì, Tạp chí}:**
+- TID 1: Bánh mì ✓, Tạp chí ✗ → ✗
+- TID 2: Bánh mì ✓, Tạp chí ✓ → ✓
+- TID 3: Bánh mì ✓, Tạp chí ✗ → ✗
+- TID 4: Bánh mì ✓, Tạp chí ✓ → ✓
+- TID 5: Bánh mì ✗, Tạp chí ✓ → ✗
+- TID 6: Bánh mì ✓, Tạp chí ✓ → ✓
+- **Count = 3** (TID 2, 4, 6)
+
+**{Bánh mì, Bơ}:**
+- TID 1: Bánh mì ✓, Bơ ✗ → ✗
+- TID 2: Bánh mì ✓, Bơ ✗ → ✗
+- TID 3: Bánh mì ✓, Bơ ✓ → ✓
+- TID 4: Bánh mì ✓, Bơ ✓ → ✓
+- TID 5: Bánh mì ✗, Bơ ✓ → ✗
+- TID 6: Bánh mì ✓, Bơ ✗ → ✗
+- **Count = 2** (TID 3, 4)
+
+**{Sữa, Tạp chí}:**
+- TID 1: Sữa ✓, Tạp chí ✗ → ✗
+- TID 2: Sữa ✓, Tạp chí ✓ → ✓
+- TID 3: Sữa ✓, Tạp chí ✗ → ✗
+- TID 4: Sữa ✗, Tạp chí ✓ → ✗
+- TID 5: Sữa ✓, Tạp chí ✓ → ✓
+- TID 6: Sữa ✓, Tạp chí ✓ → ✓
+- **Count = 3** (TID 2, 5, 6)
+
+**{Sữa, Bơ}:**
+- TID 1: Sữa ✓, Bơ ✗ → ✗
+- TID 2: Sữa ✓, Bơ ✗ → ✗
+- TID 3: Sữa ✓, Bơ ✓ → ✓
+- TID 4: Sữa ✗, Bơ ✓ → ✗
+- TID 5: Sữa ✓, Bơ ✓ → ✓
+- TID 6: Sữa ✓, Bơ ✗ → ✗
+- **Count = 2** (TID 3, 5)
+
+**{Tạp chí, Bơ}:**
+- TID 1: Tạp chí ✗, Bơ ✗ → ✗
+- TID 2: Tạp chí ✓, Bơ ✗ → ✗
+- TID 3: Tạp chí ✗, Bơ ✓ → ✗
+- TID 4: Tạp chí ✓, Bơ ✓ → ✓
+- TID 5: Tạp chí ✓, Bơ ✓ → ✓
+- TID 6: Tạp chí ✓, Bơ ✗ → ✗
+- **Count = 2** (TID 4, 5)
+
+**Bước 3: Lập bảng tổng hợp.**
+
+| Itemset | Count | Support = Count/6 | Frequent? (≥ 3) |
+|---------|-------|-------------------|------------------|
 | {Bánh mì, Sữa} | 4 | 4/6 = 0.667 | ✓ |
 | {Bánh mì, Tạp chí} | 3 | 3/6 = 0.500 | ✓ |
-| {Bánh mì, Bơ} | 3 | 3/6 = 0.500 | ✓ |
+| {Bánh mì, Bơ} | 2 | 2/6 = 0.333 | ✗ |
 | {Sữa, Tạp chí} | 3 | 3/6 = 0.500 | ✓ |
-| {Sữa, Bơ} | 3 | 3/6 = 0.500 | ✓ |
+| {Sữa, Bơ} | 2 | 2/6 = 0.333 | ✗ |
 | {Tạp chí, Bơ} | 2 | 2/6 = 0.333 | ✗ |
 
-**Frequent 2-itemsets:** {Bánh mì, Sữa}, {Bánh mì, Tạp chí}, {Bánh mì, Bơ}, {Sữa, Tạp chí}, {Sữa, Bơ}
+**Kết quả Frequent 2-itemsets:** {Bánh mì, Sữa}, {Bánh mì, Tạp chí}, {Sữa, Tạp chí}
+
+---
 
 **4. Xét luật kết hợp: {Sữa, Tạp chí} → {Bánh mì}. Tính độ tin cậy. Nếu minconf = 0.7, luật có được chấp nhận không?**
 
-$$ c(\{Sữa, Tạp chí\} \rightarrow \{Bánh mì\}) = \frac{\sigma(\{Sữa, Tạp chí, Bánh mì\})}{\sigma(\{Sữa, Tạp chí\})} $$
+**Công thức độ tin cậy (Confidence):**
+$$ c(X \rightarrow Y) = \frac{\sigma(X \cup Y)}{\sigma(X)} $$
 
-Đếm số giao dịch chứa cả Sữa, Tạp chí, và Bánh mì:
-- TID 2: Sữa, Tạp chí, Bánh mì ✓
-- TID 6: Sữa, Tạp chí, Bánh mì ✓
-- $\sigma(\{Sữa, Tạp chí, Bánh mì\}) = 2$
+**Bước 1: Tính $\sigma(\{Sữa, Tạp chí\})$ — số giao dịch chứa {Sữa, Tạp chí}.**
 
-$\sigma(\{Sữa, Tạp chí\}) = 3$ (TID 2, 5, 6)
+{Sữa, Tạp chí} xuất hiện trong: TID 2, TID 5, TID 6
+→ $\sigma(\{Sữa, Tạp chí\}) = 3$
 
-$$ c = \frac{2}{3} \approx 0.667 $$
+**Bước 2: Tính $\sigma(\{Sữa, Tạp chí, Bánh mì\})$ — số giao dịch chứa cả 3 items.**
 
-Vì $c = 0.667 < \text{minconf} = 0.7$ → **Luật KHÔNG được chấp nhận.**
+Kiểm tra từng TID có {Sữa, Tạp chí}:
+- TID 2: {Sữa, Tạp chí, Bánh mì} → có Bánh mì ✓
+- TID 5: {Sữa, Tạp chí, Bơ} → không có Bánh mì ✗
+- TID 6: {Sữa, Tạp chí, Bánh mì, Trứng} → có Bánh mì ✓
 
-**Bài tập mở rộng:** Từ 3-itemset {Bánh mì, Sữa, Tạp chí}, sinh tất cả các luật kết hợp và tính độ tin cậy.
+→ $\sigma(\{Sữa, Tạp chí, Bánh mì\}) = 2$ (TID 2 và TID 6)
 
-σ({Bánh mì, Sữa, Tạp chí}) = 2
+**Bước 3: Tính confidence.**
+$$ c(\{Sữa, Tạp chí\} \rightarrow \{Bánh mì\}) = \frac{2}{3} \approx 0.667 $$
+
+**Bước 4: So sánh với minconf = 0.7.**
+
+$$ 0.667 < 0.7 $$
+
+→ **Luật KHÔNG được chấp nhận** với minconf = 0.7.
+
+---
+
+**Bài tập mở rộng: Sinh tất cả luật kết hợp từ các frequent itemsets.**
+
+**Lưu ý quan trọng:** Để sinh luật, cần frequent itemsets. Tuy nhiên, không có 3-itemset nào thỏa mãn minsup = 0.5 (vì mỗi 3-itemset tiềm năng chỉ xuất hiện 1-2 lần). Vì vậy, các luật chỉ có thể sinh từ 2-itemsets, và mỗi 2-itemset sinh ra 2 luật (A→B và B→A).
+
+**Các frequent 2-itemsets và luật của chúng:**
+
+| Frequent 2-itemset | Count | Support |
+|-------------------|-------|---------|
+| {Bánh mì, Sữa} | 4 | 4/6 = 0.667 |
+| {Bánh mì, Tạp chí} | 3 | 3/6 = 0.500 |
+| {Sữa, Tạp chí} | 3 | 3/6 = 0.500 |
+
+**Luật từ {Bánh mì, Sữa}:**
+- {Bánh mì} → {Sữa}: c = σ({Bánh mì, Sữa}) / σ({Bánh mì}) = 4/5 = 0.800
+- {Sữa} → {Bánh mì}: c = σ({Bánh mì, Sữa}) / σ({Sữa}) = 4/5 = 0.800
+
+**Luật từ {Bánh mì, Tạp chí}:**
+- {Bánh mì} → {Tạp chí}: c = σ({Bánh mì, Tạp chí}) / σ({Bánh mì}) = 3/5 = 0.600
+- {Tạp chí} → {Bánh mì}: c = σ({Bánh mì, Tạp chí}) / σ({Tạp chí}) = 3/4 = 0.750
+
+**Luật từ {Sữa, Tạp chí}:**
+- {Sữa} → {Tạp chí}: c = σ({Sữa, Tạp chí}) / σ({Sữa}) = 3/5 = 0.600
+- {Tạp chí} → {Sữa}: c = σ({Sữa, Tạp chí}) / σ({Tạp chí}) = 3/4 = 0.750
+
+**Tổng hợp với minconf = 0.7:**
 
 | Luật | Confidence | Chấp nhận? |
 |------|------------|------------|
-| {Bánh mì, Sữa} → {Tạp chí} | 2/4 = 0.5 | ✗ |
-| {Bánh mì, Tạp chí} → {Sữa} | 2/3 = 0.667 | ✗ |
-| {Sữa, Tạp chí} → {Bánh mì} | 2/3 = 0.667 | ✗ |
-| {Bánh mì} → {Sữa, Tạp chí} | 2/4 = 0.5 | ✗ |
-| {Sữa} → {Bánh mì, Tạp chí} | 2/5 = 0.4 | ✗ |
-| {Tạp chí} → {Bánh mì, Sữa} | 2/4 = 0.5 | ✗ |
+| {Bánh mì} → {Sữa} | 4/5 = 0.800 | ✓ |
+| {Sữa} → {Bánh mì} | 4/5 = 0.800 | ✓ |
+| {Bánh mì} → {Tạp chí} | 3/5 = 0.600 | ✗ |
+| {Tạp chí} → {Bánh mì} | 3/4 = 0.750 | ✓ |
+| {Sữa} → {Tạp chí} | 3/5 = 0.600 | ✗ |
+| {Tạp chí} → {Sữa} | 3/4 = 0.750 | ✓ |
 
-Không có luật nào được chấp nhận với minconf = 0.7.
+**Luật được chấp nhận (confidence ≥ 0.7):**
+1. {Bánh mì} → {Sữa} (0.800)
+2. {Sữa} → {Bánh mì} (0.800)
+3. {Tạp chí} → {Bánh mì} (0.750)
+4. {Tạp chí} → {Sữa} (0.750)
 
 ### Bài tập 3: Content-based Recommendation - Camera similarity
 
