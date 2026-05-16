@@ -36,15 +36,6 @@ local function file_exists(fname)
   end
 end
 
-local image_ext = {
-  [".jpg"] = true, [".jpeg"] = true, [".png"] = true,
-  [".gif"] = true, [".webp"] = true, [".bmp"] = true,
-}
-
-local function escape_html(s)
-  return s:gsub("&", "&amp;"):gsub("<", "&lt;"):gsub(">", "&gt;"):gsub('"', "&quot;")
-end
-
 -- Copy contents from a file to another, creating any directory needed in the process.
 local function copy(source, target)
   mkparent(target)
@@ -94,12 +85,11 @@ illustrators.graphviz = {
 -------------------------
 
 local template_tikz = [[
-\PassOptionsToPackage{dvisvgm}{graphicx}
-\documentclass[dvisvgm]{standalone}
+\documentclass{standalone}
 
 \def\pgfsysdriver{pgfsys-dvisvgm.def}
 
-\usepackage{lmodern,amsfonts,tikz}
+\usepackage{xcolor,lmodern,amsfonts,tikz}
 
 %% Additional packages: usepackage
 \usepackage{%s}
@@ -223,6 +213,7 @@ return {
     end,
 
     Block = function(block)
+      -- Turn blocks containing only a svg into a figure with a raw <object> tag
       if block.content and #block.content == 1 and block.content[1].tag == "Image" then
         local img = block.content[1]
         local _, ext = path.split_extension(img.src)
@@ -239,21 +230,6 @@ return {
             , img.attr
             )
         end
-
-        if image_ext[ext] then
-          local alt = escape_html(pandoc.utils.stringify(img.content))
-          local src = escape_html(img.src)
-          local attr_str = ""
-          local w = img.attributes["width"]
-          if w and w ~= "" then
-            attr_str = attr_str .. fmt(' width="%s"', escape_html(w))
-          end
-          if img.title and img.title ~= "" then
-            attr_str = attr_str .. fmt(' title="%s"', escape_html(img.title))
-          end
-          local tag = fmt('<img src="%s" alt="%s" loading="lazy"%s>', src, alt, attr_str)
-          return pandoc.RawBlock("html", tag)
-        end
       end
     end,
 
@@ -264,14 +240,6 @@ return {
           local text = illustrator.format(block)
           return make_figure(illustrator, block, text)
         end
-      end
-    end,
-
-    Image = function(img)
-      local _, ext = path.split_extension(img.src)
-      if image_ext[ext] or ext == ".svg" then
-        img.attributes.loading = "lazy"
-        return img
       end
     end,
 
