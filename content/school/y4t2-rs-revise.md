@@ -320,7 +320,307 @@ Memory cell $C_t$ là vật chứa thông tin nội bộ, tích lũy qua các ti
 
 ---
 
-## Phần 2: Bài tập
+## Phần 2: Nội dung chi tiết bài giảng
+
+### L0: Giới thiệu môn học
+
+**Thông tin môn học:**
+- Giảng viên: TS. Đào Thị Thúy Quỳnh, Bộ môn KHMT, Khoa CNTT1
+- Email: quynhdtt@ptit.edu.vn
+
+**Tài liệu tham khảo:**
+1. Dietmar Jannach et al. (2010). Recommender Systems: An Introduction. Cambridge University Press.
+2. Francesco Ricci et al. (2015). Recommender Systems Handbook (2nd edition). Springer.
+3. Charu C. Aggarwal (2016). Recommender Systems: The Textbook. Springer
+
+**Đánh giá:**
+- Chuyên cần: 10%
+- Bài tập: 10%
+- Kiểm tra giữa kỳ: 10%
+- Thi cuối kỳ: 70%
+
+**Lưu ý:** Thiếu điểm thành phần hoặc nghỉ quá 20% số buổi sẽ không được thi hết môn.
+
+---
+
+### L1: Giới thiệu về hệ thống gợi ý
+
+**Định nghĩa:** Hệ gợi ý là phần mềm agents khai thác sở thích và ưu tiên của từng người tiêu dùng cá nhân và đưa ra các gợi ý tương ứng.
+
+**3 tiêu chí thành công:**
+1. **Dự đoán (Prediction):** Dự đoán chính xác mức độ user thích sản phẩm
+2. **Tương tác (Interaction):** Tạo "good feeling" cho user, định hướng/giáo dục, thuyết phục
+3. **Chuyển đổi (Conversion):** Tăng hit, clickthrough, lookers to bookers
+
+**Mô hình cơ bản:** RS có thể xem như một hàm f(user model, items) → relevance score cho ranking.
+
+**Giải thích "Long Tail":** 20% items tích lũy 74% tất cả positive ratings → gợi ý từ long tail mang lại giá trị cao.
+
+---
+
+### L2: Gợi ý dựa trên lọc cộng tác cơ bản
+
+**2 cách tiếp cận chính:**
+
+**1. Memory-based (dựa trên bộ nhớ):**
+- Ma trận ratings được sử dụng **trực tiếp** để tìm láng giềng
+- User-user CF: Tìm users tương tự → gợi ý từ items mà các users tương tự đã thích
+- Item-item CF: Tìm items tương tự → dùng ratings của user cho items tương tự để dự đoán
+- Ưu: Dễ hiểu, không cần huấn luyện
+- Nhược: Khó làm việc với dữ liệu lớn
+
+**2. Model-based (dựa trên mô hình):**
+- Phải xây dựng và huấn luyện mô hình trước
+- Dùng mô hình đã huấn luyện để dự đoán
+- VD: Matrix Factorization, Naïve Bayes, Decision Tree, Neural Networks
+
+**Độ đo tương đồng:**
+
+*Pearson correlation:*
+$$ \text{sim}(a,b) = \frac{\sum (r_{a,p}-\bar{r}_a)(r_{b,p}-\bar{r}_b)}{\sqrt{\sum(r_{a,p}-\bar{r}_a)^2}\sqrt{\sum(r_{b,p}-\bar{r}_b)^2}} $$
+
+*Cosine similarity:*
+$$ \cos(\mathbf{x},\mathbf{y}) = \frac{\mathbf{x}\cdot\mathbf{y}}{\|\mathbf{x}\|\|\mathbf{y}\|} $$
+
+**Hàm dự đoán (User-based CF):**
+$$ \text{pred}(a,p) = \bar{r}_a + \frac{\sum_{b\in N}\text{sim}(a,b)(r_{b,p}-\bar{r}_b)}{\sum|\text{sim}(a,b)|} $$
+
+**Cải thiện hàm dự đoán:**
+1. **Variance weighting:** Đặt trọng số cao hơn cho items có variance cao (nhiều ý kiến trái chiều)
+2. **Significance weighting:** Giảm trọng số khi 2 users có ít items tương tác chung
+3. **Neighbor weighting:** Đặt trọng số gần 1 khi users rất tương đồng
+4. **Neighbor selection:** Dùng ngưỡng hoặc số cố định láng giềng (20-50)
+
+**Vấn đề của CF:**
+- **Cold-start:** User/item mới không có rating → không tính tương đồng. Giải: ép user đánh giá, dùng content-based ban đầu, gán default values.
+- **Sparsity:** Ma trận thưa → ít common items → tương đồng kém. Giải: spreading activation, default voting.
+- **Scalability:** O(N²) cho tính tương đồng. Giải: pre-compute similarity.
+
+**Matrix Factorization:**
+- User $u$: vector $p_u \in \mathbb{R}^k$
+- Item $i$: vector $q_i \in \mathbb{R}^k$
+- Rating dự đoán: $\hat{r}_{ui} = p_u^T q_i$
+
+**Hàm mục tiêu:**
+$$ \min\sum(r_{ui}-p_u^Tq_i)^2 + \lambda(\|p_u\|^2+\|q_i\|^2) $$
+
+**SGD update:**
+$$ p_u \leftarrow p_u + \alpha(e_{ui}q_i - \lambda p_u) $$
+$$ q_i \leftarrow q_i + \alpha(e_{ui}p_u - \lambda q_i) $$
+
+---
+
+### L3.1: Gợi ý dựa trên lọc cộng tác nâng cao (P1)
+
+**Học máy cho CF:**
+- Xem user như data instance, features là items
+- Xây dựng bộ phân loại cho mỗi item (bằng số lượng items)
+- VD: Naïve Bayes, Decision Tree, Neural Networks
+
+**Học biểu diễn ẩn bằng học sâu:**
+
+*GMF (Generalized Matrix Factorization):*
+- Đầu vào: one-hot user và item
+- Element-wise product của embeddings
+- Đầu ra: $\hat{y}_{ui} = a_{out}(h^T(p_u \odot q_i))$
+
+*MLP (Multi-layer Perceptron):*
+- User và item embeddings riêng
+- Nối vào các tầng fully-connected với ReLU
+- Đầu ra: $\hat{y}_{ui} = a_{out}(W_L^T a_{L-1}(...))$
+
+*NeuMF (Neural Matrix Factorization):*
+- Kết hợp GMF (tuyến tính) và MLP (phi tuyến)
+- 2 nhánh embedding riêng cho mỗi mô hình
+- Nối ở tầng cuối: $\hat{y}_{ui} = \sigma(h^T[\phi^{GMF};\phi^{MLP}])$
+
+---
+
+### L3.2: Gợi ý dựa trên lọc cộng tác nâng cao (P2)
+
+**Deep Matrix Factorization (DMF):** Dùng nhiều tầng autoencoder để học biểu diễn.
+
+**LightGCN:** Graph Convolutional Network cho CF. Không có transformation và activation, chỉ propagate qua graph.
+
+**Implicit vs Explicit Feedback:**
+- **Explicit:** Rating 1-5, like/dislike → mô hình hồi quy
+- **Implicit:** Click, view, purchase → mô hình xếp hạng (ranking)
+
+**BPR (Bayesian Personalized Ranking):**
+$$ \text{loss} = -\sum_{(u,i,j)} \log\sigma(\hat{r}_{ui} - \hat{r}_{uj}) + \lambda\|p_u\|^2 + \lambda\|q_i\|^2 + \lambda\|q_j\|^2 $$
+Với $i$ là positive item, $j$ là negative item.
+
+**Implicit-to-Explicit:** Chuyển đổi implicit feedback thành explicit ratings để dùng trong MF.
+
+---
+
+### L4: Gợi ý dựa trên nội dung
+
+**Ý tưởng:** Gợi ý items có nội dung tương tự items user đã thích.
+
+**Biểu diễn item:**
+- **Có cấu trúc:** Title, Genre, Author, Type, Price, Keywords (bảng có cùng tập attributes)
+- **Phi cấu trúc:** Free-text, mô tả tự do, review → dùng NLP (TF-IDF, embedding)
+
+**TF-IDF:**
+$$ \text{TF-IDF}(t,d) = \frac{\text{count}(t,d)}{\text{tổng từ trong d}} \times \log\frac{N}{\text{df}(t)} $$
+
+**Cải thiện không gian vector:**
+1. Loại stop words ("a", "the", "on")
+2. Stemming (went → go, stemming → stem)
+3. Giảm chiều: chỉ dùng top N từ tiêu biểu
+4. Phát hiện cụm từ (VD: "United Nations")
+5. Dùng kiến thức từ vựng để xóa từ không thuộc lĩnh vực
+
+**Độ tương đồng Cosine:**
+$$ \cos(\mathbf{x},\mathbf{y}) = \frac{\mathbf{x}\cdot\mathbf{y}}{\|\mathbf{x}\|\|\mathbf{y}\|} $$
+
+**Phương pháp Rocchio:** Cập nhật user profile dựa trên phản hồi:
+$$ Q_{i+1} = \alpha Q_i + \beta\frac{1}{|D^+|}\sum_{d\in D^+}d - \gamma\frac{1}{|D^-|}\sum_{d\in D^-}d $$
+
+**Hạn chế:**
+- **Overspecialization:** Gợi ý items quá giống nhau
+- **Chỉ dùng từ khóa:** Không đánh giá được chất lượng, tính thẩm mỹ
+- **Cold-start vẫn tồn tại:** Cần một lượng dữ liệu huấn luyện
+- **Nội dung ngắn/đa phương tiện:** Khó trích xuất từ ảnh, video
+
+---
+
+### L5: Gợi ý dựa trên tri thức
+
+**Khi nào dùng:**
+1. Items có ít ratings (cold-start item)
+2. Rating cũ không còn giá trị (thời gian quan trọng)
+3. User muốn định nghĩa rõ nhu cầu
+
+**Constraint-based:**
+
+*Cơ sở tri thức:*
+- Biến: đặc trưng user model (yêu cầu) và đặc trưng items
+- Tập ràng buộc: IF...THEN..., ràng buộc chặt/lỏng, ràng buộc ưu tiên
+
+*CSP cho gợi ý:*
+$$ \text{Csp}(X_i \cup X_u, d, SRS \cup KB \cup I) $$
+- $X_i$: biến cho sản phẩm
+- $X_u$: biến cho user
+- $KB$: cơ sở tri thức (ràng buộc domain)
+- $SRS$: yêu cầu cụ thể của user
+- $I$: danh mục sản phẩm
+
+*Xử lý yêu cầu không hợp lệ:*
+1. Tính diagnosis: tập xung đột
+2. Tính repair: các cách nới lỏng ràng buộc
+3. Đề xuất cho user
+
+**Case-based:**
+
+*Độ đo tương đồng cục bộ:*
+$$ \text{sim}(p, r) = 1 - \frac{|p - r|}{\text{range}} $$
+
+*Độ đo tương đồng tổng quát:*
+$$ \text{similarity}(p, REQ) = \frac{\sum w_r \times \text{sim}(p, r)}{\sum w_r} $$
+
+*Critiquing:* User thay đổi yêu cầu dựa trên item được đề xuất.
+
+**Utility-based ranking:**
+$$ \text{utility}(c, p) = \sum_i w_i \times \text{value}_i(p) $$
+
+---
+
+### L6.1: Gợi ý dựa trên phiên (P1)
+
+**Khi nào:**
+- Khó định danh user (anonymous browsing)
+- Chỉ có tương tác trong một phiên
+- Ưu tiên sở thích ngắn hạn
+
+**Item-to-item similarity:**
+1. Tính top-K items tương đồng cho mỗi item đã tương tác
+2. Hợp các tập con, loại trùng lặp
+3. Xếp hạng theo tổng độ tương đồng
+
+**Độ đo:**
+- Cosine similarity
+- Xác suất có điều kiện: $P(u|v) = \frac{\text{freq}(uv)}{\text{freq}(v)}$
+- Điều chỉnh: $\text{Sim}(u,v) = \frac{\text{freq}(uv)}{\text{freq}(u)^\alpha \cdot \text{freq}(v)}$
+
+**Association Rule Mining:**
+
+*Định nghĩa:*
+- **Itemset:** Tập hợp các mục
+- **Support count:** Số giao dịch chứa itemset $\sigma(X)$
+- **Support:** $s(X) = \sigma(X)/N$
+- **Luật kết hợp:** $X \rightarrow Y$
+- **Confidence:** $c(X \rightarrow Y) = \sigma(X \cup Y)/\sigma(X)$
+
+**Apriori Algorithm:**
+
+*Nguyên tắc anti-monotone:* Nếu X không thường xuyên thì mọi supersets của X đều không thường xuyên.
+$$ \forall X, Y: (X \subseteq Y) \Rightarrow s(X) \geq s(Y) $$
+
+*Bước 1:* Sinh frequent itemsets (support ≥ minsup)
+*Bước 2:* Sinh rules từ frequent itemsets (confidence ≥ minconf)
+
+---
+
+### L6.2: Gợi ý dựa trên phiên (P2)
+
+**RNN cho session-based:**
+
+RNN mô hình hóa quan hệ thứ tự giữa các items trong chuỗi.
+
+$$ h_t = F(W h_{t-1} + U x_t) $$
+$$ o_t = G(V h_t) $$
+
+Vấn đề: vanishing/exploding gradient với chuỗi dài → dùng LSTM.
+
+**LSTM (Long Short-Term Memory):**
+
+3 cổng:
+1. **Forget gate:** Quyết định quên bao nhiêu từ $C_{t-1}$
+   $$ f_t = \sigma(W_f \cdot [h_{t-1}, x_t] + b_f) $$
+2. **Input gate:** Quyết định lưu bao nhiêu từ $\tilde{C}_t$
+   $$ i_t = \sigma(W_i \cdot [h_{t-1}, x_t] + b_i) $$
+3. **Output gate:** Quyết định trích xuất bao nhiêu cho $h_t$
+   $$ o_t = \sigma(W_o \cdot [h_{t-1}, x_t] + b_o) $$
+
+Memory cell $C_t$ tích lũy thông tin qua timesteps.
+
+**Các mở rộng:**
+- **SASRec:** Self-Attentive Sequential Recommendation — dùng self-attention thay RNN
+- **BERT4Rec:** BERT-style bidirectional training cho sequential recommendation
+
+---
+
+### L7: Kết hợp các kỹ thuật gợi ý (Hybrid)
+
+**Tại sao lai ghép:**
+- Mỗi kỹ thuật có hạn chế (VD: CF có cold-start)
+- Kết hợp để tận dụng ưu điểm từng phương pháp
+
+**Các thiết kế hybrid:**
+
+**1. Feature Augmentation (Làm giàu đặc trưng):**
+- Dùng output của hệ này làm đặc trưng cho hệ khác
+- VD: CF tăng cường nội dung — dùng content features tạo ratings bổ sung, giảm sparsity
+
+**2. Parallel (Song song):**
+- **Weighted:** Tổng có trọng số $\text{rec}_{\text{weighted}}(u,i) = \sum_k \beta_k \text{rec}_k(u,i)$
+- **Switching:** Chuyển đổi giữa các hệ dựa trên tiêu chí (VD: nếu ít ratings thì dùng KB)
+- **Mixed:** Kết quả từ nhiều hệ được trình bày cùng nhau
+
+*Tối ưu trọng số bằng MAE:*
+$$ \text{MAE} = \frac{1}{|T|}\sum|\text{rec}_{\text{weighted}} - r_{\text{actual}}| $$
+
+**3. Pipeline (Đường ống):**
+- **Cascade (Thác nước):** Lọc dần — rec1 lọc, rec2 xếp hạng
+  $$ \text{rec}_{\text{cascade}}(u,i) = \text{rec}_k(u,i) \text{ nếu } \text{rec}_{k-1}(u,i) \neq 0 $$
+- **Meta-level:** Hệ sau khai thác mô hình của hệ trước
+  $$ \text{rec}_{\text{meta}}(u,i) = \text{rec}_n(u,i, D_{\text{rec}_{n-1}}) $$
+
+---
+
+## Phần 3: Bài tập
 
 ![Bài tập 1 & 2](/img/y4t2-rs/photo_3_2026-05-16_11-49-15.jpg)
 ![Bài tập 3](/img/y4t2-rs/photo_2_2026-05-16_11-49-15.jpg)
