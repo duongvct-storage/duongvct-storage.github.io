@@ -1133,6 +1133,165 @@ P(cây 2) ∝ 0.3 × 1.0 = 0.3 × các xác suất luật còn lại
 
 
 
+**Gemini giải**
+
+Chào bạn, đây là một bài tập Phân tích Cú pháp (Syntax Parsing) và Văn phạm Phi ngữ cảnh (CFG) rất toàn diện, bao quát từ việc xây dựng cây cú pháp, chuẩn hóa văn phạm (CNF), đến thuật toán phân tích (CKY) và văn phạm xác suất (PCFG).
+
+Dưới đây là lời giải chi tiết từng phần cho bạn.
+
+---
+
+### **a) Vẽ cây cú pháp cho câu: “con mèo bắt con chuột trong bẫy”**
+
+Câu này có hiện tượng **nhập nhằng về mặt cấu trúc (structural ambiguity)** do cụm giới từ (PP) "trong bẫy". Cụ thể, "trong bẫy" có thể bổ nghĩa cho danh từ "con chuột" (con chuột đang ở trong cái bẫy) hoặc bổ nghĩa cho động từ "bắt" (hành động bắt diễn ra ở trong cái bẫy).
+
+Do đó, ta có 2 cây cú pháp (Syntax Trees) như sau:
+
+**Cây 1: PP bổ nghĩa cho NP (con chuột ở trong bẫy)**
+
+* Cách hiểu: Con mèo bắt [con chuột (đang ở) trong bẫy].
+* Cấu trúc cây:
+* **S**
+* **NP**: Det(con) N(mèo)
+* **VP**:
+* **V**: bắt
+* **NP**:
+* **NP**: Det(con) N(chuột)
+* **PP**: P(trong) **NP**(N(bẫy)) *(Lưu ý: theo quy tắc `NP -> N`, bẫy được sinh ra từ N)*
+
+
+
+
+
+
+
+
+
+**Cây 2: PP bổ nghĩa cho VP (hành động bắt diễn ra trong bẫy)**
+
+* Cách hiểu: Con mèo [bắt con chuột] (ở) trong bẫy.
+* Cấu trúc cây:
+* **S**
+* **NP**: Det(con) N(mèo)
+* **VP**:
+* **VP**:
+* **V**: bắt
+* **NP**: Det(con) N(chuột)
+
+
+* **PP**: P(trong) **NP**(N(bẫy))
+
+
+
+
+
+
+
+*(Ghi chú: Việc vẽ cây trực quan trên giấy sẽ chia nhánh theo các cấu trúc cha-con được thụt lề ở trên).*
+
+---
+
+### **b) Chuyển văn phạm con sang dạng CNF**
+
+Văn phạm dạng chuẩn Chomsky (CNF) yêu cầu mọi quy tắc phải có dạng $A \rightarrow BC$ (hai non-terminal) hoặc $A \rightarrow a$ (một terminal).
+
+**Văn phạm ban đầu:**
+
+1. $S \rightarrow VP \ | \ NP \ VP$
+2. $VP \rightarrow V \ NP \ | \ V \ NP \ PP \ | \ \varepsilon$
+3. $PP \rightarrow P \ NP$
+
+**Bước 1: Loại bỏ $\varepsilon$-productions (quy tắc rỗng)**
+
+* Ta thấy $VP \rightarrow \varepsilon$ nên $VP$ là một non-terminal có thể rỗng (nullable).
+* Thêm các quy tắc mới bằng cách xóa $VP$ ở vế phải của các quy tắc khác, sau đó bỏ $VP \rightarrow \varepsilon$.
+* Quy tắc sinh ra: $S \rightarrow NP$ (do $S \rightarrow NP \ VP$ và $VP$ rỗng). Tuy nhiên, $S \rightarrow VP$ khi $VP$ rỗng sẽ sinh ra $S \rightarrow \varepsilon$ (nếu hệ thống cho phép S rỗng thì giữ, thông thường ta tạo $S_0$ mới, nhưng ở đây ta chỉ xét văn phạm con nên lược bỏ).
+* *Văn phạm cập nhật:*
+$S \rightarrow VP \ | \ NP \ VP \ | \ NP$
+$VP \rightarrow V \ NP \ | \ V \ NP \ PP$
+$PP \rightarrow P \ NP$
+
+**Bước 2: Loại bỏ Unit productions (quy tắc đơn)**
+
+* Quy tắc đơn hiện có: $S \rightarrow VP$ và $S \rightarrow NP$.
+* Thay $S \rightarrow VP$ bằng các vế phải của $VP$.
+* *(Lưu ý: Vì đề bài chỉ cho văn phạm con, ta không có luật khai triển của $NP$. Về nguyên tắc lý thuyết, ta giữ lại $S \rightarrow NP$ như một ký hiệu thay thế tạm thời, hoặc nếu đây là bài thi, bạn nên ghi chú là "Không có luật của NP nên không thể loại bỏ hoàn toàn $S \rightarrow NP$").*
+* *Văn phạm cập nhật:*
+$S \rightarrow V \ NP \ | \ V \ NP \ PP \ | \ NP \ VP \ | \ NP$
+$VP \rightarrow V \ NP \ | \ V \ NP \ PP$
+$PP \rightarrow P \ NP$
+
+**Bước 3: Chuẩn hóa chiều dài vế phải (chỉ còn đúng 2 Non-terminals)**
+
+* Các quy tắc $V \ NP \ PP$ có độ dài 3, cần cắt ngắn. Ta đặt một non-terminal mới, ví dụ $X \rightarrow NP \ PP$.
+* *Văn phạm CNF cuối cùng:*
+$S \rightarrow V \ NP \ | \ V \ X \ | \ NP \ VP \ | \ NP$
+$VP \rightarrow V \ NP \ | \ V \ X$
+$PP \rightarrow P \ NP$
+$X \rightarrow NP \ PP$
+
+---
+
+### **c) Thuật toán CKY cho câu "mèo bắt chuột"**
+
+Với câu $w_1 = \text{mèo}, w_2 = \text{bắt}, w_3 = \text{chuột}$ và văn phạm CNF rút gọn:
+$S \rightarrow NP \ VP$, $\ NP \rightarrow N$, $\ VP \rightarrow V \ NP$
+$N \rightarrow \text{mèo} \ | \ \text{chuột}$, $\ V \rightarrow \text{bắt}$
+
+Bảng CKY $3 \times 3$ (với ô $(i, j)$ là parse tree cho dải từ vị trí $i$ đến $j$):
+
+| i \ j | 1 (mèo) | 2 (bắt) | 3 (chuột) |
+| --- | --- | --- | --- |
+| **1** | {N, NP} | $\emptyset$ | **{S}** |
+| **2** | - | {V} | {VP} |
+| **3** | - | - | {N, NP} |
+
+**Giải thích các bước điền bảng:**
+
+* **Đường chéo chính (Span = 1):**
+* (1, 1): "mèo" $\rightarrow N$, từ $N \rightarrow NP$. Điền **{N, NP}**.
+* (2, 2): "bắt" $\rightarrow V$. Điền **{V}**.
+* (3, 3): "chuột" $\rightarrow N$, từ $N \rightarrow NP$. Điền **{N, NP}**.
+
+
+* **Span = 2:**
+* (1, 2): "mèo bắt". Xét (1, 1) x (2, 2) = {N, NP} x {V}. Không có luật nào dạng $A \rightarrow N \ V$ hoặc $NP \ V$. Điền **$\emptyset$**.
+* (2, 3): "bắt chuột". Xét (2, 2) x (3, 3) = {V} x {N, NP}. Có luật $VP \rightarrow V \ NP$. Điền **{VP}**.
+
+
+* **Span = 3 (Toàn câu):**
+* (1, 3): "mèo bắt chuột". Xét (1, 1) x (2, 3) = {N, NP} x {VP}. Có luật $S \rightarrow NP \ VP$. Điền **{S}**. (Phép thử (1, 2) x (3, 3) rỗng nên bỏ qua).
+
+
+
+**Kết luận:** Ô $(1, 3)$ chứa ký hiệu bắt đầu $S$, vậy **câu này đúng ngữ pháp**.
+
+---
+
+### **d) Phân tích PCFG: Bộ phân tích ưu tiên cách hiểu nào? Tại sao?**
+
+Xác suất của một cây cú pháp trong PCFG là tích các xác suất của mọi quy tắc (rules) được sử dụng để tạo ra cây đó. Vì 2 cây cú pháp ở câu (a) có phần thân (S, NP chủ ngữ) giống hệt nhau, sự khác biệt về xác suất chỉ nằm ở **cách rẽ nhánh của cụm VP chứa PP**.
+
+Ta xét xác suất cục bộ của phần khác biệt này:
+
+**Trường hợp 1: PP gắn vào NP (Cây 1 - chuột trong bẫy)**
+Luật được sử dụng ở nhánh này:
+
+1. $VP \rightarrow V \ NP$ (Xác suất = $0.7$)
+2. $NP \rightarrow NP \ PP$ (Xác suất = $0.25$)
+$\rightarrow$ Xác suất cục bộ = $0.7 \times 0.25 = \textbf{0.175}$
+
+**Trường hợp 2: PP gắn vào VP (Cây 2 - bắt ... trong bẫy)**
+Luật được sử dụng ở nhánh này:
+
+1. $VP \rightarrow VP \ PP$ (Xác suất = $0.3$)
+2. (Nhánh VP con bên trong): $VP \rightarrow V \ NP$ (Xác suất = $0.7$)
+$\rightarrow$ Xác suất cục bộ = $0.3 \times 0.7 = \textbf{0.210}$
+
+**Kết luận:**
+Vì $0.210 > 0.175$, bộ phân tích (Parser) sẽ **ưu tiên Cây 2 (cách hiểu 2)**.
+**Tại sao?** Bởi vì theo mô hình học thống kê (đại diện qua các trọng số xác suất), hành động "bắt" đi kèm với trạng ngữ chỉ nơi chốn ("trong bẫy") xảy ra phổ biến hơn trong ngữ liệu huấn luyện so với việc cụm danh từ "con chuột" mang theo mệnh đề phụ "trong bẫy". Hiểu đơn giản, dữ liệu cho thấy "VP bổ nghĩa bằng PP" mạnh hơn "NP bổ nghĩa bằng PP" trong ngữ cảnh này.
+
 ### Bài tập 5: Cosine Similarity & Word Embeddings
 
 **Đề:** Ma trận đồng xuất hiện (cửa sổ ±2):
