@@ -220,23 +220,20 @@ P(t₁..tₙ, w₁..wₙ) = P(t₁) × ∏ P(tᵢ|tᵢ₋₁) × P(wᵢ|tᵢ)
 **Mô hình N-gram** là mô hình ngôn ngữ xác suất, tính xác suất một câu W = w₁w₂...wₙ dựa trên giả định Markov bậc N-1 (từ thứ i chỉ phụ thuộc vào N-1 từ trước nó).
 
 **Bigram (N=2):**
-```
-P(w₁w₂...wₙ) = P(w₁|<s>) × P(w₂|w₁) × P(w₃|w₂) × ... × P(wₙ|wₙ₋₁) × P(</s>|wₙ)
-```
+
+$$P(w_1 w_2 \ldots w_n) = P(w_1|\langle s\rangle) \times P(w_2|w_1) \times P(w_3|w_2) \times \ldots \times P(w_n|w_{n-1}) \times P(\langle /s\rangle|w_n)$$
+
 hay tổng quát:
-```
-P(w₁w₂...wₙ) ≈ ∏ P(wᵢ | wᵢ₋₁)
-```
+
+$$P(w_1 w_2 \ldots w_n) \approx \prod P(w_i | w_{i-1})$$
 
 **Trigram (N=3):**
-```
-P(w₁w₂...wₙ) = P(w₁|<s><s>) × P(w₂|<s>w₁) × P(w₃|w₁w₂) × ... × P(wₙ|wₙ₋₂wₙ₋₁) × P(</s>|wₙ₋₁wₙ)
-```
+
+$$P(w_1 w_2 \ldots w_n) = P(w_1|\langle s\rangle\langle s\rangle) \times P(w_2|\langle s\rangle w_1) \times P(w_3|w_1 w_2) \times \ldots \times P(w_n|w_{n-2} w_{n-1}) \times P(\langle /s\rangle|w_{n-1} w_n)$$
 
 **Công thức MLE cho bigram:**
-```
-P(wᵢ | wᵢ₋₁) = count(wᵢ₋₁, wᵢ) / count(wᵢ₋₁)
-```
+
+$$P(w_i | w_{i-1}) = \frac{\text{count}(w_{i-1}, w_i)}{\text{count}(w_{i-1})}$$
 
 
 
@@ -244,9 +241,7 @@ P(wᵢ | wᵢ₋₁) = count(wᵢ₋₁, wᵢ) / count(wᵢ₋₁)
 
 **Giả thuyết Markov bậc n:** Xác suất của một từ chỉ phụ thuộc vào n từ đứng ngay trước nó, không cần xét toàn bộ lịch sử.
 
-```
-P(wₘ | w₁w₂...wₘ₋₁) ≈ P(wₘ | wₘ₋ₙ...wₘ₋₁)
-```
+$$P(w_m | w_1 w_2 \ldots w_{m-1}) \approx P(w_m | w_{m-n} \ldots w_{m-1})$$
 
 - **Unigram** = Markov bậc 0 (không phụ thuộc từ nào)
 - **Bigram** = Markov bậc 1 (phụ thuộc 1 từ trước)
@@ -264,9 +259,7 @@ P(wₘ | w₁w₂...wₘ₋₁) ≈ P(wₘ | wₘ₋ₙ...wₘ₋₁)
 
 **Cơ chế:** Cộng 1 vào mọi giá trị đếm của bigram để đảm bảo không có bigram nào có xác suất = 0.
 
-```
-P_Laplace(wᵢ | wᵢ₋₁) = (count(wᵢ₋₁, wᵢ) + 1) / (count(wᵢ₋₁) + V)
-```
+$$P_{\text{Laplace}}(w_i | w_{i-1}) = \frac{\text{count}(w_{i-1}, w_i) + 1}{\text{count}(w_{i-1}) + V}$$
 Trong đó V là kích thước từ vựng.
 
 **Vấn đề "quá tay":**
@@ -284,15 +277,16 @@ Trong đó V là kích thước từ vựng.
 
 **Perplexity** là thước đo đánh giá chất lượng mô hình ngôn ngữ. PP là nghịch đảo của xác suất trên tập test, được chuẩn hóa theo số từ:
 
-```
-PP(W) = P(w₁w₂...wₙ)^{-1/N}
-      = (∏ P(wᵢ | w₁...wᵢ₋₁))^{-1/N}
-```
+$$
+\begin{aligned}
+\text{PP}(W) &= P(w_1 w_2 \ldots w_n)^{-1/N} \\
+&= \left(\prod P(w_i | w_1 \ldots w_{i-1})\right)^{-1/N}
+\end{aligned}
+$$
 
 **Với bigram:**
-```
-PP(W) = (∏ P(wᵢ | wᵢ₋₁))^{-1/N}
-```
+
+$$\text{PP}(W) = \left(\prod P(w_i | w_{i-1})\right)^{-1/N}$$
 
 **Mối quan hệ:**
 
@@ -321,9 +315,7 @@ PP(W) = (∏ P(wᵢ | wᵢ₋₁))^{-1/N}
 1. **Tránh underflow số học:** Xác suất thô luôn ≤ 1, tích của nhiều xác suất rất nhỏ → dễ về 0 do giới hạn biểu diễn floating-point. Log-probability là số âm có độ lớn vừa phải.
 2. **Cộng nhanh hơn nhân:** $\log(a \times b) = \log(a) + \log(b)$. Cộng nhanh hơn nhân trong tính toán.
 
-```
-log P(câu) = Σ log P(wᵢ | wᵢ₋₁)
-```
+$$\log P(\text{câu}) = \sum \log P(w_i | w_{i-1})$$
 
 
 
@@ -1213,41 +1205,41 @@ Tập nhãn: {B-PER, I-PER, B-ORG, I-ORG, B-LOC, I-LOC, B-DATE, I-DATE, O}
 
 **a) Bảng token-nhãn:**
 
-| Token | Nhãn |
-|-------|------|
-| Ngày | O |
-| 08 | B-DATE |
-| tháng | I-DATE |
-| 4 | I-DATE |
-| năm | I-DATE |
-| 2026 | I-DATE |
-| , | O |
-| tại | O |
-| Hà | B-LOC |
-| Nội | I-LOC |
-| , | O |
-| đồng | O |
-| chí | O |
-| Vũ | B-PER |
-| Hải | I-PER |
-| Quân | I-PER |
-| được | O |
-| phê | O |
-| chuẩn | O |
-| giữ | O |
-| chức | O |
-| Bộ | B-ORG |
-| trưởng | I-ORG |
-| Bộ | I-ORG |
-| Khoa | I-ORG |
-| học | I-ORG |
-| và | I-ORG |
-| Công | I-ORG |
-| nghệ | I-ORG |
-| nhiệm | O |
-| kỳ | O |
-| 2026-2031 | B-DATE |
-| . | O |
+| Token | Nhãn | Giải thích |
+|-------|------|-------------|
+| Ngày | B-DATE | Bắt đầu cụm thời gian |
+| 08 | I-DATE | |
+| tháng | I-DATE | |
+| 4 | I-DATE | |
+| năm | I-DATE | |
+| 2026 | I-DATE | |
+| , | O | |
+| tại | O | |
+| Hà | B-LOC | Hà Nội |
+| Nội | I-LOC | |
+| , | O | |
+| đồng | O | Danh xưng, không thuộc thực thể |
+| chí | O | |
+| Vũ | B-PER | Vũ Hải Quân |
+| Hải | I-PER | |
+| Quân | I-PER | |
+| được | O | |
+| phê | O | |
+| chuẩn | O | |
+| giữ | O | |
+| chức | O | |
+| Bộ | O | "Bộ trưởng" là chức vụ, không phải tổ chức |
+| trưởng | O | |
+| Bộ | B-ORG | Bắt đầu "Bộ Khoa học và Công nghệ" |
+| Khoa | I-ORG | |
+| học | I-ORG | |
+| và | I-ORG | |
+| Công | I-ORG | |
+| nghệ | I-ORG | |
+| nhiệm | O | |
+| kỳ | O | |
+| 2026-2031 | B-DATE | Khoảng thời gian / nhiệm kỳ |
+| . | O | |
 
 **b) Tính Precision, Recall, F1 micro-average.**
 
