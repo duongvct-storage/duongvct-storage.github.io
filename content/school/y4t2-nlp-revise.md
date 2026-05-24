@@ -617,6 +617,8 @@ Input: Large document set D + Question Q
 
 ### Bài tập 1: HMM cho POS Tagging
 
+![Bài tập 1](/img/y4t2-nlp/revise/ex1.jpg)
+
 **Đề:** Cho corpus gồm 4 câu đã được gán nhãn từ loại (POS tags). Mỗi câu gồm một chuỗi **từ** (quan sát được) và một chuỗi **nhãn** (trạng thái ẩn):
 
 | # | Câu (chuỗi từ) | Nhãn tương ứng (chuỗi trạng thái) |
@@ -784,6 +786,8 @@ Xác suất của chuỗi trạng thái này: **0.125**.
 Từ vựng V = {em, yêu, học, NLP, anh, rất, vui, chăm, `</s>`}, |V| = 9.
 
 ![Câu 2a](/img/y4t2-nlp/revise/ex2-a.jpg)
+
+![Câu 2a](/img/y4t2-nlp/revise/ex2-a_v2.jpg)
 
 **a) Xây dựng mô hình unigram và bigram (không làm trơn).**
 
