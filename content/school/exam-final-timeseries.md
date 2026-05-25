@@ -34,32 +34,32 @@ Cho dữ liệu doanh thu theo tháng của một cửa hàng (đơn vị: tri�
 |-------------|---|---|---|---|---|---|---|---|---|----|
 | Doanh thu   | 45 | 48 | ? | 52 | 48 | ? | 55 | 58 | ? | 60 |
 
-**a)** Sử dụng phương pháp **trung bình động đơn giản (Simple Moving Average – SMA)** với kích thước cửa sổ \(k = 2\) để điền các giá trị bị thiếu (các ô có dấu ?). Công thức SMA: \(\widehat{Y}_t = \frac{Y_{t-1} + Y_{t-2}}{2}\).
+**a)** Sử dụng phương pháp **trung bình động đơn giản (Simple Moving Average – SMA)** với kích thước cửa sổ $k = 2$ để điền các giá trị bị thiếu (các ô có dấu ?). Công thức SMA: $\widehat{Y}_t = \frac{Y_{t-1} + Y_{t-2}}{2}$.
 
 **b)** Sau khi đã điền đầy đủ, hãy tính các đặc trưng thống kê: **giá trị trung bình (mean)**, **phương sai (variance)**, **giá trị nhỏ nhất (min)** và **giá trị lớn nhất (max)** của chuỗi.
 
-**c)** Sử dụng kỹ thuật **cửa sổ trượt (sliding window)** với kích thước cửa sổ \(W = 3\) và bước trượt \(S = 1\) để tạo các cửa sổ dữ liệu từ chuỗi đã được điền. Hãy viết tất cả các cửa sổ thu được.
+**c)** Sử dụng kỹ thuật **cửa sổ trượt (sliding window)** với kích thước cửa sổ $W = 3$ và bước trượt $S = 1$ để tạo các cửa sổ dữ liệu từ chuỗi đã được điền. Hãy viết tất cả các cửa sổ thu được.
 
 ---
 
 ## Câu 4 (4 điểm) – Bài tập
 
 **Cho mô hình AR(1):**  
-\[
+$$
 Y_t = 8 + 0.6\,Y_{t-1} + \varepsilon_t,
 \quad \varepsilon_t \sim \mathcal{N}(0,\,4)
-\]
+$$
 
-**a)** Mô hình có thỏa mãn điều kiện dừng hay không? Giải thích. Tính kỳ vọng \(E[Y_t]\) và phương sai \(Var(Y_t)\) của chuỗi khi ở trạng thái dừng.
+**a)** Mô hình có thỏa mãn điều kiện dừng hay không? Giải thích. Tính kỳ vọng $E[Y_t]$ và phương sai $Var(Y_t)$ của chuỗi khi ở trạng thái dừng.
 
-**b)** Giả sử \(Y_t = 50\). Hãy dự báo giá trị tại thời điểm \(t+1\) và \(t+2\).
+**b)** Giả sử $Y_t = 50$. Hãy dự báo giá trị tại thời điểm $t+1$ và $t+2$.
 
 **c)** Cho thêm mô hình **MA(1):**  
-\[
+$$
 Y_t = 30 + \varepsilon_t + 0.5\,\varepsilon_{t-1},
 \quad \varepsilon_t \sim \mathcal{N}(0,\,16)
-\]  
-Tính \(E[Y_t]\), \(Var(Y_t)\) và các hệ số tự tương quan \(\rho_1\), \(\rho_k\) (với \(k \ge 2\)) của mô hình MA(1) này.
+$$  
+Tính $E[Y_t]$, $Var(Y_t)$ và các hệ số tự tương quan $\rho_1$, $\rho_k$ (với $k \ge 2$) của mô hình MA(1) này.
 
 ---
 
@@ -81,23 +81,23 @@ Tính \(E[Y_t]\), \(Var(Y_t)\) và các hệ số tự tương quan \(\rho_1\), 
 
 **a) Mô hình AR(p) và điều kiện dừng (1 điểm)**
 
-Mô hình AR(p): \(Y_t = c + \phi_1 Y_{t-1} + \phi_2 Y_{t-2} + \dots + \phi_p Y_{t-p} + \varepsilon_t\).
+Mô hình AR(p): $Y_t = c + \phi_1 Y_{t-1} + \phi_2 Y_{t-2} + \dots + \phi_p Y_{t-p} + \varepsilon_t$.
 
 Điều kiện dừng: nghiệm của phương trình đặc trưng
-\[
+$$
 \phi(B) = 1 - \phi_1 B - \phi_2 B^2 - \dots - \phi_p B^p = 0
-\]
-phải nằm **ngoài vòng tròn đơn vị** (\(|B| > 1\)).
+$$
+phải nằm **ngoài vòng tròn đơn vị** ($|B| > 1$).
 
-- **AR(1):** \(|\phi_1| < 1\).
+- **AR(1):** $|\phi_1| < 1$.
 - **AR(2):** hệ thỏa mãn đồng thời:
-  \[
+  $$
   \begin{cases}
   \phi_1 + \phi_2 < 1,\\
   \phi_2 - \phi_1 < 1,\\
   |\phi_2| < 1.
   \end{cases}
-  \]
+  $$
 
 **b) So sánh CNN và RNN (1 điểm)**
 
@@ -115,21 +115,21 @@ phải nằm **ngoài vòng tròn đơn vị** (\(|B| > 1\)).
 
 **a) Điền giá trị thiếu bằng SMA(k=2) (1 điểm)**
 
-Áp dụng công thức \(\widehat{Y}_t = \frac{Y_{t-1} + Y_{t-2}}{2}\):
+Áp dụng công thức $\widehat{Y}_t = \frac{Y_{t-1} + Y_{t-2}}{2}$:
 
-\[
+$$
 \begin{aligned}
 \widehat{Y}_3 &= \frac{Y_2 + Y_1}{2} = \frac{48 + 45}{2} = 46.5,\\[4pt]
 \widehat{Y}_6 &= \frac{Y_5 + Y_4}{2} = \frac{48 + 52}{2} = 50,\\[4pt]
 \widehat{Y}_9 &= \frac{Y_8 + Y_7}{2} = \frac{58 + 55}{2} = 56.5.
 \end{aligned}
-\]
+$$
 
-Chuỗi sau khi điền: \([45,\; 48,\; 46.5,\; 52,\; 48,\; 50,\; 55,\; 58,\; 56.5,\; 60]\).
+Chuỗi sau khi điền: $[45,\; 48,\; 46.5,\; 52,\; 48,\; 50,\; 55,\; 58,\; 56.5,\; 60]$.
 
 **b) Các đặc trưng thống kê (1 điểm)**
 
-\[
+$$
 \begin{aligned}
 \bar{Y} &= \frac{45 + 48 + 46.5 + 52 + 48 + 50 + 55 + 58 + 56.5 + 60}{10}
          = \frac{519}{10} = 51.9. \\[4pt]
@@ -138,11 +138,11 @@ S^2 &= \frac{\sum_{i=1}^{10} (Y_i - \bar{Y})^2}{n-1} \\
     &= \frac{244.40}{9} \approx 27.16. \\[4pt]
 \min &= 45, \qquad \max = 60.
 \end{aligned}
-\]
+$$
 
 **c) Cửa sổ trượt (W=3, S=1) (1 điểm)**
 
-\[
+$$
 \begin{aligned}
 &\text{WS}_1: [45,\; 48,\; 46.5],\\
 &\text{WS}_2: [48,\; 46.5,\; 52],\\
@@ -153,7 +153,7 @@ S^2 &= \frac{\sum_{i=1}^{10} (Y_i - \bar{Y})^2}{n-1} \\
 &\text{WS}_7: [55,\; 58,\; 56.5],\\
 &\text{WS}_8: [58,\; 56.5,\; 60].
 \end{aligned}
-\]
+$$
 
 ---
 
@@ -161,33 +161,33 @@ S^2 &= \frac{\sum_{i=1}^{10} (Y_i - \bar{Y})^2}{n-1} \\
 
 **a) Điều kiện dừng, kỳ vọng và phương sai AR(1) (1 điểm)**
 
-\(|\phi_1| = 0.6 < 1\) → mô hình **dừng**.
+$|\phi_1| = 0.6 < 1$ → mô hình **dừng**.
 
-\[
+$$
 \begin{aligned}
 E[Y_t] &= \mu = \frac{8}{1 - 0.6} = \frac{8}{0.4} = 20. \\[4pt]
 Var(Y_t) &= \frac{\sigma_\varepsilon^2}{1 - \phi_1^2}
           = \frac{4}{1 - 0.36}
           = \frac{4}{0.64} = 6.25.
 \end{aligned}
-\]
+$$
 
 **b) Dự báo (1 điểm)**
 
-\[
+$$
 \begin{aligned}
 \widehat{Y}_{t+1} &= 8 + 0.6 \times 50 = 8 + 30 = 38, \\[4pt]
 \widehat{Y}_{t+2} &= 8 + 0.6 \times 38 = 8 + 22.8 = 30.8.
 \end{aligned}
-\]
+$$
 
 **c) Mô hình MA(1) (2 điểm)**
 
-\[
+$$
 Y_t = 30 + \varepsilon_t + 0.5\,\varepsilon_{t-1},\quad \varepsilon_t \sim \mathcal{N}(0, 16).
-\]
+$$
 
-\[
+$$
 \begin{aligned}
 E[Y_t] &= 30. \\[4pt]
 Var(Y_t) &= \gamma_0 = \sigma_\varepsilon^2 (1 + \theta_1^2)
@@ -196,15 +196,14 @@ Var(Y_t) &= \gamma_0 = \sigma_\varepsilon^2 (1 + \theta_1^2)
           = 0.5 \times 16 = 8, \\
 \gamma_k &= 0,\quad \forall k \ge 2.
 \end{aligned}
-\]
+$$
 
-\[
+$$
 \boxed{\rho_1 = \frac{\gamma_1}{\gamma_0} = \frac{8}{20} = 0.4},
 \qquad
 \boxed{\rho_k = 0,\; \forall k \ge 2}.
-\]
+$$
 
 ---
 
 ## Hết
-
