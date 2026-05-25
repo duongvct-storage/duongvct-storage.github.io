@@ -9,11 +9,11 @@ description:
 
 # Ôn tập Xử lý ngôn ngữ tự nhiên
 
-**Hình thức:** Tự luận - **Thời gian:** 90ph - **Cấu trúc:** 2 câu lý thuyết + 2 câu bài tập
+**Hình thức:** Tự luận - **Thời gian:** 90ph - **Cấu trúc:** 3 câu lý thuyết + 2 câu bài tập
 
 
 
-## Phần 1: Lý thuyết (4đ)
+## Phần 1: Lý thuyết (6đ)
 
 ### Chương 1: Giới thiệu NLP
 
@@ -29,6 +29,8 @@ description:
 1. **Dịch máy (Machine Translation):** Google Translate, ChatGPT dịch văn bản giữa các ngôn ngữ.
 2. **Trợ lý ảo/Chatbot:** ChatGPT, Google Assistant, Alexa, Siri — hiểu và phản hồi hội thoại.
 3. **Phân tích quan điểm (Sentiment Analysis):** Phân loại đánh giá sản phẩm thành tích cực/tiêu cực trên các nền tảng thương mại điện tử.
+
+**Thị trường NLP:** Dự kiến tăng trưởng từ $24.1 tỷ (2023) lên $158.04 tỷ (2032), tốc độ CAGR 23.2%. Động lực: sự phát triển của phần cứng, dữ liệu và thuật toán (theo slide Bài 1).
 
 
 
@@ -339,7 +341,12 @@ TF-IDF cân bằng giữa:
 
 **Câu 15. Phân tích quan điểm là gì? Lấy 03 ứng dụng thực tế.**
 
-**Phân tích quan điểm (Sentiment Analysis)** là quá trình phát hiện thái độ (tích cực, tiêu cực, trung tính) của người viết đối với một đối tượng, sự kiện hoặc con người.
+**Phân tích quan điểm (Sentiment Analysis)** là quá trình phát hiện thái độ (tích cực, tiêu cực, trung tính) của người viết đối với một đối tượng, sự kiện hoặc con người. Tên gọi khác: trích xuất ý kiến (opinion extraction), khai phá ý kiến (opinion mining), khai thác quan điểm (sentiment mining), phân tích chủ quan (subjectivity analysis) (theo slide Bài 5).
+
+**Thách thức chính** (theo slide):
+
+- **Phụ thuộc miền (Domain dependence):** Một từ có thể mang nghĩa tích cực ở lĩnh vực này nhưng tiêu cực ở lĩnh vực khác. VD: "thấp" — "chi phí thấp" (tích cực trong kinh doanh) vs "độ phân giải thấp" (tiêu cực trong công nghệ).
+- **Thông tin diễn ngôn (Discourse information):** Phân tích từng từ rời rạc dễ mất ý nghĩa toàn bộ ngữ cảnh.
 
 **3 ứng dụng thực tế:**
 
@@ -379,6 +386,15 @@ TF-IDF cân bằng giữa:
 1. **Chuẩn hóa (Normalization):** Chuyển chữ hoa → thường, xóa thẻ HTML/URL, chuẩn hóa từ viết tắt.
 2. **Loại bỏ stop word:** Xóa các từ không mang ý nghĩa cảm xúc ("và", "là", "của", "the", "a").
 3. **Tách từ (Tokenization):** Chia câu thành các token (unigram/bigram/n-gram).
+
+**Các kỹ thuật khác** (theo slide Bài 5 — Text Preprocessing):
+
+- **Uncapitalizing:** Chuyển tất cả về chữ thường để đồng nhất (VD: "NLP" = "nlp").
+- **Removing Punctuation:** Dấu câu không mang ý nghĩa → giảm chiều dữ liệu.
+- **Standardizing Text:** Biến đổi viết tắt (acronym/abbreviation) thành dạng đầy đủ.
+- **Correcting Spelling:** Sửa lỗi chính tả từ dữ liệu mạng xã hội.
+- **Stemming:** Rút gọn từ về dạng gốc bằng cách cắt bỏ phụ tố (affixes).
+- **Lemmatization:** Đưa từ về dạng từ điển (base form) dựa trên ngữ nghĩa.
 
 **3 loại đặc trưng:**
 
@@ -461,7 +477,40 @@ TF-IDF cân bằng giữa:
 
 ### Chương 6: Word Embeddings & Ngữ nghĩa từ vựng
 
-**Câu 22. Giải thích thuật toán word2vec. Trong word2vec, một từ có một vector duy nhất hay nhiều vector phụ thuộc ngữ cảnh?**
+**Câu 22. Phân tích sự khác nhau giữa word2vec và BERT embedding?**
+
+| Tiêu chí | word2vec | BERT |
+|----------|----------|------|
+| Loại embedding | **Static** (một vector duy nhất cho mỗi từ) | **Contextual** (vector phụ thuộc ngữ cảnh) |
+| Kiến trúc | Mạng nơ-ron nông (Shallow NN): CBOW / Skip-gram | Transformer nhiều tầng (thường 12-24 layers) |
+| Ngữ cảnh | Cửa sổ cố định (window ±k) | **Bidirectional** — toàn bộ câu qua Self-Attention |
+| Xử lý đa nghĩa | **Không** — từ "bank" chỉ có 1 vector | **Có** — vector khác nhau cho mỗi nghĩa trong ngữ cảnh khác nhau |
+| Huấn luyện | Dựa trên đồng xuất hiện (co-occurrence) | Masked Language Model (MLM) + Next Sentence Prediction (NSP) |
+| Đầu ra | 1 embedding cho mỗi từ | 1 embedding cho mỗi token ở mỗi tầng |
+| Kích thước | Nhỏ (thường 100-300 chiều) | Lớn (768-1024 chiều) |
+| Tài nguyên | Huấn luyện nhanh, ít tài nguyên | Huấn luyện chậm, cần GPU lớn |
+
+**Kết luận:** word2vec cho embedding tĩnh, nhanh, nhẹ nhưng không xử lý được đa nghĩa. BERT cho embedding động theo ngữ cảnh, xử lý nhập nhằng tốt nhưng nặng hơn.
+
+
+
+**Câu 23. Tại sao BERT thường tốt hơn word2vec cho bài toán xử lý nhập nhằng nghĩa của từ (WSD)?**
+
+**Word2Vec** gán một vector **cố định** cho mỗi từ, bất kể ngữ cảnh. VD: "bank" (bờ sông) và "bank" (ngân hàng) có cùng một vector → không thể phân biệt.
+
+**BERT** khắc phục nhờ:
+
+1. **Contextual embeddings:** Vector biểu diễn của từ được tính dựa trên toàn bộ các từ xung quanh trong câu thông qua cơ chế Self-Attention.
+
+2. **Bidirectional encoding:** BERT nhìn cả ngữ cảnh trái và phải cùng lúc (nhờ Masked LM), trong khi word2vec chỉ nhìn cửa sổ cố định một chiều (Skip-gram/CBOW).
+
+3. **Kiến trúc sâu:** 12-24 tầng Transformer giúp BERT học các biểu diễn ngữ nghĩa tinh vi hơn so với mạng 1-2 tầng của word2vec.
+
+4. **Attention đến các từ liên quan:** Self-attention cho phép BERT "chú ý" đến các từ quan trọng cho nghĩa. VD: với "bank" trong "river bank", BERT học gán trọng số cao cho "river".
+
+→ Kết quả: BERT cho biểu diễn khác nhau cho cùng một từ ở các ngữ cảnh khác nhau, giải quyết được bài toán nhập nhằng nghĩa của từ (Word Sense Disambiguation).
+
+**Câu 24. Giải thích thuật toán word2vec. Trong word2vec, một từ có một vector duy nhất hay nhiều vector phụ thuộc ngữ cảnh?**
 
 **Word2Vec:** Là phương pháp học word embedding (vector từ dày đặc) từ corpus lớn. Có 2 kiến trúc:
 
@@ -478,7 +527,56 @@ TF-IDF cân bằng giữa:
 
 
 
-**Câu 23. Ngữ nghĩa từ vựng nghiên cứu vấn đề gì? Phân biệt "nghĩa của từ" (word sense) với "từ" (word form).**
+**Câu 25. Trong mô hình BERT, tại sao một từ có thể có nhiều biểu diễn vector khác nhau trong các câu khác nhau?**
+
+BERT tạo ra các vector biểu diễn khác nhau cho cùng một từ trong các câu khác nhau nhờ:
+
+1. **Cơ chế Self-Attention:** Mỗi từ trong BERT được biểu diễn bằng tổng có trọng số của tất cả các từ khác trong câu. Trọng số (attention weight) thay đổi theo ngữ cảnh → cùng một từ "bank" trong "river bank" và "money bank" có trọng số attention khác nhau → vector khác nhau.
+
+2. **Kiến trúc đa tầng (Multi-layer):** BERT có 12-24 tầng Transformer. Mỗi tầng học một cấp độ biểu diễn khác nhau (từ cú pháp đến ngữ nghĩa). Kết hợp nhiều tầng cho biểu diễn giàu ngữ cảnh hơn.
+
+3. **Mã hóa vị trí (Positional Encoding):** BERT thêm thông tin vị trí vào mỗi token. Vị trí khác nhau → vector khác nhau.
+
+4. **Bidirectional Encoding:** BERT sử dụng Masked Language Model (MLM), cho phép mỗi từ nhìn cả ngữ cảnh trái và phải cùng lúc. Ngữ cảnh hai phía khác nhau → biểu diễn khác nhau.
+
+5. **Tokenization khác biệt:** BERT dùng WordPiece, có thể chia từ thành subword. VD: "playing" → "play" + "##ing". Các subword tokens cũng có biểu diễn thay đổi theo ngữ cảnh.
+
+→ Kết quả: BERT tạo **contextual embeddings** — vector động khác nhau cho mỗi lần xuất hiện của từ, giải quyết được hiện tượng đa nghĩa (polysemy) mà word2vec không làm được.
+
+
+
+**Câu 26. So sánh biểu diễn ngữ nghĩa của từ bằng WordNet và BERT: ưu điểm và nhược điểm.**
+
+| Tiêu chí | WordNet | BERT |
+|----------|---------|------|
+| Bản chất | Cơ sở tri thức từ vựng (Lexical database) do con người xây dựng | Mô hình ngôn ngữ học biểu diễn từ dữ liệu |
+| Biểu diễn | Các synset (tập từ đồng nghĩa) và quan hệ (hypernymy, hyponymy) | Vector số thực nhiều chiều (contextual embedding) |
+| Ngữ cảnh | **Tĩnh** — mỗi từ có synset cố định | **Động** — vector thay đổi theo câu |
+| Xử lý đa nghĩa | Có (liệt kê sẵn các nghĩa trong synset) | Có (tự động suy ra từ ngữ cảnh) |
+
+**Ưu điểm của WordNet:**
+- Cấu trúc rõ ràng, có thể tra cứu quan hệ ngữ nghĩa (đồng nghĩa, trái nghĩa, bao hàm).
+- Được chuyên gia ngôn ngữ xây dựng, độ chính xác cao.
+- Hữu ích cho WSD, mở rộng truy vấn IR.
+
+**Nhược điểm của WordNet (theo slide Bài 7):**
+- **Thiếu sắc thái:** Các từ đồng nghĩa ("cố", "gắng", "nỗ lực") được xem như nhau.
+- **Không cập nhật:** Thiếu từ mới hoặc nghĩa mới (không thể cập nhật kịp).
+- **Chủ quan:** Phụ thuộc vào người tạo.
+- **Tốn công sức:** Yêu cầu nhiều công sức tạo ra và cập nhật.
+- **Khó đo khoảng cách:** Khó đo chính xác khoảng cách về nghĩa giữa các từ.
+
+**Ưu điểm của BERT:**
+- Biểu diễn ngữ nghĩa động theo ngữ cảnh, xử lý đa nghĩa tự nhiên.
+- Học tự động từ dữ liệu lớn, cập nhật được với dữ liệu mới.
+- Vector liên tục cho phép đo độ tương đồng ngữ nghĩa bằng cosine similarity.
+
+**Nhược điểm của BERT:**
+- Cần tài nguyên tính toán lớn (GPU/TPU) để huấn luyện và suy luận.
+- "Hộp đen" — khó diễn giải tại sao một từ có biểu diễn cụ thể.
+- Cần fine-tuning cho từng tác vụ cụ thể để đạt hiệu quả tối ưu.
+
+**Câu 27. Ngữ nghĩa từ vựng nghiên cứu vấn đề gì? Phân biệt "nghĩa của từ" (word sense) với "từ" (word form).**
 
 **Ngữ nghĩa từ vựng (Lexical Semantics)** nghiên cứu:
 
@@ -496,7 +594,7 @@ Một word form có thể có nhiều word senses (hiện tượng đa nghĩa/đ
 
 
 
-**Câu 24. Trình bày 4 hiện tượng quan hệ nghĩa cơ bản: đồng âm, đa nghĩa, đồng nghĩa, trái nghĩa. Lấy ví dụ.**
+**Câu 28. Trình bày 4 hiện tượng quan hệ nghĩa cơ bản: đồng âm, đa nghĩa, đồng nghĩa, trái nghĩa. Lấy ví dụ.**
 
 | Hiện tượng | Định nghĩa | Đặc điểm | Ví dụ |
 |-----------|-----------|---------|-------|
@@ -509,7 +607,7 @@ Một word form có thể có nhiều word senses (hiện tượng đa nghĩa/đ
 
 ### Chương 7: Trích xuất thông tin
 
-**Câu 25. Trình bày bài toán NER: đầu vào, đầu ra, các loại thực thể phổ biến và nhãn tương ứng.**
+**Câu 29. Trình bày bài toán NER: đầu vào, đầu ra, các loại thực thể phổ biến và nhãn tương ứng.**
 
 **NER (Named Entity Recognition):** Định vị và phân loại thực thể có tên trong văn bản.
 
@@ -534,7 +632,7 @@ B-LOC  O  O    O     B-LOC
 
 
 
-**Câu 26. Trích xuất thông tin (IE) là gì? Nêu sự khác biệt giữa IE và IR.**
+**Câu 30. Trích xuất thông tin (IE) là gì? Nêu sự khác biệt giữa IE và IR.**
 
 **IE (Information Extraction):** Tự động tìm và trích chọn thông tin có cấu trúc từ văn bản phi cấu trúc. Mục tiêu: xây dựng biểu diễn có cấu trúc (database) phục vụ máy tính phân tích.
 
@@ -551,7 +649,7 @@ B-LOC  O  O    O     B-LOC
 
 ### Chương 8: Hỏi đáp & RAG
 
-**Câu 27. Trình bày bài toán hỏi đáp tự động. Lấy ví dụ 3 dạng câu hỏi, trả lời tương ứng.**
+**Câu 31. Trình bày bài toán hỏi đáp tự động. Lấy ví dụ 3 dạng câu hỏi, trả lời tương ứng.**
 
 **Hỏi đáp tự động (Question Answering):** Xây dựng hệ thống tự động trả lời câu hỏi bằng ngôn ngữ tự nhiên dựa trên nguồn thông tin (văn bản, CSDL, CSTT).
 
@@ -565,7 +663,7 @@ B-LOC  O  O    O     B-LOC
 
 
 
-**Câu 28. Mô tả kiến trúc hai giai đoạn Retriever-Reader. Nêu rõ đầu vào, đầu ra và nhiệm vụ của từng thành phần.**
+**Câu 32. Mô tả kiến trúc hai giai đoạn Retriever-Reader. Nêu rõ đầu vào, đầu ra và nhiệm vụ của từng thành phần.**
 
 ```
 Input: Large document set D + Question Q
@@ -588,7 +686,7 @@ Input: Large document set D + Question Q
 
 
 
-**Câu 29. Trình bày các đặc điểm chính của bộ dữ liệu SQuAD.**
+**Câu 33. Trình bày các đặc điểm chính của bộ dữ liệu SQuAD.**
 
 | Đặc điểm | Mô tả |
 |----------|-------|
@@ -601,7 +699,7 @@ Input: Large document set D + Question Q
 
 
 
-**Câu 30. Trình bày ba bước cơ bản của hệ thống Naive RAG.**
+**Câu 34. Trình bày ba bước cơ bản của hệ thống Naive RAG.**
 
 **RAG (Retrieval-Augmented Generation)** kết hợp truy hồi và sinh văn bản để cải thiện chất lượng LLM.
 
@@ -613,7 +711,7 @@ Input: Large document set D + Question Q
 
 
 
-## Phần 2: Bài tập (6đ)
+## Phần 2: Bài tập (4đ)
 
 ### Bài tập 1: HMM cho POS Tagging
 
