@@ -1,5 +1,9 @@
 ---
 title: Đề thi cuối kỳ – Phân tích dữ liệu chuỗi thời gian
+keywords: [school, time-series, exam]
+date: 2026-05-25
+theme: time-series
+description: Year 4 Term 2 - Time Series final exam with answer key
 ---
 
 **Thời gian:** 90 phút  
