@@ -557,25 +557,39 @@ BERT tạo ra các vector biểu diễn khác nhau cho cùng một từ trong c�
 | Xử lý đa nghĩa | Có (liệt kê sẵn các nghĩa trong synset) | Có (tự động suy ra từ ngữ cảnh) |
 
 **Ưu điểm của WordNet:**
+
 - Cấu trúc rõ ràng, có thể tra cứu quan hệ ngữ nghĩa (đồng nghĩa, trái nghĩa, bao hàm).
+
 - Được chuyên gia ngôn ngữ xây dựng, độ chính xác cao.
+
 - Hữu ích cho WSD, mở rộng truy vấn IR.
 
 **Nhược điểm của WordNet (theo slide Bài 7):**
+
 - **Thiếu sắc thái:** Các từ đồng nghĩa ("cố", "gắng", "nỗ lực") được xem như nhau.
+
 - **Không cập nhật:** Thiếu từ mới hoặc nghĩa mới (không thể cập nhật kịp).
+
 - **Chủ quan:** Phụ thuộc vào người tạo.
+
 - **Tốn công sức:** Yêu cầu nhiều công sức tạo ra và cập nhật.
+
 - **Khó đo khoảng cách:** Khó đo chính xác khoảng cách về nghĩa giữa các từ.
 
 **Ưu điểm của BERT:**
+
 - Biểu diễn ngữ nghĩa động theo ngữ cảnh, xử lý đa nghĩa tự nhiên.
+
 - Học tự động từ dữ liệu lớn, cập nhật được với dữ liệu mới.
+
 - Vector liên tục cho phép đo độ tương đồng ngữ nghĩa bằng cosine similarity.
 
 **Nhược điểm của BERT:**
+
 - Cần tài nguyên tính toán lớn (GPU/TPU) để huấn luyện và suy luận.
+
 - "Hộp đen" — khó diễn giải tại sao một từ có biểu diễn cụ thể.
+
 - Cần fine-tuning cho từng tác vụ cụ thể để đạt hiệu quả tối ưu.
 
 **Câu 27. Ngữ nghĩa từ vựng nghiên cứu vấn đề gì? Phân biệt "nghĩa của từ" (word sense) với "từ" (word form).**
@@ -583,13 +597,17 @@ BERT tạo ra các vector biểu diễn khác nhau cho cùng một từ trong c�
 **Ngữ nghĩa từ vựng (Lexical Semantics)** nghiên cứu:
 
 - Quan hệ từ vựng: sự liên hệ ngữ nghĩa giữa các từ (đồng nghĩa, trái nghĩa,...).
+
 - Ràng buộc về lựa chọn (selectional restrictions): cấu trúc ngữ nghĩa bên trong từ.
+
 - Phân loại và phân rã nghĩa của từ.
+
 - Sự khác biệt cấu trúc từ vựng - ngữ nghĩa giữa các ngôn ngữ.
 
 **Phân biệt:**
 
 - **Word form (từ):** Hình thức (âm thanh/chữ viết) của từ. VD: "bank" là một word form.
+
 - **Word sense (nghĩa của từ):** Một khía cạnh ý nghĩa riêng biệt. VD: "bank" có các senses: (1) bờ sông, (2) ngân hàng, (3) nghiêng máy bay.
 
 Một word form có thể có nhiều word senses (hiện tượng đa nghĩa/đồng âm).
