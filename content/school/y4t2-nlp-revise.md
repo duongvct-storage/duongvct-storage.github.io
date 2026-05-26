@@ -11,6 +11,8 @@ description:
 
 **Hình thức:** Tự luận - **Thời gian:** 90ph - **Cấu trúc:** 3 câu lý thuyết + 2 câu bài tập
 
+**[Đề cương NLP v2](/pdfs/y4t2-nlp/de-cuong-nlp-v2.pdf)**
+
 
 
 ## Phần 1: Lý thuyết (6đ)

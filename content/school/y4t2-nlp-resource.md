@@ -64,6 +64,7 @@ Year 4 Term 2 - NLP learning resources
 - [Week 9 - Question Answering](/pdfs/y4t2-nlp/Week9-Question-Answering.pdf)
 
 - [Đề cương NLP](/pdfs/y4t2-nlp/de-cuong-nlp.pdf)
+- [Đề cương NLP v2](/pdfs/y4t2-nlp/de-cuong-nlp-v2.pdf)
 
 
 ## Images
