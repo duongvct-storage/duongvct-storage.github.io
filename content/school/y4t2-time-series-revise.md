@@ -278,13 +278,17 @@ $$\text{Deseasonalized} = \frac{X_t}{\text{Seasonal\_index}} \quad \text{hoặc}
 
 ## 3.3 Tính dừng (Stationarity)
 
+### Tại sao tính dừng quan trọng?
+
+Phần lớn các mô hình thống kê (AR, MA, ARMA, ARIMA) đều **giả định chuỗi là dừng**. Nếu chuỗi không dừng, các ước lượng tham số sẽ không ổn định và dự báo sẽ sai.
+
 ### Tính dừng nghiêm ngặt (Strict Stationarity)
 
 $$F(X_{t_1}, X_{t_2}, \ldots, X_{t_n}) = F(X_{t_1+k}, X_{t_2+k}, \ldots, X_{t_n+k})$$
 
 với mọi $t$ và mọi độ dịch chuyển $k$.
 
-→ Trung bình và phương sai là hằng số; hiệp phương sai chỉ phụ thuộc vào độ trễ.
+→ Phân phối xác suất **không thay đổi** khi dịch chuyển thời gian. Trung bình, phương sai, và tất cả các mômen đều là hằng số.
 
 ### Tính dừng yếu (Weak Stationarity)
 
@@ -294,42 +298,163 @@ $$\text{Var}(X_t) = \sigma^2 \quad (\text{không phụ thuộc } t)$$
 
 $$\text{Cov}(X_t, X_{t-k}) = \gamma(k) \quad (\text{chỉ phụ thuộc } k)$$
 
+→ Chỉ cần 2 mômen đầu tiên (trung bình, phương sai) và hiệp phương sai là hằng số.
+
 **Lưu ý:** Tính dừng nghiêm ngặt luôn dẫn đến tính dừng yếu. Ngược lại chỉ đúng với phân phối chuẩn đa biến.
+
+### Ví dụ kiểm tra tính dừng
+
+| Chuỗi | Mô hình | Dừng? | Giải thích |
+|-------|---------|-------|-----------|
+| $X_t = \beta + \varepsilon_t$ | Constant + noise | **Có** | $\mu = \beta$ (hằng số), $\text{Var} = \sigma^2$ (hằng số) |
+| $X_t = \beta_0 + \beta_1 t + \varepsilon_t$ | Trend tuyến tính | **Không** | $\mu_t = \beta_0 + \beta_1 t$ (phụ thuộc $t$) |
+| $X_t = X_{t-1} + \varepsilon_t$ | Random walk | **Không** | $\text{Var}(X_t) = t\sigma^2$ (tăng vô hạn) |
+
+### Cách đưa chuỗi về dạng dừng
+
+| Phương pháp | Khi nào dùng | Ví dụ |
+|------------|---------------|-------|
+| **Sai phân (Differencing)** | Có trend | $\nabla X_t = X_t - X_{t-1}$ |
+| **Sai phân bậc cao** | Trend bậc $d$ | $\nabla^d X_t = (1-B)^d X_t$ |
+| **Log transform** | Phương sai thay đổi | $\log(X_t)$ |
+| **Box-Cox** | Phân phối lệch | $\frac{X_t^\lambda - 1}{\lambda}$ |
+
+### Ví dụ: Sai phân loại bỏ trend
+
+Cho $Y_t = \beta_0 + \beta_1 t + \varepsilon_t$ (không dừng vì có trend).
+
+Sai phân bậc 1:
+
+$$\nabla Y_t = Y_t - Y_{t-1} = \beta_1 + \varepsilon_t - \varepsilon_{t-1}$$
+
+→ $\nabla Y_t$ là MA(1) → **dừng** (trung bình = $\beta_1$, phương sai = $2\sigma^2$).
 
 ## 3.4 Hàm tự tương quan (ACF) và Tự tương quan từng phần (PACF)
 
-### ACF (Autocorrelation Function)
+### ACF (Autocorrelation Function) - Hàm tự tương quan
+
+**ACF** đo mức độ tương quan tuyến tính giữa chuỗi thời gian với chính nó ở các độ trễ (lag) khác nhau. Nói đơn giản: giá trị hiện tại liên quan thế nào đến giá trị quá khứ.
+
+**Công thức:**
 
 $$\rho(k) = \frac{\gamma(t, t-k)}{\gamma(t, t)} = \frac{\text{Cov}(X_t, X_{t-k})}{\text{Var}(X_t)}$$
 
+Trong đó:
+
+- $\gamma(k) = \text{Cov}(X_t, X_{t-k})$ là **autocovariance** tại lag $k$.
+- $\gamma(0) = \text{Var}(X_t)$ là phương sai.
+
+**Ước lượng mẫu:**
+
+$$r_k = \frac{\sum_{t=k+1}^{n}(x_t - \bar{x})(x_{t-k} - \bar{x})}{\sum_{t=1}^{n}(x_t - \bar{x})^2}$$
+
+**Đặc điểm quan trọng:**
+
+- $r_0 = 1$ (tương quan với chính mình luôn bằng 1).
+- $r_k = r_{-k}$ (đối xứng).
+- $r_k \in [-1, 1]$.
+- **Khoảng tin cậy:** $r_k$ nằm trong khoảng $\pm \frac{1.96}{\sqrt{n}}$ thì coi như bằng 0 (không có ý nghĩa thống kê).
+
+### Cách đọc đồ thị Correlogram (ACF plot)
+
+Đồ thị ACF có trục X = lag (0, 1, 2, ...) và trục Y = hệ số tự tương quan $r_k$. Đường nét đứt trên/dưới = khoảng tin cậy 95%.
+
+**Các dạng ACF phổ biến:**
+
+| Dạng ACF | Ý nghĩa | Chuỗi |
+|----------|---------|-------|
+| $r_0 = 1$, tất cả $r_k \approx 0$ (nằm trong khoảng tin cậy) | Không có tự tương quan → **Nhiễu trắng (White noise)** | Chuỗi ngẫu nhiên |
+| $r_k$ giảm từ từ theo hàm mũ hoặc sóng sin | Có **trend** hoặc **chu kỳ** mạnh → chuỗi **không dừng** | Dữ liệu có xu hướng |
+| $r_k$ giảm nhanh về 0 (chậm hơn noise trắng) | Có tự tương quan → phù hợp **AR** | AR(p) |
+| $r_1$ lớn, $r_k \approx 0$ với $k > 1$ | Chỉ có lag 1 tương quan → phù hợp **MA(1)** | MA(q) |
+| $r_k$ dao động theo chu kỳ lặp lại | Có **tính mùa vụ** (seasonality) | Dữ liệu có mùa vụ |
+
+**Ví dụ minh họa:**
+
+- **Nhiễu trắng:** $r_1 = 0.02, r_2 = -0.01, r_3 = 0.03, \ldots$ (tất cả nằm trong khoảng $\pm \frac{1.96}{\sqrt{n}}$).
+- **AR(1) với $\phi_1 = 0.8$:** $r_1 \approx 0.8, r_2 \approx 0.64, r_3 \approx 0.512, \ldots$ (giảm theo hàm mũ).
+- **MA(1) với $\theta_1 = 0.5$:** $r_1 \approx -0.4, r_2 \approx 0, r_3 \approx 0, \ldots$ (cắt ngang sau lag 1).
+- **Dữ liệu có trend:** $r_1 = 0.95, r_2 = 0.90, r_3 = 0.85, \ldots$ (giảm rất chậm).
+
+### PACF (Partial Autocorrelation Function) - Hàm tự tương quan từng phần
+
+**PACF** đo tương quan tuyến tính giữa $Y_t$ và $Y_{t-k}$ sau khi **loại bỏ tác động** của các biến nằm giữa ($Y_{t-1}, \ldots, Y_{t-k+1}$).
+
+**Ý tưởng:** ACF tại lag $k$ bao gồm cả ảnh hưởng gián tiếp qua các lag trung gian. PACF loại bỏ ảnh hưởng gián tiếp này để chỉ giữ **mối quan hệ trực tiếp**.
+
+**Ví dụ:** ACF lag 3 của AR(1) có thể lớn是因为它经过了lag 1 và lag 2, nhưng PACF lag 3 ≈ 0 vì không có quan hệ trực tiếp giữa $Y_t$ và $Y_{t-3}$.
+
 **Đặc điểm:**
 
-- $\rho(0) = 1$
-- $\rho(s, t) = \rho(t, s)$ (đối xứng)
-- $\rho(k) \in [-1, 1]$
+- $\phi_{00} = 1$.
+- $\phi_{kk} \in [-1, 1]$.
+- Khoảng tin cậy: $\pm \frac{1.96}{\sqrt{n}}$.
 
-**Ý nghĩa:**
+### ACF vs PACF - Bảng so sánh để chọn mô hình
 
-- ACF giảm từ từ → có trend hoặc chu kỳ.
-- ACF giảm nhanh → dữ liệu gần dừng.
+| Mô hình | ACF | PACF |
+|---------|-----|------|
+| **AR(p)** | Giảm từ từ (hàm mũ hoặc sóng sin), không cắt ngang | **Cắt ngang sau lag $p$** (PACF ≈ 0 với $k > p$) |
+| **MA(q)** | **Cắt ngang sau lag $q$** (ACF ≈ 0 với $k > q$) | Giảm từ từ |
+| **ARMA(p,q)** | Giảm từ từ | Giảm từ từ |
 
-### PACF (Partial Autocorrelation Function)
+**Cách chọn mô hình:**
 
-PACF đo tương quan tuyến tính giữa $Y_t$ và $Y_{t-k}$ sau khi **loại bỏ tác động** của các biến nằm giữa ($Y_{t-1}, \ldots, Y_{t-k+1}$).
+1. Vẽ ACF và PACF của chuỗi.
+2. Nếu ACF giảm từ từ, PACF cắt ngang sau lag $p$ → chọn **AR(p)**.
+3. Nếu ACF cắt ngang sau lag $q$, PACF giảm từ từ → chọn **MA(q)**.
+4. Nếu cả hai đều giảm từ từ → có thể là **ARMA(p,q)**, dùng AIC/BIC để chọn bậc.
 
-**Đặc điểm:**
+### Ví dụ thực tế: Kiểm tra nhiễu trắng
 
-- $\phi_{00} = 1$
-- $\phi_{kk} \in [-1, 1]$
-- Nếu $\phi_{kk} = 0$ → không có tự tương quan từng phần tuyến tính.
+Cho chuỗi $\{\varepsilon_t\}$ là nhiễu trắng với $\varepsilon_t \sim N(0, \sigma^2)$.
+
+$$\rho(k) = \begin{cases} 1 & k = 0 \\ 0 & k \neq 0 \end{cases}$$
+
+→ Trên đồ thị correlogram: chỉ có cột lag 0 bằng 1, tất cả lag khác nằm trong khoảng $\pm \frac{1.96}{\sqrt{n}}$.
+
+Nếu có lag nằm ngoài khoảng tin cậy → chuỗi **không phải** nhiễu trắng → có thể có cấu trúc cần mô hình hóa.
+
+### Ví dụ thực tế: ACF của AR(1)
+
+$$Y_t = 0.7 Y_{t-1} + \varepsilon_t$$
+
+$$\rho(k) = 0.7^k$$
+
+| Lag $k$ | $\rho(k)$ |
+|---------|-----------|
+| 0 | 1.000 |
+| 1 | 0.700 |
+| 2 | 0.490 |
+| 3 | 0.343 |
+| 4 | 0.240 |
+| 5 | 0.168 |
+
+→ ACF giảm từ từ theo hàm mũ. PACF: $\phi_{11} = 0.7$, $\phi_{kk} = 0$ với $k > 1$.
+
+### Ví dụ thực tế: ACF của MA(1)
+
+$$Y_t = \varepsilon_t + 0.5 \varepsilon_{t-1}$$
+
+$$\rho(k) = \begin{cases} \frac{0.5}{1 + 0.5^2} \approx 0.4 & k = 1 \\ 0 & k > 1 \end{cases}$$
+
+→ ACF: $r_1 \approx 0.4$, $r_k \approx 0$ với $k > 1$. PACF giảm từ từ.
 
 ### Hệ phương trình Yule-Walker
 
-Cho AR(p) với trung bình 0:
+Cho AR(p) với trung bình 0, phương trình Yule-Walker liên hệ ACF với các hệ số AR:
 
 $$\rho_k = \phi_1 \rho_{k-1} + \phi_2 \rho_{k-2} + \ldots + \phi_p \rho_{k-p}$$
 
-Giải hệ phương trình để ước lượng tham số $\phi_i$ từ ACF mẫu.
+**AR(1):** $\rho_1 = \phi_1$ → $\phi_1 = r_1$ (dùng hệ số tự tương quan mẫu).
+
+**AR(2):** Hệ phương trình:
+
+$$\begin{cases} \rho_1 = \phi_1 + \phi_2 \rho_1 \\ \rho_2 = \phi_1 \rho_1 + \phi_2 \end{cases}$$
+
+Giải:
+
+$$\phi_1 = \frac{\rho_1(1 - \rho_2)}{1 - \rho_1^2}, \quad \phi_2 = \frac{\rho_2 - \rho_1^2}{1 - \rho_1^2}$$
 
 ## 3.5 Toán tử chuỗi thời gian
 
@@ -379,6 +504,8 @@ Trong đó $\{\varepsilon_t\}$ là nhiễu trắng, $\mu$ là hằng số, $\{\p
 
 ### Định nghĩa
 
+**AR(p)** là mô hình trong đó giá trị hiện tại $Y_t$ được mô tả như **hàm tuyến tính** của các giá trị quá khứ $Y_{t-1}, Y_{t-2}, \ldots, Y_{t-p}$ cộng với nhiễu trắng.
+
 $$Y_t = c + \phi_1 Y_{t-1} + \phi_2 Y_{t-2} + \ldots + \phi_p Y_{t-p} + \varepsilon_t$$
 
 Hoặc dùng toán tử dịch ngược:
@@ -387,50 +514,80 @@ $$\Phi(B) Y_t = c + \varepsilon_t$$
 
 Trong đó $\Phi(B) = 1 - \phi_1 B - \phi_2 B^2 - \ldots - \phi_p B^p$.
 
-### AR(1)
+**Ý nghĩa:** "Hôm nay = một phần của hôm qua + nhiễu ngẫu nhiên."
+
+### AR(1) - Mô hình tự hồi quy bậc nhất
 
 $$Y_t = c + \phi_1 Y_{t-1} + \varepsilon_t$$
 
-- $|\phi_1| < 1$: chuỗi dần ổn định (dừng).
-- $\phi_1 > 0$: xu hướng nối tiếp cùng chiều.
-- $\phi_1 < 0$: dao động lên xuống (zig-zag).
+**Các trường hợp:**
 
-**Điều kiện dừng:** Nghiệm của $\Phi(B) = 0$ phải nằm **ngoài** đường tròn đơn vị ($|B| > 1$).
+- $|\phi_1| < 1$: Chuỗi **dừng**, dần ổn định.
+- $\phi_1 > 0$: Xu hướng **nối tiếp cùng chiều** (giá trị cao → giá trị tiếp theo cũng cao).
+- $\phi_1 < 0$: **Dao động lên xuống** (zig-zag, xen kẽ).
+- $|\phi_1| = 1$: **Random walk** (không dừng).
 
-**Giá trị trung bình:** $\mu = \frac{c}{1 - \phi_1}$
+**Ví dụ:** Dự báo dân số:
 
-**Phương sai:** $\gamma_0 = \frac{\sigma^2}{1 - \phi_1^2}$
+$$Y_t = \phi_1 Y_{t-1} + \varepsilon_t$$
 
-**ACF:** $\rho_k = \phi_1^k$ (giảm theo hàm mũ).
+Trong đó $\phi_1$ = tỷ lệ những người vẫn còn sống, $\varepsilon_t$ = công dân mới.
 
-**PACF:** $\phi_{11} = \phi_1$, $\phi_{kk} = 0$ với $k > 1$.
+**Điều kiện dừng:** Nghiệm của phương trình đặc trưng $\Phi(B) = 0$ phải nằm **ngoài** đường tròn đơn vị ($|B| > 1$). Với AR(1): điều kiện là $|\phi_1| < 1$.
 
-### AR(2)
+**Các tham số:**
+
+- **Giá trị trung bình:** $\mu = \frac{c}{1 - \phi_1}$
+- **Phương sai:** $\gamma_0 = \frac{\sigma^2}{1 - \phi_1^2}$
+- **ACF:** $\rho_k = \phi_1^k$ (giảm theo hàm mũ)
+- **PACF:** $\phi_{11} = \phi_1$, $\phi_{kk} = 0$ với $k > 1$
+
+### AR(2) - Mô hình tự hồi quy bậc hai
 
 $$Y_t = c + \phi_1 Y_{t-1} + \phi_2 Y_{t-2} + \varepsilon_t$$
 
 **Điều kiện dừng (điều kiện đủ):**
 
-- $\phi_1 + \phi_2 < 1$
-- $\phi_2 - \phi_1 < 1$
-- $|\phi_2| < 1$
+1. $\phi_1 + \phi_2 < 1$
+2. $\phi_2 - \phi_1 < 1$
+3. $|\phi_2| < 1$
 
 **ACF:** Phụ thuộc vào nghiệm phương trình đặc trưng:
 
-- Nghiệm thực → ACF giảm theo hàm mũ.
-- Nghiệm phức → ACF giảm theo dạng sóng sin.
+- Nghiệm thực: ACF giảm theo **hàm mũ**.
+- Nghiệm phức: ACF giảm theo dạng **sóng sin** (dao động).
+
+**Ví dụ:** $Y_t = 0.5 Y_{t-1} + 0.3 Y_{t-2} + \varepsilon_t$
+
+- $\phi_1 + \phi_2 = 0.8 < 1$ ✓
+- $\phi_2 - \phi_1 = -0.2 < 1$ ✓
+- $|\phi_2| = 0.3 < 1$ ✓
+
+→ Mô hình là **dừng**.
 
 ### AR(p) tổng quát
 
-**Ước lượng tham số:** OLS, MLE, Python (statsmodels), R.
+**Ước lượng tham số:**
 
-**ACF:** Mở rộng vô hạn, hỗn hợp hàm mũ hoặc sóng sin suy giảm.
+- **OLS (Ordinary Least Squares):** $\hat{\phi} = (X^T X)^{-1} X^T Y$
+- **MLE (Maximum Likelihood Estimation)**
+- **Yule-Walker:** Dùng hệ phương trình liên hệ ACF với tham số AR.
 
-**PACF:** Cắt ngang sau bậc $p$ → dùng để chọn bậc AR.
+**ACF:** Mở rộng vô hạn, hỗn hợp hàm mũ hoặc sóng sin suy giảm → Dùng để **nhận biết** có mô hình AR.
+
+**PACF:** Cắt ngang sau bậc $p$ → Dùng để **chọn bậc** AR(p).
+
+**Ứng dụng:**
+
+- Dự báo tài chính: giá cổ phiếu, lãi suất.
+- Kinh tế vĩ mô: GDP, CPI.
+- Khí tượng: nhiệt độ, lượng mưa.
 
 ## 4.3 Mô hình MA(q) - Moving Average
 
 ### Định nghĩa
+
+**MA(q)** là mô hình trong đó giá trị hiện tại $Y_t$ được mô tả dựa trên **nhiễu trắng hiện tại** và các **nhiễu trắng trong quá khứ**.
 
 $$Y_t = c + \varepsilon_t + \theta_1 \varepsilon_{t-1} + \theta_2 \varepsilon_{t-2} + \ldots + \theta_q \varepsilon_{t-q}$$
 
@@ -438,30 +595,65 @@ Hoặc: $Y_t = c + \Theta(B)\varepsilon_t$
 
 Trong đó $\Theta(B) = 1 + \theta_1 B + \theta_2 B^2 + \ldots + \theta_q B^q$.
 
-### MA(1)
+**Ý tưởng:** "Hôm nay = nhiễu hôm nay + ảnh hưởng của các cú shock quá khứ."
+
+**Lưu ý:** MA **luôn dừng** bất kể giá trị tham số, vì số lượng giá trị $\psi$ khác không là hữu hạn.
+
+### MA(1) - Trung bình động bậc nhất
 
 $$Y_t = c + \varepsilon_t - \theta_1 \varepsilon_{t-1}$$
 
-**ACF:** Cắt ngang sau lag $q$:
+**ACF:** Cắt ngang sau lag 1:
 
-$$\rho_k = \begin{cases} \frac{-\theta_1}{1 + \theta_1^2} & k = 1 \\ 0 & k > 1 \end{cases}$$
+$$\rho(k) = \begin{cases} \frac{-\theta_1}{1 + \theta_1^2} & k = 1 \\ 0 & k > 1 \end{cases}$$
 
-**PACF:** Mở rộng vô hạn.
+**PACF:** Mở rộng vô hạn, giảm theo hàm mũ.
 
-**Điều kiện khả nghịch (Invertibility):** $|\theta_1| < 1$ → MA có thể viết dưới dạng AR vô hạn.
+**Ví dụ:** $Y_t = \varepsilon_t + 0.5 \varepsilon_{t-1}$
+
+- $\rho_1 = \frac{0.5}{1 + 0.25} = 0.4$
+- $\rho_2 = \rho_3 = \ldots = 0$
+
+→ ACF: chỉ lag 1 có ý nghĩa, lag > 1 ≈ 0.
+
+**Điều kiện khả nghịch (Invertibility):** $|\theta_1| < 1$ → MA có thể viết dưới dạng AR vô hạn. Điều này giúp:
+
+- Đảm bảo mô hình **duy nhất** (unique).
+- **Ước lượng MLE** hội tụ tốt.
+- Dễ dàng **dự báo** nhiều bước.
+
+### MA(2) - Trung bình động bậc hai
+
+$$Y_t = c + \varepsilon_t + \theta_1 \varepsilon_{t-1} + \theta_2 \varepsilon_{t-2}$$
+
+**ACF:**
+
+$$\rho_1 = \frac{-\theta_1 + \theta_1 \theta_2}{1 + \theta_1^2 + \theta_2^2}$$
+$$\rho_2 = \frac{-\theta_2}{1 + \theta_1^2 + \theta_2^2}$$
+$$\rho_k = 0 \quad \forall k > 2$$
+
+→ ACF: cắt ngang sau lag 2.
 
 ### MA(q) tổng quát
 
-**ACF:** Cắt ngang sau lag $q$.
+**ACF:** Cắt ngang sau lag $q$ ($\rho_k = 0$ với $k > q$).
 
 **PACF:** Mở rộng vô hạn.
 
-**Điều kiện khả nghịch:** Tất cả nghiệm của $\Theta(B) = 0$ phải nằm ngoài đường tròn đơn vị.
+**Ước lượng tham số:**
 
-### Tính chất MA
+- **Nonlinear Least Squares:** Vì MA không tuyến tính về tham số.
+- **MLE:** Dùng numerical optimization.
 
-- Luôn dừng bất kể giá trị tham số.
-- Hạn chế: Không tận dụng trực tiếp thông tin quá khứ, khó chọn bậc $q$.
+### So sánh AR vs MA
+
+| Tiêu chí | AR(p) | MA(q) |
+|----------|-------|-------|
+| Phụ thuộc vào | Giá trị quá khứ $Y_{t-1}, \ldots$ | Nhiễu quá khứ $\varepsilon_{t-1}, \ldots$ |
+| **ACF** | Giảm từ từ | **Cắt ngang sau lag $q$** |
+| **PACF** | **Cắt ngang sau lag $p$** | Giảm từ từ |
+| Điều kiện dừng | Nghiệm $\Phi(B) = 0$ ngoài đơn vị | Luôn dừng |
+| Điều kiện khả nghịch | Luôn khả nghịch | Nghiệm $\Theta(B) = 0$ ngoài đơn vị |
 
 ## 4.4 Mô hình ARMA(p, q)
 
@@ -488,21 +680,55 @@ $$Y_t = \phi_1 Y_{t-1} + \varepsilon_t + \theta_1 \varepsilon_{t-1}$$
 
 ## 4.5 Mô hình ARIMA(p, d, q)
 
-Hầu hết chuỗi thời gian thực tế **không dừng**. ARIMA xử lý bằng cách lấy sai phân $d$ lần để đưa về dạng dừng.
+Hầu hết chuỗi thời gian thực tế **không dừng**. ARIMA xử lý bằng cách lấy sai phân $d$ lần để đưa về dạng dừng, sau đó áp dụng ARMA.
 
 $$\Phi(B)(1 - B)^d Y_t = c + \Theta(B)\varepsilon_t$$
 
 Trong đó:
 
 - $p$: bậc AR.
-- $d$: số lần sai phân.
-- $q$: bậc MA.
+- $d$: số lần sai phân (để đưa về dạng dừng).
+- $q$: bust MA.
 
-**Ví dụ ARIMA(1,1,1):**
+**Ý nghĩa:** ARIMA = AR (tự hồi quy) + I (Integrated - sai phân) + MA (trung bình động).
+
+### Quy trình Box-Jenkins (4 bước)
+
+**Bước 1: Nhận dạng mô hình (Identification)**
+
+- Vẽ biểu đồ chuỗi để kiểm tra trend, seasonality.
+- Kiểm tra tính dừng (ADF test, KPSS test).
+- Nếu không dừng → lấy sai phân ($d = 1$ hoặc $d = 2$).
+- Vẽ ACF và PACF của chuỗi đã sai phân.
+- Chọn $p$ từ PACF (cắt ngang sau lag $p$) và $q$ từ ACF (cắt ngang sau lag $q$).
+
+**Bước 2: Ước lượng tham số (Estimation)**
+
+- Dùng MLE hoặc Least Squares.
+- Kiểm tra significance của từng tham số (p-value).
+
+**Bước 3: Kiểm định chẩn đoán (Diagnostic Checking)**
+
+- Kiểm tra phần dư $\hat{\varepsilon}_t$ có phải nhiễu trắng không (ACF của residuals).
+- Nếu phần dư có cấu trúc → mô hình chưa tốt, cần chọn lại $(p, d, q)$.
+- Dùng AIC, BIC để so sánh mô hình.
+
+**Bước 4: Dự báo (Forecasting)**
+
+- Sử dụng mô hình đã chọn để dự báo tương lai.
+- Tính khoảng tin cậy cho dự báo.
+
+### Ví dụ ARIMA(1,1,1)
 
 $$(1 - \phi_1 B)(1 - B)Y_t = c + (1 + \theta_1 B)\varepsilon_t$$
 
-Đặt $W_t = (1 - B)Y_t = Y_t - Y_{t-1}$, ta có ARMA(1,1) trên $W_t$.
+Rozwijając: $(1 - \phi_1 B - B + \phi_1 B^2)Y_t = c + (1 + \theta_1 B)\varepsilon_t$
+
+Đặt $W_t = (1 - B)Y_t = Y_t - Y_{t-1}$ (sai phân bậc 1):
+
+$$W_t = \phi_1 W_{t-1} + \varepsilon_t + \theta_1 \varepsilon_{t-1}$$
+
+→ ARMA(1,1) trên chuỗi sai phân $W_t$.
 
 ## 4.6 Ước tính tham số
 
