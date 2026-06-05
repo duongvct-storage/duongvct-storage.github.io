@@ -1116,3 +1116,18 @@ Trong đó:
 | V | TF-IDF, Vector Space Model, cosine similarity, SMART notation |
 | VI | Precision/Recall, MAP, DCG/NDCG, MRR, A/B testing, interleaved ranking |
 | VII | Relevance feedback (Rocchio), pseudo relevance feedback, query expansion, thesaurus |
+
+## Tài liệu tham khảo
+
+Slide bài giảng (có trong thư mục `/pdfs/y4t2-information-retrieval/`):
+
+- **Giới thiệu:** [`Introduction.pdf`](/pdfs/y4t2-information-retrieval/Introduction.pdf)
+- **Giáo trình:** [`intro_information_retrieval.pdf`](/pdfs/y4t2-information-retrieval/intro_information_retrieval.pdf)
+- **Chương I (Boolean Retrieval & Inverted Index):** [`Chapter_I.pdf`](/pdfs/y4t2-information-retrieval/Chapter_I.pdf)
+- **Chương II (Index Construction):** [`Chapter_II.pdf`](/pdfs/y4t2-information-retrieval/Chapter_II.pdf)
+- **Chương III (Compression):** [`Chapter_III.pdf`](/pdfs/y4t2-information-retrieval/Chapter_III.pdf)
+- **Chương IV (Wildcards & Spelling Correction):** [`Chapter_IV.pdf`](/pdfs/y4t2-information-retrieval/Chapter_IV.pdf)
+- **Chương V (Scoring & Term Weighting):** [`Chapter_V.pdf`](/pdfs/y4t2-information-retrieval/Chapter_V.pdf)
+- **Chương VI (Evaluation):** [`Chapter_VI.pdf`](/pdfs/y4t2-information-retrieval/Chapter_VI.pdf)
+- **Chương VII (Relevance Feedback & Query Expansion):** [`Chapter_VII.pdf`](/pdfs/y4t2-information-retrieval/Chapter_VII.pdf)
+- **Bài tập lớn:** [`btl/slide.pdf`](/pdfs/y4t2-information-retrieval/btl/slide.pdf), [`btl/BTL.pdf`](/pdfs/y4t2-information-retrieval/btl/BTL.pdf)
