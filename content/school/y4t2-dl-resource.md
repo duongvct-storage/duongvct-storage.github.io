@@ -68,3 +68,12 @@ Year 4 Term 2 - Deep Learning learning resources
 
 
 - [Slide](/pdfs/y4t2-dl/btl/slide.pdf)
+
+
+### Final exam
+
+
+- [BTL](/pdfs/y4t2-dl/final-exam/BTL.pdf)
+
+
+- [Slide](/pdfs/y4t2-dl/final-exam/slide_final_exam.pdf)
