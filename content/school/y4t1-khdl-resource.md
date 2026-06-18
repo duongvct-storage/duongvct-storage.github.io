@@ -4,11 +4,13 @@ keywords: [learning-resource, khdl]
 date: 2026-06-18
 theme: software
 description:
-  Year 4 Term 1 - Khai phá dữ liệu learning resources
+  Year 4 Term 1 - Khoa học dữ liệu learning resources
 ---
-Year 4 Term 1 - Khai phá dữ liệu learning resources
+Year 4 Term 1 - Khoa học dữ liệu learning resources
 
 ## Offline resource
+
+- [Nhập môn Khoa học Dữ liệu](/pdfs/y4t1-khdl/nhap-mon-khoa-hoc-du-lieu.pdf)
 
 - [0 - Introduction](/pdfs/y4t1-khdl/0-introduction.pdf)
 

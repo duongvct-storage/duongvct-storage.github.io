@@ -28,3 +28,5 @@ Year 4 Term 1 - Xử lý ảnh learning resources
 ## Exam
 
 - [Ngân hàng câu hỏi trắc nghiệm](/pdfs/y4t1-xla/xla-ngan-hang-cht-xu-ly-anh-2021.pdf)
+
+- [Ngân hàng xử lý ảnh Full](/pdfs/y4t1-xla/ngan-hang-xu-ly-anh-full.pdf)
